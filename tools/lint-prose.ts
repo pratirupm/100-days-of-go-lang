@@ -24,12 +24,15 @@ const FAIL: Array<{ re: RegExp; why: string }> = [
 	{ re: /\bCI\b/, why: 'no CI talk in reader pages' },
 	{ re: /\bworkflows?\b/i, why: 'no CI talk in reader pages' },
 	{ re: /\bred\s*(?:→|->|to|[-–—])\s*green\b/i, why: 'use plain words for the test-first loop' },
+	{ re: /\bchapter\s+\d/i, why: 'no chapter-number cross references' },
+	{ re: /\bappendix\s+[abc]\b/i, why: "the first edition's lettered appendices do not exist here" },
 ];
 
 const WARN: Array<{ re: RegExp; why: string }> = [
 	{ re: /\bgates?\b/i, why: 'checkpoint-era vocabulary' },
 	{ re: /\btags?\b/i, why: 'checkpoint-era vocabulary (fine if it is HTML tag talk)' },
 	{ re: /\brepositor(y|ies)\b/i, why: 'keep the book self-contained' },
+	{ re: /\bpart\s+(?:i{1,3}|iv|v|vi{1,3}|ix|x)\b/i, why: 'part cross-reference (fine inside verbatim app quotes)' },
 ];
 
 async function* walk(dir: string): AsyncGenerator<string> {
