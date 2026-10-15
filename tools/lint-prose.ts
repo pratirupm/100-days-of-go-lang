@@ -79,14 +79,18 @@ for await (const file of walk(DOCS)) {
 		}
 		if (inFence) continue;
 
+		// Inline code spans are not prose: a line may talk about a `tag` in
+		// code while its prose says "label". Scrub them before matching.
+		const scrubbed = line.replace(/`[^`]*`/g, '`x`');
+
 		for (const { re, why } of FAIL) {
-			if (re.test(line)) {
+			if (re.test(scrubbed)) {
 				console.log(`${rel}:${n}  [fail] ${why} — ${line.trim().slice(0, 90)}`);
 				failures++;
 			}
 		}
 		for (const { re, why } of WARN) {
-			if (re.test(line)) {
+			if (re.test(scrubbed)) {
 				console.log(`${rel}:${n}  [warn] ${why} — ${line.trim().slice(0, 90)}`);
 				warnings++;
 			}
