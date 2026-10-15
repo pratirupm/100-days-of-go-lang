@@ -10,7 +10,8 @@
     "astro": "astro",
     "lint": "bun tools/lint-prose.ts",
     "verify": "bun tools/verify-quotes.ts",
-    "check": "bun run lint && bun run verify && bun run build"
+    "transcripts": "bun tools/check-transcripts.ts",
+    "check": "bun run lint && bun run verify && bun run transcripts && bun run build"
   },
   "dependencies": {
     "@astrojs/starlight": "^0.42.6",
