@@ -5,10 +5,15 @@ import starlightLinksValidator from 'starlight-links-validator';
 
 // Build a Todo App in Go — the book site.
 // Astro + Starlight, run with Bun. `bun run build` emits a static site to dist/.
+import stripVerifyMarkers from './src/integrations/strip-verify-markers.mjs';
+
 export default defineConfig({
 	// Placeholder until the book has a real home; keeps the sitemap happy.
 	site: 'https://example.com/',
 	integrations: [
+		// Verification markers stay in the source for `bun run verify`,
+		// but are stripped from the pages readers see.
+		stripVerifyMarkers(),
 		starlight({
 			title: 'Build a Todo App in Go',
 			description:
