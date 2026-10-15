@@ -14,15 +14,20 @@ a real Go application from an empty folder. Astro + Starlight, run with Bun.
 | `bun run preview` | Serve the built site |
 | `bun run lint` | Prose lint — fails on bookkeeping vocabulary, warns on style smells |
 | `bun run verify` | Checks marked code quotes against the app that produced them |
-| `bun run check` | `lint` + `verify` + `build` — the full gate |
+| `bun run transcripts` | Checks every terminal line against the first edition it came from |
+| `bun run appendix` | Regenerates the finished-app appendix from `../go-todo-app` |
+| `bun run check` | `lint` + `verify` + `transcripts` + `build` — the full gate |
 
 ## Layout
 
 ```
-src/content/docs/       the book: start-here, part-i…part-x, appendices
-tools/lint-prose.ts     the house-style gate
-tools/verify-quotes.ts  code-quote verification against ../go-todo-app
-STYLE.md                the writing rules every chapter follows
+src/content/docs/           the book: start-here, part-i…part-x, appendices
+tools/lint-prose.ts         the house-style gate
+tools/verify-quotes.ts      code-quote verification against ../go-todo-app
+tools/check-transcripts.ts  terminal-line verification against the first edition
+tools/generate-appendix.ts  regenerates the finished-app appendix
+src/integrations/           build-time cleanup (verification markers)
+STYLE.md                    the writing rules every chapter follows
 ```
 
 ## Related repositories
