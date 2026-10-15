@@ -18,6 +18,7 @@ export default defineConfig({
 			title: 'Build a Todo App in Go',
 			description:
 				'A beginner-friendly, step-by-step course that builds a real Go application from an empty folder.',
+			customCss: ['./src/styles/custom.css'],
 			plugins: [starlightLinksValidator()],
 			sidebar: [
 				{ label: 'Start here', slug: 'start-here' },

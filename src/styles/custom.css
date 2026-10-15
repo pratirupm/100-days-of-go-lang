@@ -1,0 +1,32 @@
+/* The book's typeface: 0xProto — https://github.com/0xType/0xProto
+   Self-hosted (SIL Open Font License; see /fonts/0xProto-LICENSE.txt). */
+
+@font-face {
+	font-family: '0xProto';
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url('/fonts/0xProto-Regular.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: '0xProto';
+	font-style: normal;
+	font-weight: 700;
+	font-display: swap;
+	src: url('/fonts/0xProto-Bold.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: '0xProto';
+	font-style: italic;
+	font-weight: 400;
+	font-display: swap;
+	src: url('/fonts/0xProto-Italic.woff2') format('woff2');
+}
+
+/* 0xProto everywhere: body text, headings, UI, and code. */
+:root {
+	--sl-font: '0xProto', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	--sl-font-mono: '0xProto', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
