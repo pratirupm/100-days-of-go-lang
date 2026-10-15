@@ -11,6 +11,7 @@
     "lint": "bun tools/lint-prose.ts",
     "verify": "bun tools/verify-quotes.ts",
     "transcripts": "bun tools/check-transcripts.ts",
+    "appendix": "bun tools/generate-appendix.ts",
     "check": "bun run lint && bun run verify && bun run transcripts && bun run build"
   },
   "dependencies": {
