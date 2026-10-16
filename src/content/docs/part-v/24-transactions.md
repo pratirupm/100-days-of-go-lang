@@ -21,6 +21,7 @@ The tests come first. The conformance suite — the shared set of tests every st
 
 <!-- verify: internal/store/storetest/suite.go at=transactions -->
 ```go title="internal/store/storetest/suite.go"
+...
 	t.Run("CompleteStaleVersion", func(t *testing.T) {
 		s := newStore(t)
 		added := addAll(t, s, task.Task{Title: "write tests", Status: task.StatusTodo})
@@ -50,6 +51,7 @@ The suite's helper `addAll` grows one assertion to match: every `Add` stores its
 
 <!-- verify: internal/store/concurrency_test.go at=transactions -->
 ```go title="internal/store/concurrency_test.go"
+...
 			a, b := firstRead[0], secondRead[0]
 			require.Equal(t, a.Version, b.Version)
 
@@ -97,7 +99,7 @@ Every complaint is the same kind of thing: the tests describe code that does not
 
 ## The version column
 
-Now the code. The database needs somewhere to keep the version, so the schema grows one column. The schema lives in migration files, and this change is one statement:
+Now the code. The database needs somewhere to keep the version, so the schema grows one column. The schema lives in migration files, and this change is one statement — create `internal/db/migrations/00003_task_version.sql`:
 
 <!-- verify: internal/db/migrations/00003_task_version.sql at=transactions -->
 ```sql title="internal/db/migrations/00003_task_version.sql"
@@ -138,13 +140,24 @@ Both stores assign the version the way they already assign the id — inside `Ad
 
 <!-- verify: internal/store/turso.go at=transactions -->
 ```go title="internal/store/turso.go"
+...
 	// The stored task starts at version 1, whatever the argument carried:
 	// the version, like the id, is the store's to assign.
 	t.ID = id
 	t.Version = 1
+
+...
+		if err := q.InsertTask(ctx, db.InsertTaskParams{
+			ID:       id.String(),
+			Title:    t.Title,
+			Status:   string(t.Status),
+			Priority: int64(t.Priority),
+			Due:      dueSQL(t.Due),
+			Version:  int64(t.Version),
+		}); err != nil {
 ```
 
-The version belongs to the store, not the caller: if a caller could choose it, someone could invent a version the store never handed out and defeat the check. The memory store makes the same two assignments.
+The first block assigns the version; the second writes it into the row, so the value `Add` returns and the value stored are the same by construction. The version belongs to the store, not the caller: if a caller could choose it, someone could invent a version the store never handed out and defeat the check. The memory store makes the same two assignments.
 
 The schema snapshot file — the plain-text picture of the tables that a test compares against — gains one line:
 
@@ -160,6 +173,95 @@ table tasks
 ```
 
 That snapshot is what makes a forgotten schema change visible: the test compares the tables the migrations build with this file, and they must match line for line.
+
+The column is in the schema, but the queries have to carry it too. A read that never selects `version` hands back a zero, and a caller who writes that zero back is describing a snapshot the store never gave out — so every query that returns a task gains the column, and the insert names it:
+
+<!-- verify: internal/db/queries/tasks.sql at=transactions -->
+```sql title="internal/db/queries/tasks.sql"
+-- name: InsertTask :exec
+INSERT INTO tasks (id, title, status, priority, due, version)
+VALUES (?, ?, ?, ?, ?, ?);
+...
+-- name: GetTask :one
+SELECT id, title, status, priority, due, version
+FROM tasks
+WHERE id = ?;
+...
+-- name: ListTasks :many
+SELECT id, title, status, priority, due, version
+FROM tasks
+ORDER BY id;
+...
+-- name: ListTasksByStatus :many
+SELECT id, title, status, priority, due, version
+FROM tasks
+WHERE status = ?
+ORDER BY id;
+...
+-- name: ListTasksByTag :many
+SELECT tasks.id, tasks.title, tasks.status, tasks.priority, tasks.due, tasks.version
+FROM tasks
+JOIN task_tags ON task_tags.task_id = tasks.id
+WHERE task_tags.tag = ?
+ORDER BY tasks.id;
+...
+-- name: SortTasksByDue :many
+SELECT id, title, status, priority, due, version
+FROM tasks
+ORDER BY (due IS NULL), due, id;
+```
+
+Read the fence as one edit per query: each of the five reads adds `version` to its column list, which is what lets a caller's snapshot survive the trip out of the database, and the insert names the column so the stored row and the value `Add` returns agree by construction instead of by a column default.
+
+Regenerating turns those column lists into typed scans. The row struct gains a `Version` field, and every read scans it; the generated `GetTask` shows the shape the other four share:
+
+<!-- verify: internal/db/tasks.sql.go at=transactions -->
+```go title="internal/db/tasks.sql.go"
+const getTask = `-- name: GetTask :one
+SELECT id, title, status, priority, due, version
+FROM tasks
+WHERE id = ?
+`
+
+...
+func (q *Queries) GetTask(ctx context.Context, id string) (Task, error) {
+	row := q.db.QueryRowContext(ctx, getTask, id)
+	var i Task
+	err := row.Scan(
+		&i.ID,
+		&i.Title,
+		&i.Status,
+		&i.Priority,
+		&i.Due,
+		&i.Version,
+	)
+	return i, err
+}
+```
+
+The `&i.Version` line is the generated half of the read change: the query selects the column, and the scan reads it into the row the store maps from.
+
+The last hop is the store's own boundary. Its mapping takes the row's version as a parameter and sets it on the domain task, and the call site passes it through:
+
+<!-- verify: internal/store/turso.go at=transactions -->
+```go title="internal/store/turso.go"
+...
+		t, err := taskFromRow(r.ID, r.Title, r.Status, r.Priority, r.Due, r.Version)
+...
+func taskFromRow(id, title, status string, priority int64, due sql.NullString, version int64) (task.Task, error) {
+	parsedID, err := uuid.Parse(id)
+	...
+	t := task.Task{
+		ID:       parsedID,
+		Version:  int(version),
+		Title:    title,
+		Status:   task.Status(status),
+		Priority: task.Priority(priority),
+	}
+	...
+```
+
+The signature is where the version enters the domain and `Version: int(version)` is where it lands; without either, every task the database store read back would claim version 0, and the suite's `got[0].Version == 2` is the assertion that catches it.
 
 ## The compare-and-swap
 
@@ -215,6 +317,7 @@ The memory store's `Complete` compares under its write lock, so the compare and 
 
 <!-- verify: internal/store/store.go at=transactions -->
 ```go title="internal/store/store.go"
+...
 	for i, t := range s.tasks {
 		if t.ID != id {
 			continue
@@ -233,6 +336,7 @@ The database store has no lock to lean on, so it classifies a zero-row result wi
 
 <!-- verify: internal/store/turso.go at=transactions -->
 ```go title="internal/store/turso.go"
+...
 	_, err = s.queries.GetTask(ctx, id.String())
 	switch {
 	case errors.Is(err, sql.ErrNoRows):
@@ -274,12 +378,13 @@ And the CLI's seed step passes the tasks `Add` returned, id and version together
 
 <!-- verify: cmd/todo/main.go at=transactions -->
 ```go title="cmd/todo/main.go"
+...
 	if err := store.CompleteAll(ctx, s, added[:1]); err != nil {
 		return err
 	}
 ```
 
-Regenerate the Go from the query — the same command all the generated code comes from:
+Regenerate the Go from the queries — the same command all the generated code comes from:
 
 ```bash
 $ go generate ./...
@@ -307,7 +412,7 @@ A single database write is its own little transaction: it either lands or it doe
 
 The engine underneath can run several transactions at the same time. The mode that allows this keeps older versions of each row around, so every transaction works from its own **snapshot** — the data as it looked when the transaction started. The mode is called **MVCC**, short for multi-version concurrency control. Two writers touching different tasks never wait for each other; when two transactions touch the same row, the engine reports a **write-write conflict** instead of letting one silently overwrite the other.
 
-Our helper opens one such transaction on a connection of its own:
+Our helper opens one such transaction on a connection of its own. It lives in a new file — create `internal/store/tx.go` — and its lower half is a single attempt:
 
 <!-- verify: internal/store/tx.go at=transactions -->
 ```go title="internal/store/tx.go"
@@ -335,10 +440,19 @@ func concurrentTxOnce(ctx context.Context, db *sql.DB, fn func(*sql.Conn) error)
 
 Three details carry the discipline. The transaction gets a dedicated connection, so nothing else can use it mid-transaction. The undo is deferred, so every path that does not reach the final statement — a failed beginning, a failing function, a failed ending — undoes whatever the attempt wrote. And the undo runs under `context.WithoutCancel`, so even a canceled caller cannot leave a transaction open for the connection's next user.
 
-The helper on top retries the two shapes worth retrying — a busy engine, and a write-write conflict — with a wait that doubles between attempts, up to a small bound:
+The helper on top retries the two shapes worth retrying — a busy engine, and a write-write conflict — with a wait that doubles between attempts, up to a small bound. Its name is `withConcurrentTx`, and its bound is a named constant:
 
 <!-- verify: internal/store/tx.go at=transactions -->
 ```go title="internal/store/tx.go"
+// txMaxAttempts is how many times withConcurrentTx runs its transaction
+// before giving up on a busy engine or a write-write conflict. The first
+// attempt is immediate; the rest wait out a doubling backoff.
+const txMaxAttempts = 5
+
+...
+func withConcurrentTx(ctx context.Context, db *sql.DB, fn func(*sql.Conn) error) error {
+	delay := time.Millisecond
+	var err error
 	for attempt := 1; attempt <= txMaxAttempts; attempt++ {
 		if err = concurrentTxOnce(ctx, db, fn); err == nil {
 			return nil
@@ -354,7 +468,10 @@ The helper on top retries the two shapes worth retrying — a busy engine, and a
 		delay *= 2
 	}
 	return fmt.Errorf("concurrent transaction: %w", err)
+}
 ```
+
+Read the loop as four moves: run the attempt, stop when it succeeds, stop when the error is not worth retrying or the attempts are spent, otherwise wait — and wait longer each time. The `...` stands for the function's longer comment, where the reasoning behind the retry lives.
 
 Everything else fails as itself. A duplicate id, for example, is a fact about the data — running it again would fail identically — so the predicate that decides "retry" matches exactly the two transient shapes:
 
@@ -374,6 +491,7 @@ Then the mode. It is a property of the file, not of a connection, so it is set o
 
 <!-- verify: internal/store/turso.go at=transactions -->
 ```go title="internal/store/turso.go"
+...
 	var mode string
 	if err := sqlDB.QueryRowContext(ctx, "PRAGMA journal_mode = mvcc").Scan(&mode); err != nil {
 		_ = sqlDB.Close()
@@ -389,6 +507,7 @@ And the pool of open connections grows from one to eight, because concurrent tra
 
 <!-- verify: internal/store/turso.go at=transactions -->
 ```go title="internal/store/turso.go"
+...
 	maxConns := 8
 	if path == memoryPath {
 		maxConns = 1
@@ -423,7 +542,7 @@ func (s *TursoStore) Close() error {
 
 The fold is best effort — a failure never turns a close into an error — and it runs first, so the file a caller copies afterwards is the whole database.
 
-Run the helper's own tests:
+The helper's tests live in a new file — create `internal/store/tx_test.go` — and running them shows the four outcomes:
 
 ```bash
 $ go test -v -count=1 -run '^TestWithConcurrentTx$' ./internal/store
@@ -437,10 +556,11 @@ $ go test -v -count=1 -run '^TestWithConcurrentTx$' ./internal/store
     --- PASS: TestWithConcurrentTx/a_constraint_error_is_not_retried (0.00s)
 ```
 
-The four names are the four outcomes the helper must produce: a successful write is visible, a failure rolls back, a conflict is retried until it lands, and a constraint failure is not retried at all. The test fabricates the conflict shape on the first attempt — a real one needs a second writer holding the row — which is enough to prove the loop runs the function again:
+The four names are the four outcomes the helper must produce: a successful write is visible, a failure rolls back, a conflict is retried until it lands, and a constraint failure is not retried at all. The conflict case fabricates the conflict shape on the first attempt — a real one needs a second writer holding the row — which is enough to prove the loop runs the function again:
 
 <!-- verify: internal/store/tx_test.go at=transactions -->
 ```go title="internal/store/tx_test.go"
+...
 		err = withConcurrentTx(ctx, s.db, func(conn *sql.Conn) error {
 			attempts++
 			if err := insert(conn, id.String()); err != nil {
@@ -479,10 +599,38 @@ The document's own version moves to 3, the shape that carries the task's version
 const exportVersion = 3
 ```
 
-The public door walks the envelope — the version field first, then the tasks array — and hands the store a stream, not a slice. The store pulls one task at a time while its own write is open:
+Create `internal/store/importer.go` for the reading side — the import moves out of `export.go` into a file of its own — and two names there carry the design. `taskStream` is what the store pulls from: a function that returns one task per call and reports `io.EOF` when the document is spent. `bulkInserter` is the store-side half: the single method that takes a stream and writes it as one batch.
 
 <!-- verify: internal/store/importer.go at=transactions -->
 ```go title="internal/store/importer.go"
+type taskStream = func() (task.Task, error)
+
+...
+type bulkInserter interface {
+	insertAll(ctx context.Context, stream taskStream) (int, error)
+}
+```
+
+The alias is deliberate: a store or a test double can spell the signature out and still satisfy the interface, so the name documents the shape without becoming a second thing to import.
+
+The public door walks the envelope — the version field first, then the tasks array — and before it decodes a single task it asserts that the store can take the batch. A store without the hook is refused by name instead of being quietly served one-at-a-time writes that could leave half a document behind:
+
+<!-- verify: internal/store/importer.go at=transactions -->
+```go title="internal/store/importer.go"
+...
+	bi, ok := s.(bulkInserter)
+	if !ok {
+		return 0, fmt.Errorf("import tasks: %T does not support atomic import", s)
+	}
+```
+
+That assertion is the door's first demand: a store that cannot take the batch is refused up front, before the document is read at all.
+
+The store pulls one task at a time while its own write is open:
+
+<!-- verify: internal/store/importer.go at=transactions -->
+```go title="internal/store/importer.go"
+...
 	// The store pulls the stream inside its own write: for the Turso store
 	// that is one BEGIN CONCURRENT transaction whose rollback undoes a
 	// failed import, for the memory store one buffered append under one
@@ -501,6 +649,7 @@ Older documents are the importer's business, so it reads versions 1 through 3 an
 
 <!-- verify: internal/store/importer.go at=transactions -->
 ```go title="internal/store/importer.go"
+...
 	if version < 1 || version > exportVersion {
 		return nil, fmt.Errorf("unsupported version %d", version)
 	}
@@ -522,6 +671,89 @@ Older documents are the importer's business, so it reads versions 1 through 3 an
 ```
 
 The mapping's smallest half is the v2 rule: a v2 document predates the version column, so every task in it was at version 1 by definition, and the importer writes that value instead of the zero the absent field decodes to. The strictest half is the last check: a v3 task at version 0 is a task no store could have written, because `Add` assigns 1 and every write moves it — so the importer refuses it rather than admitting a row that no version check could ever match.
+
+Five tests written for the old importer now describe behavior that no longer exists, so they change with it.
+
+`TestImportJSON_RejectsUnknownVersion` fed versions 1 and 3, because those were the versions the old importer refused. The importer reads both now, so the refusal case moves to version 0 and the first version past the current one, and the message it checks is the importer's own:
+
+<!-- verify: internal/store/export_test.go at=transactions -->
+```go title="internal/store/export_test.go"
+...
+	for _, version := range []int{0, exportVersion + 1} {
+...
+			doc := fmt.Sprintf(`{"version":%d,"tasks":[{"ID":"0199c0de-0000-7000-8000-000000000001","Title":"later","Status":"Todo","Priority":3}]}`, version)
+...
+			assert.Contains(t, err.Error(), fmt.Sprintf("unsupported version %d", version))
+```
+
+The refusal cases are now the two ends of the range — nothing below the oldest shape and nothing past the current one.
+
+The round-trip test asserted that an import assigns fresh ids; a v3 document carries ids and versions now, so the test asserts they survive the trip instead:
+
+<!-- verify: internal/store/export_test.go at=transactions -->
+```go title="internal/store/export_test.go"
+...
+	assert.True(t, strings.HasPrefix(raw, `{"version":3,"tasks":[`),
+...
+	assert.Contains(t, raw, `"Version":1`)
+	assert.Contains(t, raw, `"Version":2`)
+...
+	want := slices.Clone(added)
+	want[1].Status = task.StatusDone
+	want[1].Version = 2
+```
+
+The header, the two `"Version"` fields, and the completed task's version 2 are the document's own values, and comparing the imported store against `added` is what pins them arriving whole.
+
+The test that pinned fresh ids goes the same way — its v2 document keeps its UUID ids, with the missing version normalized to 1 — so it becomes the v2 case:
+
+<!-- verify: internal/store/export_test.go at=transactions -->
+```go title="internal/store/export_test.go"
+...
+			want := []task.Task{
+				{ID: uuid.MustParse(firstID), Version: 1, Title: "from v2", Status: task.StatusTodo, Priority: task.PriorityDefault},
+				{ID: uuid.MustParse(secondID), Version: 1, Title: "also v2", Status: task.StatusDone, Priority: task.PriorityMax, Tags: []string{"go"}},
+			}
+```
+
+The `want` block spells the ids the document carried and the version 1 the importer normalizes to, so a fresh id anywhere in the result would fail the comparison.
+
+And the malformed-element test asserted the opposite of the promise this section is about — that the element before the failure had already landed. The atomic case asserts the store is exactly as it was, with the count zero:
+
+<!-- verify: internal/store/export_test.go at=transactions -->
+```go title="internal/store/export_test.go"
+...
+				n, err := ImportJSON(context.Background(), s, strings.NewReader(tt.doc))
+				require.Error(t, err)
+				assert.Zero(t, n, "a failed import added nothing")
+				assert.Contains(t, err.Error(), tt.wantErr)
+
+				got, err := s.List(context.Background())
+				require.NoError(t, err)
+				require.Len(t, got, 1, "the store is exactly as it was")
+				assert.Equal(t, seeded, got[0])
+```
+
+Zero added and a `List` that is exactly the seeded task: the count is the import's own report, and the list is the store's.
+
+And the streaming test's probe hooked `Add`, which the new importer never calls — the store pulls the batch hook instead — so the probe moves to `insertAll`, recording the reader's position at every pull:
+
+<!-- verify: internal/store/export_test.go at=transactions -->
+```go title="internal/store/export_test.go"
+type streamProbe struct {
+	*MemoryStore
+	r          *byteCountingReader
+	readAtNext []int
+}
+
+func (s *streamProbe) insertAll(ctx context.Context, stream func() (task.Task, error)) (int, error) {
+	var batch []task.Task
+	for {
+		s.readAtNext = append(s.readAtNext, s.r.read)
+		...
+```
+
+The probe is still the proof that the store consumes the document while it is arriving; it now records the reader's position at each stream pull, so every position short of the document's end says the import never held the whole file.
 
 One more distinction lives in the end-of-document check. The stores' insert loops treat the stream's clean end as "the batch is complete", so a document that stops early must report a *different* error — otherwise a truncated import would look like a clean finish:
 
@@ -552,6 +784,7 @@ The two stores carry the batch differently, and both are all-or-nothing. The dat
 
 <!-- verify: internal/store/turso.go at=transactions -->
 ```go title="internal/store/turso.go"
+...
 	count := 0
 	err := concurrentTxOnce(ctx, s.db, func(conn *sql.Conn) error {
 		q := db.New(conn)
@@ -563,16 +796,29 @@ The two stores carry the batch differently, and both are all-or-nothing. The dat
 			if err != nil {
 				return err
 			}
+			if err := q.InsertTask(ctx, db.InsertTaskParams{
+				ID:       t.ID.String(),
+				Title:    t.Title,
+				Status:   string(t.Status),
+				Priority: int64(t.Priority),
+				Due:      dueSQL(t.Due),
+				Version:  int64(t.Version),
+			}); err != nil {
+				return err
+			}
 			...
 			count++
 		}
 	})
 ```
 
+It calls `concurrentTxOnce` — the single attempt — rather than the retrying wrapper `withConcurrentTx`, because a retry replays its function from the start and this function pulls a one-shot stream, so a second attempt would resume mid-document and insert the rest; a conflict fails the whole import, and the caller re-runs it with a fresh document.
+
 The memory store has no transaction to ride, so its promise comes from buffering: the stream is pulled into a slice, and the whole batch is appended under one write lock, so a failure while streaming never reaches the store.
 
 <!-- verify: internal/store/store.go at=transactions -->
 ```go title="internal/store/store.go"
+...
 	var batch []task.Task
 	for {
 		t, err := stream()
@@ -589,6 +835,8 @@ The memory store has no transaction to ride, so its promise comes from buffering
 	s.tasks = append(s.tasks, batch...)
 	return len(batch), nil
 ```
+
+The buffer is the store's own state arriving: the failure path returns before the lock, so a document that breaks mid-stream never touches the slice.
 
 Run the importer's atomicity tests — the ones that check a broken document leaves nothing behind:
 
@@ -721,6 +969,7 @@ Version 1 documents came from the era when ids were integers. An integer carries
 
 <!-- verify: internal/store/importer.go at=transactions -->
 ```go title="internal/store/importer.go"
+...
 		if version == 1 {
 			var old importTaskV1
 			if err := d.Decode(&old); err != nil {
