@@ -1,5 +1,10 @@
 /* The book's typeface: 0xProto — https://github.com/0xType/0xProto
-   Self-hosted (SIL Open Font License; see /fonts/0xProto-LICENSE.txt). */
+   Self-hosted (SIL Open Font License; see /fonts/0xProto-LICENSE.txt).
+   Noto Sans Symbols 2 covers the marks captured tool output uses (✎ ✓ ✗),
+   which 0xProto does not draw; its unicode-range CSS loads it only when a
+   page needs those glyphs. */
+
+@import '@fontsource/noto-sans-symbols-2/400.css';
 
 @font-face {
 	font-family: '0xProto';
@@ -25,8 +30,29 @@
 	src: url('/fonts/0xProto-Italic.woff2') format('woff2');
 }
 
-/* 0xProto everywhere: body text, headings, UI, and code. */
+/* 0xProto everywhere: body text, headings, UI, and code — with the symbol
+   fallback at the end of both stacks. */
 :root {
-	--sl-font: '0xProto', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-	--sl-font-mono: '0xProto', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	--sl-font: '0xProto', ui-monospace, SFMono-Regular, Menlo, Consolas, 'Noto Sans Symbols 2', sans-serif;
+	--sl-font-mono: '0xProto', ui-monospace, SFMono-Regular, Menlo, Consolas, 'Noto Sans Symbols 2', sans-serif;
+}
+
+/* The header title never clips mid-phrase on small screens. */
+.site-title {
+	min-width: 0;
+}
+
+.site-title span {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* Comfortable tap targets on phones. */
+@media (max-width: 50rem) {
+	header button,
+	site-search button {
+		min-height: 44px;
+		min-width: 44px;
+	}
 }
