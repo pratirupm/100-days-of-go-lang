@@ -619,7 +619,7 @@ func parseLogLevel(value string) (slog.Level, error) {
 }
 ```
 
-`logLevelName` is the inverse, for the help text: it turns a level back into the flag's word, which is what prints `(default info)` and names the type the flag takes.
+`logLevelName` is the inverse, for the help text: it maps `slog.LevelDebug`, `slog.LevelInfo`, `slog.LevelWarn`, and `slog.LevelError` back to the four words the flag accepts — `debug`, `info`, `warn`, and `error`. It is what prints `(default info)` and names the type the flag takes. The finished app's appendix holds `internal/cli/cli.go` in full.
 
 The level reaches the handler in the pre-run hook, before anything logs.
 
@@ -719,6 +719,8 @@ ok  	todo/internal/logging	0.004s
 ok  	todo/internal/store	0.099s
 ?   	todo/internal/store/storetest	[no test files]
 ```
+
+Your run prints one line more than this capture: `ok todo/internal/task`, the package this chapter did not touch.
 
 Every package passes — the fan-out, the threshold, the file, and both renderings among them. The script scenarios pass too, because the binary now writes the record `add_list` asks for.
 

@@ -95,6 +95,8 @@ ok  	todo/internal/task	0.003s
 FAIL
 ```
 
+The `"github.com/google/uuid".UUID` spelling is the toolchain's — current Go prints the same type as `uuid.UUID`; the complaint is the same either way.
+
 Every complaint is the same kind of thing: the tests describe code that does not exist yet. There is no `Version` field, `Complete` takes only an id, and `store.ErrConflict` has never been written. The compiler is the checklist — it names every call site that has to change.
 
 ## The version column
@@ -514,6 +516,8 @@ And the pool of open connections grows from one to eight, because concurrent tra
 	}
 	sqlDB.SetMaxOpenConns(maxConns)
 ```
+
+`memoryPath` is the constant holding that `:memory:` text — the finished app's appendix holds `internal/store/turso.go` in full.
 
 If you wire the helper in before the mode is on — the natural order to write the code — the engine says exactly what is missing:
 

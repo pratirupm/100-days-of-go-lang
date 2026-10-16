@@ -34,7 +34,7 @@ const (
 )
 ```
 
-One policy belongs to the pages and the API, and the other belongs to the docs page — a moment below explains why it needs its own. The header table is the rest of the contract:
+The comment's MPA is the browser pages — the multi-page site the server renders. One policy belongs to the pages and the API, and the other belongs to the docs page — a moment below explains why it needs its own. The header table is the rest of the contract:
 
 <!-- verify: internal/api/security_test.go at=web-security -->
 ```go title="internal/api/security_test.go"

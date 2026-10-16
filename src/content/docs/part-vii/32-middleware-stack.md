@@ -383,7 +383,9 @@ then Secure, whose config spells out every header it sets, because the layer app
 }
 ```
 
-CORS is closed by policy: no browser page from another site may read these responses. That is written down rather than left to echo's default, which allows every origin. Worth knowing: CORS is a browser *read* permission, not access control — it stops a page from reading a response, not from causing one. And `SecureWithConfig` applies no header defaults of its own, so every header the API sends is named right here — nosniff, SAMEORIGIN, no-referrer, and the legacy XSS protection. HSTS is set only when the request already arrived over https, which is why the plain-http transcript later shows none.
+In the CORS comment, the MPA is the browser pages — the multi-page site the server renders — and the TUI is the terminal app built later in the book. CORS is closed by policy: no browser page from another site may read these responses. That is written down rather than left to echo's default, which allows every origin. Worth knowing: CORS is a browser *read* permission, not access control — it stops a page from reading a response, not from causing one.
+
+And `SecureWithConfig` applies no header defaults of its own, so every header the API sends is named right here — nosniff, SAMEORIGIN, no-referrer, and the legacy XSS protection. HSTS is set only when the request already arrived over https, which is why the plain-http transcript later shows none.
 
 Echo's middleware package pulls in one small helper library of its own, so record it in the project's list of dependencies:
 

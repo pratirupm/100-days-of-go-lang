@@ -555,7 +555,8 @@ ok  	todo/internal/task	0.003s
 The store's tests are clean under the race detector too: the cancellation
 travels only through the context's channel, an ordered hand-off.
 
-Next: a small cache shared safely by several goroutines.
+Next: the store becomes safe to share between goroutines — a lock around its
+tasks, and a counter for the calls made to it.
 
 ## If something went wrong
 

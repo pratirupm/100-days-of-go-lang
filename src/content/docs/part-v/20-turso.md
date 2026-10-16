@@ -383,10 +383,10 @@ behind the `...` there as you type them:
 
 Every statement uses `?` placeholders: the values travel separately from the
 SQL text, so a title containing SQL is data, never instructions. `uniqueTags`
-drops repeated labels before inserting, because the primary key would reject
-a repeat. The deferred `Rollback` makes the transaction safe: fail before
-the transaction finishes, and it undoes everything; afterwards, it does
-nothing.
+is a small helper defined further down the file: it drops repeated labels
+before inserting, because the primary key would reject a repeat. The
+deferred `Rollback` makes the transaction safe: fail before the transaction
+finishes, and it undoes everything; afterwards, it does nothing.
 
 ## Complete asks how many rows changed
 

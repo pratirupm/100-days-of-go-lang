@@ -412,7 +412,9 @@ type Task struct {
 Two fields are new. `ID` sits at the top: a whole number that stays 0 until
 a store assigns one — the field's comment says exactly that. The field at
 the bottom is a list of labels: `[]string` means "a list of strings" — the
-brackets say "list", the word inside says what it holds.
+brackets say "list", the word inside says what it holds. In code, a label is
+called a `tag` — the field is `Tags`, and the store's counting method is
+`CountByTag`.
 
 In Go, a list like this is called a **slice**. A new task starts with no
 labels, and its slice is `nil` — Go's word for "nothing yet". A nil slice
@@ -615,6 +617,9 @@ FAIL
 FAIL	todo/store	0.001s
 FAIL
 ```
+
+The three lines come from a loop over a map, so their order varies between
+runs — the counts are what matter.
 
 The cause: the line assigns `1` instead of incrementing, so `go` can be
 seen three times and stay at 1. The fix: increment with `++` — a missing

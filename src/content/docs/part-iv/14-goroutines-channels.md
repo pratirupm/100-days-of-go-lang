@@ -684,8 +684,9 @@ Counting a list that already sits in memory is not slow work, and splitting it
 four ways adds the cost of spawning helpers and handing partials over. The pool
 is here because it is the safest place to learn the pattern: the work divides
 cleanly, every piece is independent, and a plain sequential version checks the
-whole answer. Later in the book the same pool learns to stop early, and then to
-take its size from the caller.
+whole answer. Later in the book the same pool learns to stop early, and a
+separate batch runner, built for work that can fail, takes its size from the
+caller.
 
 </details>
 

@@ -61,7 +61,7 @@ func main() {
 // run executes the command tree and returns the process's exit code: 0 on
 // success, 1 after printing the one error line. It reads os.Args and writes
 // to os.Stdout and os.Stderr, so the real binary and testscript's
-// re-executed test binary — which needs a func() int to call — run the same
+// re-executed test binary ... run the same
 // function.
 func run() int {
 	// ...
@@ -712,17 +712,20 @@ program, not from the test process.
 Everything is in place: the two test files, the four scripts, and the split
 in `main`. Run the package:
 
+<!-- transcripts: authored -->
 ```bash
 $ go test ./cmd/todo
-go: updates to go.mod needed; to update it:
-	go mod tidy
+missing go.sum entry for module providing package golang.org/x/tools/txtar (imported by github.com/rogpeppe/go-internal/txtar); to add:
+	go get github.com/rogpeppe/go-internal/txtar@v1.13.1
 ```
 
 The module's list is the first thing to object, and it objects before any
 code compiles. The test files import the testscript package, and the module
 does not name it directly yet — it sits in the list only because another test
-tool dragged it in. The message names the fix, and one more command asks for
-the current version:
+tool dragged it in. The run stops on the missing module: testscript reaches
+`golang.org/x/tools/txtar`, and `go.sum` holds no checksum for it. The `go get`
+line the message prints is pinned to the old version; the commands below ask
+for the current version instead:
 
 ```bash
 $ go get github.com/rogpeppe/go-internal@latest

@@ -272,6 +272,9 @@ ok  	todo/task	0.001s
 FAIL
 ```
 
+An untouched package answers from Go's test cache: `todo/task` did not change
+here, so your run may print `(cached)` where this one shows a time.
+
 "Disk on fire" came back by itself, and the ID 3 failure was never reached, so the error cannot match `ErrNotFound`. Collect the failures and join them at the end, as shown above.
 
 <details>

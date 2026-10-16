@@ -194,6 +194,9 @@ Command todo is the todo application's CLI. For now it is a walking skeleton;
 the real commands arrive in Part VI.
 ```
 
+The comment calls `todo` a CLI — short for command-line tool, a program you
+run from the terminal.
+
 `main` does three small jobs and nothing else. It hands `run` the terminal
 itself — `os.Stdout`, where normal output goes. If `run` reports an error,
 `main` prints it to `os.Stderr`, where error messages belong, and exits with

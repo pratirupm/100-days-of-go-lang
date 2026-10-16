@@ -474,7 +474,7 @@ Deterministic: the tests order events with channels, so a busy machine changes h
 
 ## If something went wrong
 
-**The second call runs anyway, once in tens of thousands of tries.** This is the failure the second check exists for. Delete the check inside the job wrapper and keep only the loop's check, and the fail-fast test passes almost every time: the window between the loop's check and the helper's start is a few instructions long. Run it enough times and it fails:
+**The second call runs anyway, nearly every run.** This is the failure the second check exists for. Delete the check inside the job wrapper and keep only the loop's check, and the fail-fast test fails almost every time — on the very first run, not after tens of thousands of tries. The loop's check passes while task 1 is still starting, then blocks in `Go` waiting for the crew's only slot; the failing call cancels and frees the slot, and the next hand-off starts anyway. The command fails right away:
 
 ```bash
 $ go test -count=200000 -failfast -run TestProcess_FirstErrorStopsScheduling ./internal/store
@@ -495,7 +495,7 @@ FAIL	todo/internal/store	0.003s
 FAIL
 ```
 
-Expected `[]int{1}`, got `[]int{1, 2}`: task 2 ran after task 1 had already failed. What happened: the loop's check saw a live context and moved on, then blocked in `Go` waiting for the crew's only slot; the failing call canceled the group and released the slot; the loop's next hand-off started anyway. Fix: the second check inside the wrapper, in front of `fn`, after the slot is held — the shape in `batch.go`. A failure that needs tens of thousands of runs is telling you a safety property is gone, not that the test is unfair.
+Expected `[]int{1}`, got `[]int{1, 2}`: task 2 ran after task 1 had already failed. What happened: the loop's check saw a live context and moved on, then blocked in `Go` waiting for the crew's only slot; the failing call canceled the group and released the slot; the loop's next hand-off started anyway. Fix: the second check inside the wrapper, in front of `fn`, after the slot is held — the shape in `batch.go`. The immediate failure is the point of the experiment: the check in front of `fn` is the fail-fast promise, and the command showed what removing it costs.
 
 **Two helpers writing to the same slice.** `fn` runs from several helpers at once — that's the point — so anything `fn` shares needs a lock or a hand-off, like the counting pool's partials. An `fn` that appends to a shared slice without a lock makes the race detector open the run with:
 
@@ -558,7 +558,7 @@ Fix: decide which contract you want. To stop at the first problem, `Process` is 
 <details>
 <summary>Going deeper: the race the second check closes</summary>
 
-One check in the loop looks correct, and it is correct 199,994 times out of 200,000. A small experiment outside the app measured the two shapes — three tasks, a crew of one, task 1 failing, 200,000 runs each:
+One check in the loop looks correct, and with it the fail-fast test fails 199,994 times out of 200,000. A small experiment outside the app measured the two shapes — three tasks, a crew of one, task 1 failing, 200,000 runs each:
 
 ```text
 outer-only: [1 2]=199994
@@ -566,7 +566,7 @@ outer-only: [1]=6
 both: [1]=200000
 ```
 
-The keys are the call sequences `fn` saw; the counts are runs. The one-check shape ran the second call in 199,994 runs. The shipped shape never did, because the library orders the events that close the window: the failing call records the error and cancels the group, then releases its slot; the loop wakes and starts the next helper; the helper's first statement reads the context. Cancel, release, start, check — the cancellation is always first. That is why the fail-fast test can say "the next call never ran" instead of racing it.
+The keys are the call sequences `fn` saw; the counts are runs. The one-check shape ran the second call in 199,994 runs; the 6 runs that passed are the flake. The shipped shape never did, because the library orders the events that close the window: the failing call records the error and cancels the group, then releases its slot; the loop wakes and starts the next helper; the helper's first statement reads the context. Cancel, release, start, check — the cancellation is always first. That is why the fail-fast test can say "the next call never ran" instead of racing it.
 
 </details>
 
@@ -591,4 +591,4 @@ Every test in this chapter orders its events with channels, and none reads a clo
 
 </details>
 
-Next, the tasks leave the store as JSON — and this batch runner will be waiting to carry them back in.
+Next, the tasks leave the store as JSON — and the batch runner stands as the shape for bounded work, with its tests holding it to the contract.

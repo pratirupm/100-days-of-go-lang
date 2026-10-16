@@ -1260,4 +1260,4 @@ So the model carries the program's context — the signal context the binary cre
 
 </details>
 
-The plain frame is in place; next it gets color, a scrolling list, and the keys that add and complete a task.
+The plain frame is in place; next it gets color, a text input, and the keys that add and complete a task.

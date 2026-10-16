@@ -1027,4 +1027,4 @@ the list yourself when order matters.
 
 The tool is real, and every command is covered by tests that never start a
 process. Next, the database path stops being a constant: the tool learns to
-take it from a flag and a configuration file.
+take it from a flag, an environment variable, or a sensible default.

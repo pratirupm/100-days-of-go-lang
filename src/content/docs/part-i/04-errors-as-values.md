@@ -301,8 +301,9 @@ names the ID it could not find.
 a failure by comparing `err.Error()` with the exact text you expect. The text
 is one layer's rendering; the moment a caller above wraps the error with its
 own words, the comparison breaks even though the failure is the same. A
-throwaway test that compared the full text fails like this — the first part of
-the line names the file where the check lived, and yours will name your own:
+throwaway test that compared the full text fails like this (run with `-v` to
+see the case by name) — the first part of the line names the file where the
+check lived, and yours will name your own:
 
 ```text
 === RUN   TestScratch_StringCompare
@@ -331,8 +332,8 @@ FAIL
 `%v` formatted the sentinel into text and recorded nothing, so `errors.Is` had
 no chain to walk. The message looked perfect — that is the trap. Use `%w`.
 
-**`errors.As` handed the variable instead of its address.** The test binary
-does not build:
+**`errors.As` handed the variable instead of its address.** The mistake is
+reported by `go vet`, which runs as part of `go test`:
 
 ```text
 # todo/task

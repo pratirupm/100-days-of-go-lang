@@ -181,7 +181,7 @@ The rows are the boundaries and the values just outside them. `0` and `6` are th
 
 ## Retype every fixture
 
-The tests we already have spell statuses by hand, and those spellings must become the new names. In `internal/task/task_test.go`, the constructor's default checks become:
+A **fixture** is a test's data — the sample values it feeds in. The tests we already have spell statuses by hand, and those spellings must become the new names. In `internal/task/task_test.go`, the constructor's default checks become:
 
 <!-- verify: internal/task/task_test.go at=text-encoding -->
 ```go title="internal/task/task_test.go"
@@ -236,6 +236,8 @@ FAIL	todo/internal/store [build failed]
 FAIL	todo/internal/task [build failed]
 FAIL
 ```
+
+An untouched package answers from Go's test cache: `todo/cmd/todo` did not change here, so your run may print `(cached)` where this one shows a time.
 
 Read it in order. The two `#` lines name the test builds that failed, and every middle line is `file:line:column: complaint`. The task package's names are bare because its test file lives in the same package; the store's carry a `task.` prefix because it reaches across a package boundary.
 
@@ -406,7 +408,7 @@ All three packages pass, with the command's test untouched: it prints tasks with
 
 ## If something went wrong
 
-**The decoder validates but drops the value.** `UnmarshalText` writes, so its receiver must be a pointer. With a value receiver — `func (s Status) UnmarshalText(...)` — the decode still runs, still rejects bad text, and drops every accepted value on a copy. The tests report:
+**The decoder validates but drops the value.** `UnmarshalText` writes, so its receiver must be a pointer. With a value receiver — `func (s Status) UnmarshalText(...)` — the decode still runs, still rejects bad text, and drops every accepted value on a copy. Run with `-v` to see each case by name. The tests report:
 
 ```text
 === RUN   TestStatus_UnmarshalText

@@ -28,9 +28,9 @@ completes, `r` reloads. They just travel to the server as requests now.
 ## The interface becomes a customer
 
 A **client** is a program that asks another program to do work for it. The
-browser is the model: it asks, and the server answers with a page. The
-interface is about to work the same way — it asks for the task list and asks
-the server to make changes.
+browser is the pattern to copy: it asks, and the server answers with a page.
+The interface is about to work the same way — it asks for the task list and
+asks the server to make changes.
 
 The server is the only program that touches the file now: one writer, many
 askers. The arrangement buys two habits.
@@ -987,6 +987,10 @@ internal/tui/tui_test.go:246:37: too many errors
 FAIL	todo/internal/tui [build failed]
 FAIL
 ```
+
+The `"todo/internal/store".Store` spelling is the toolchain's — current Go
+prints the same type as `store.Store`; the missing method is the point
+either way.
 
 One line of the target API, said once per call site. The model changes next.
 

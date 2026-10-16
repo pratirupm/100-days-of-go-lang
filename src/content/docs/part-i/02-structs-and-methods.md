@@ -211,8 +211,8 @@ A bigger wall of text than before, but it reads in groups, one per piece we
 haven't built:
 
 - `undefined: NewTask` — the constructor doesn't exist yet.
-- Six `unknown field` lines — `Task` still has only a `Title`, and the test
-  writes tasks with `Status`, `Priority`, and `Due`. One missing field,
+- Five `unknown field` lines — `Task` still has only a `Title`, and the test
+  writes tasks with `Status`, `Priority`, and `Due`. Each missing field,
   listed once per line that mentions it.
 - `no field or method String` — the method doesn't exist yet.
 
@@ -348,7 +348,7 @@ type Task struct {
 	// Due is the deadline. The zero value means the task has no due date.
 	Due time.Time
 }
-  Task is a single todo item.
+    Task is a single todo item.
 
 func NewTask(title string) (Task, error)
 func (t Task) String() string
@@ -381,7 +381,7 @@ file is saved, it opens with `package task`, and the name is spelled
 
 **`unknown field ... in struct literal of type Task`.** The struct in
 `task/task.go` is still the small one, with only a `Title`. The compiler
-lists each field it can't find, once per line that mentions it — six lines,
+lists each field it can't find, once per line that mentions it — five lines,
 one cause. Grow the struct to match the block above; capitalization and
 spelling both count.
 

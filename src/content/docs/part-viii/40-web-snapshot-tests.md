@@ -792,9 +792,9 @@ What the check does not claim is everything else an accessibility audit
 covers: contrast, focus order, labels and names, landmarks, keyboard behavior,
 or conformance with the Web Content Accessibility Guidelines. Heading
 structure is the one property a page's outline can assert without a browser,
-and the live browser check from the security work is the only rendering proof
-the suite has. This check is deliberately small enough to be honest about what
-it proves.
+and the process-level web cases — the whole flow through the real binary — are
+the closest the suite gets to a rendering proof. This check is deliberately
+small enough to be honest about what it proves.
 
 </details>
 

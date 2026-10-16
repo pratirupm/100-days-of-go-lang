@@ -783,6 +783,9 @@ $ find xdg-data -type f
 xdg-data/todo/todo.db
 ```
 
+Your `find` will also list `todo.db-log` and `todo.db-wal`, the database's
+`-log` and `-wal` sidecars.
+
 `TODO_DB` selects a different database, and the list proves it — the task from
 the default store is not there:
 

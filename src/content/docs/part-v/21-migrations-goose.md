@@ -297,7 +297,7 @@ ok  	todo/internal/task	0.004s
 FAIL
 ```
 
-Two classes of error, and the compiler is the checklist. `undefined: Up` — and `Down` — means the package the tests describe doesn't exist yet: six symbols in all. `too many arguments in call to NewTursoStore` counts the new first parameter; the tests moved to the new shape before the store did. Once this internal test file compiles, the external one reports the same arity error at its own call site. Your line numbers will differ; the shapes will not.
+Two classes of error, and the compiler is the checklist. `undefined: Up` — and `Down` — means the package the tests describe doesn't exist yet: six complaints in all. `too many arguments in call to NewTursoStore` counts the new first parameter; the tests moved to the new shape before the store did. Once this internal test file compiles, the external one reports the same arity error at its own call site. Your line numbers will differ; the shapes will not.
 
 ## Write the migration
 
@@ -582,7 +582,10 @@ FAIL	todo/internal/db [setup failed]
 FAIL
 ```
 
-Go cannot find goose, so the package never reaches the compiler. Run the `go get` command above, then the tests again.
+Go cannot find goose, so the package never reaches the compiler. The file and
+line at the start of the message are wherever the import lives — in your tree
+that is `internal/db/migrate.go`. Run the `go get` command above, then the
+tests again.
 
 **A database created by the old constructor.** The old constructor created the tables without recording a version. goose now tries to run `00001_init.sql` on a database that already has the tables, and the engine refuses:
 
