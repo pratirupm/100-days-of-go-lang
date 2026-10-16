@@ -130,6 +130,7 @@ Below the table, leave a blank line, then the loop:
 			t.Errorf("%s: NewTask(%q).Due = %v, want zero time", tc.name, tc.title, got.Due)
 		}
 	}
+}
 ```
 
 `for _, tc := range cases` walks the rows one at a time, with `tc` holding

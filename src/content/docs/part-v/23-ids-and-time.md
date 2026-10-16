@@ -167,7 +167,7 @@ Every line is a place where a test expects the new id and the code still speaks 
 
 ## Change the type, then the stores
 
-Now the code the tests describe. The domain field changes type, and its comment records who assigns ids:
+Now the code the tests describe. The domain field changes type, and its comment records who assigns ids. The finished app's appendix holds this file in full — read the parts behind the `...` there as you type them:
 
 <!-- verify: internal/task/task.go at=uuid-ids -->
 ```go title="internal/task/task.go"
@@ -199,7 +199,7 @@ The lock earns its keep here: version 7 ids never go backwards within a process,
 
 The rest of the memory store is a short sweep. `Complete` and `CompleteAll` take a `uuid.UUID` instead of an `int`, the `Store` interface's line changes with them, and the error text prints the id with `%s` so it appears in its dashed form.
 
-The database store generates the id before the transaction and hands the same value to the row and to the caller:
+The database store generates the id before the transaction and hands the same value to the row and to the caller. The appendix holds this file in full — the lines behind the `...` are there as you type them:
 
 <!-- verify: internal/store/turso.go at=uuid-ids -->
 ```go title="internal/store/turso.go"
@@ -295,7 +295,7 @@ A migration this risky gets a test before it gets written. `UpTo` — the hook t
 
 It migrates a fresh database only to version 1, seeds the old integer schema by raw SQL — the counter assigns ids 1 and 2 — and then runs the rest of the migrations.
 
-What it checks is shape and identity, not values, because the new ids are random: every id parses as a UUID, the stored text is canonical, and the backfilled ids are version 4.
+What it checks is shape and identity, not values, because the new ids are random: every id parses as a UUID, the stored text is canonical, and the backfilled ids are version 4. The finished app's appendix holds this file in full — read the parts behind the `...` there as you type them.
 
 <!-- verify: internal/db/migrate_test.go at=uuid-ids -->
 ```go title="internal/db/migrate_test.go"
@@ -329,7 +329,7 @@ What it checks is shape and identity, not values, because the new ids are random
 	}
 ```
 
-Each title, status, priority, and due date must match the old row it came from. Then the labels, and one fresh insert:
+Each title, status, priority, and due date must match the old row it came from. Then the labels, and one fresh insert. The appendix holds this file in full — the lines behind the `...` are there as you type them:
 
 <!-- verify: internal/db/migrate_test.go at=uuid-ids -->
 ```go title="internal/db/migrate_test.go"
@@ -364,7 +364,7 @@ Run the package now and the test fails: the migration that gives the rows their 
 
 ## Write the migration
 
-Create `internal/db/migrations/00002_uuid_ids.sql`. The forward half starts with the mapping — a scratch table pairing every old number with a new id:
+Create `internal/db/migrations/00002_uuid_ids.sql`. The finished app's appendix holds this file in full — read the parts behind the `...` there as you type them. The forward half starts with the mapping — a scratch table pairing every old number with a new id:
 
 <!-- verify: internal/db/migrations/00002_uuid_ids.sql at=uuid-ids -->
 ```sql title="internal/db/migrations/00002_uuid_ids.sql"

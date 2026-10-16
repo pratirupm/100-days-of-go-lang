@@ -59,7 +59,7 @@ Three inputs, one output. `schema` points at the migration directory the last ch
 
 ## Write the queries
 
-Create the folder `internal/db/queries` and, inside it, `tasks.sql`. This file is the store's whole SQL surface: twelve named queries in sqlc's format. It opens with a note about the file itself, then the two inserts and the read-by-id:
+Create the folder `internal/db/queries` and, inside it, `tasks.sql`. The finished app's appendix holds this file in full — read the parts behind the `...` there as you type them. This file is the store's whole SQL surface: twelve named queries in sqlc's format. It opens with a note about the file itself, then the two inserts and the read-by-id:
 
 <!-- verify: internal/db/queries/tasks.sql at=sqlc -->
 ```sql title="internal/db/queries/tasks.sql"
@@ -186,7 +186,7 @@ ORDER BY task_id, tag;
 
 ## Run the generator
 
-sqlc is not part of the app. Like the mock generator, it runs from a `//go:generate` line pinned to an exact version. Open `internal/store/store.go` and add the second directive below the mock's:
+sqlc is not part of the app. Like the mock generator, it runs from a `//go:generate` line pinned to an exact version. Open `internal/store/store.go` and add the second directive below the mock's. The finished app's appendix holds this file in full; the pieces quoted here are the ones that carry the idea:
 
 <!-- verify: internal/store/store.go at=sqlc -->
 ```go title="internal/store/store.go"
@@ -357,7 +357,7 @@ The rewrite is done when that suite passes unchanged. If a case fails, the mappi
 
 ## Move the store onto the generated queries
 
-The store keeps its job: opening the database, transactions, error shapes, and the mapping to `task.Task`. What leaves is the SQL. Start with the struct — one new field — and the constructor:
+The store keeps its job: opening the database, transactions, error shapes, and the mapping to `task.Task`. What leaves is the SQL. Start with the struct — one new field — and the constructor. The finished app's appendix holds this file in full — read the parts behind the `...` there as you type them:
 
 <!-- verify: internal/store/turso.go at=sqlc -->
 ```go title="internal/store/turso.go"

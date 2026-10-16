@@ -70,8 +70,12 @@ require (
 The two new names sit beside `testify`, which the suite already uses. Below
 this block, `go.mod` lists the libraries' own dependencies, each marked
 `// indirect` — things the two libraries need, which we never write by hand.
-And if you run `go mod tidy` later, both entries stay, because the tests will
-import them.
+
+One ordering note before we move on: fetch the libraries now — the tests are
+about to import them — and tidy the project's dependency files only after
+that test code exists. `go mod tidy` removes a module that nothing imports, so
+tidying now would undo this step; the same ordering the testify dependency
+taught earlier.
 
 ## Hand the listing to a file
 
@@ -302,7 +306,19 @@ value and the `+` lines are what the app produced.
 ## Record the snapshots
 
 Both new snapshot tests expect entries that don't exist yet, and that is the
-interesting part: the first run writes them. Run the CLI test and watch:
+interesting part: the first run writes them. One housekeeping step first: the
+tests now import both libraries, so bring the project's dependency files up to
+date:
+
+<!-- transcripts: authored -->
+```bash
+$ go mod tidy
+```
+
+`go mod tidy` is quiet when there is nothing to report — the libraries are
+already required, so the command fills in the checksums the first build needs
+and keeps both entries, because the tests import them. Now run the CLI test
+and watch:
 
 ```bash
 $ NO_COLOR=true go test -count=1 -v ./cmd/todo
@@ -568,9 +584,9 @@ right, then make both agree — update the inline expectation too, or change the
 code back and update nothing. Keeping both views of a fact is the feature, not
 the bug.
 
-**The tests won't build.** If the build stops on the `snaps` or `cmp` import,
-the library is not in the project yet. Run the `go get` command from earlier
-again, then run the tests.
+**The tests won't build.** If the build stops on the `snaps` or `cmp` import —
+or asks for a missing `go.sum` entry — the dependency files are out of date
+with the tests. Run `go mod tidy`, then run the tests again.
 
 <details>
 <summary>Going deeper: what makes a snapshot trustworthy?</summary>

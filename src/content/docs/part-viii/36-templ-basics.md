@@ -208,8 +208,9 @@ func TestServer_IndexPage(t *testing.T) {
 }
 ```
 
-The finished app's appendix holds the whole test file; the pieces above are
-the ones that carry the idea. Now run everything and watch it fail:
+The finished app's appendix holds the complete file — it has grown since
+this chapter, so read the cases that match what's shown here and skip what
+hasn't been built yet. Now run everything and watch it fail:
 
 ```bash
 $ go test -count=1 ./...
@@ -420,10 +421,18 @@ renders the page. Look closely at that last line: the render target is
 `c.Response()` itself. A nearby variant looks right and quietly breaks the
 request record — it is in "If something went wrong".
 
-One line mounts the page from `main`:
+The mount is a small edit to `main`: the session manager moves into a name
+both surfaces share, and the page mounts onto the instance the API built:
 
 <!-- verify: cmd/todo-server/main.go at=templates -->
 ```go title="cmd/todo-server/main.go"
+	"todo/internal/store"
+	"todo/internal/web"
+)
+...
+	sessions := api.NewSessionManager(sessionStore)
+	e := api.New(st, auth.NewService(sqlDB), sessions, logger)
+...
 	// The server-rendered pages mount onto the instance the API just built:
 	// one echo, one middleware stack, one session manager, one store. The
 	// pages are registered here rather than inside api.New so the API
@@ -432,11 +441,15 @@ One line mounts the page from `main`:
 	web.New(st, sessions).Register(e)
 ```
 
-`web.New(st, sessions).Register(e)` sits right after `api.New` builds the
-instance: one server, one middleware stack, one session manager, one store.
-The pages mount here rather than inside `api.New` so the API's route table
-stays the API's — the documentation's coverage check walks that table, and
-pages are not API operations.
+Three pieces changed: the import `todo/internal/web` is new; the session
+manager, once built inline inside the `api.New(...)` call, is hoisted into
+`sessions` so `api.New` and `web.New` share the one manager; and the mount
+line follows `api.New`.
+
+Sharing the manager is the point: one cookie, one session, one login, for
+both surfaces. The pages mount from `main` rather than inside `api.New` so
+the API's route table stays the API's — the documentation's coverage check
+walks that table, and pages are not API operations.
 
 ## Run it green
 
@@ -489,9 +502,19 @@ Start the server the way the earlier web work showed — a scratch folder with
 its own database and log file — and sign in through the API the way the auth
 work showed; `curl -c alice.jar` keeps the cookie a login sets. The captures
 below use `$B` for the server's address, and `alice.jar` and `bob.jar` for
-the two accounts' cookie files. Add a few tasks through the API, including
-one titled `<script>alert("xss")</script>` and one with a due date and
-labels, and give the second account a task of its own.
+the two accounts' cookie files. The tasks go in like this — alice's three
+first, in the order the page lists them, then bob's one:
+
+<!-- transcripts: authored -->
+```bash
+$ curl -s -b alice.jar -H 'Content-Type: application/json' --data '{"title":"buy milk","priority":4,"due":"2026-10-20T00:00:00Z","tags":["errands","home"]}' $B/api/v1/tasks
+$ curl -s -b alice.jar -H 'Content-Type: application/json' --data '{"title":"write the chapter","priority":2}' $B/api/v1/tasks
+$ curl -s -b alice.jar -H 'Content-Type: application/json' --data '{"title":"<script>alert(\"xss\")</script>","priority":3}' $B/api/v1/tasks
+$ curl -s -b bob.jar -H 'Content-Type: application/json' --data '{"title":"bob private task"}' $B/api/v1/tasks
+```
+
+Each command answers `201` with the stored task, and the values are the
+ones the body below pins.
 
 An anonymous visitor meets the sign-in check first:
 
@@ -538,7 +561,8 @@ Transfer-Encoding: chunked
 request id, the security headers, and the session layer's `Vary: Cookie`. The
 page does not bypass the stack; it rides it.
 
-The body:
+The capture below is the same body, wrapped one piece of markup per line so
+it can be read — your terminal prints it as one long line:
 
 ```bash
 $ curl -s -b alice.jar $B/

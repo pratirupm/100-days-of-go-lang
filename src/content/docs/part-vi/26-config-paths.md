@@ -57,7 +57,8 @@ The resolution is a small piece of logic with a lot of cases — three sources,
 two paths, empty values falling through — which makes it a natural table test.
 It belongs in a package of its own, `internal/config`, so the command tree can
 call it by name. Create the folder `internal/config` and, inside it, a file
-called `config_test.go`.
+called `config_test.go`. The finished app's appendix holds this file in full —
+read the parts behind the `...` there as you type them.
 
 The file opens with a helper. `Load`, the function we're about to write, will
 take the environment as a parameter: a function that looks up a name and
@@ -200,7 +201,8 @@ The command tree is about to change shape. Until now, `New` took a store and
 the tests handed it a memory store. But the store cannot exist before the path
 is known, and the path is not known until the flags are parsed — so the tree
 will take a way to build the store, and call it at the right moment. The tests
-move first.
+move first. The finished app's appendix holds the whole test file in full —
+read the parts behind the `...` there as you type them.
 
 Their fake is an **opener**: a function that records the path it was asked to
 open and returns the store the test seeded.
@@ -423,9 +425,10 @@ The rest of the output is the other packages still passing, and
 
 ## The resolver
 
-Now the code the tests describe. Create `internal/config/config.go`. It opens
-with the package comment, two imports, and the `Config` type — the pair of
-resolved paths:
+Now the code the tests describe. Create `internal/config/config.go`. The
+finished app's appendix holds this file in full; the pieces quoted here are
+the ones that carry the idea. It opens with the package comment, two imports,
+and the `Config` type — the pair of resolved paths:
 
 <!-- verify: internal/config/config.go at=config -->
 ```go title="internal/config/config.go"
@@ -626,7 +629,9 @@ open the empty path:
 
 Cobra calls a hook — a function it runs at a fixed moment in a command's life.
 The resolution and the open happen in the pre-run hook, before any command body
-runs; the cleanup happens in the post-run hook, after a command succeeds:
+runs; the cleanup happens in the post-run hook, after a command succeeds. The
+appendix holds this file in full — the lines behind the `...` are there as you
+type them:
 
 <!-- verify: internal/cli/cli.go at=config -->
 ```go title="internal/cli/cli.go"
@@ -679,7 +684,9 @@ The import list also gains `todo/internal/config`.
 
 `cmd/todo/main.go` gets simpler. The store's handle has one owner now — the
 session — so `main` stops opening the store and stops closing it. It hands the
-tree the real opener and lets the tree do the work:
+tree the real opener and lets the tree do the work. The finished app's appendix
+holds this file in full — the lines behind the `...` are there as you type
+them:
 
 <!-- verify: cmd/todo/main.go at=config -->
 ```go title="cmd/todo/main.go"

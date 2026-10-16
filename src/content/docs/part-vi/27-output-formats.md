@@ -156,6 +156,11 @@ func TestList_JSONContract(t *testing.T) {
 
 	assert.Nil(t, got[1].Due, "no due date is null")
 	assert.Equal(t, []string{}, got[1].Tags, "tags is an array even when the task has none")
+
+	assert.Equal(t, task.StatusDone.String(), got[2].Status)
+	assert.Equal(t, int(task.PriorityMax), got[1].Priority)
+	assert.Equal(t, []string{"garden"}, got[3].Tags)
+}
 ```
 
 The second decode is the other direction: into the test's own `wireTask`, with unknown fields refused, so a renamed or retyped key fails here too. The assertions at the end pin the value rules — a timestamp when there is a due date and `null` when there is not, and an array for the labels even when it is empty.

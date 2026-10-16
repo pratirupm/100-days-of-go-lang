@@ -62,6 +62,8 @@ The `Get` case has the shape all seven share:
 
 It seeds two tasks, reads one back, and compares it with what `Add` returned. Then it overwrites the title and a label on the task it read, and reads again: the store must have handed out a copy, so the changes never reach its own state. Last, it asks for a fixed id no store holds and pins the miss: `ErrNotFound`, naming the operation.
 
+The finished app's appendix holds the whole suite file; the `Get` case above is the one that carries the idea. Read the other six cases there as you type, and add them one at a time.
+
 The API's tests are new, in `internal/api/tasks_test.go`: seventeen cases that drive the routes through echo's own `ServeHTTP` — no socket, no port — against a real memory store. One helper sends every request:
 
 <!-- verify: internal/api/tasks_test.go at=task-endpoints -->
@@ -141,6 +143,8 @@ The filters get a table too, over a status, a label, and a label nothing carries
 			taskJSON(second.ID.String(), "ship it", "Todo", 1, "null", "[]", 1),
 		), rec.Body.String())
 ```
+
+The finished app's appendix holds the whole test file; the pieces above are the ones that carry the idea. Read the rest there as you type, and add the cases one at a time.
 
 Now run the tests and watch two kinds of failure arrive at once:
 
@@ -236,7 +240,56 @@ Two generator directives sit in `internal/store/store.go`, and their order is on
 
 The query generator goes first: the mock generator reads the store's package, and the store does not compile until the new query methods exist. While a query is changing, run the query generator on its own — `go run github.com/sqlc-dev/sqlc/cmd/sqlc@v1.31.1 generate -f sqlc.yaml` — and let `go generate ./...` follow once the stores are whole.
 
-The memory store's `Get` is the same lookup the other methods already use — under the read lock, with the labels copied out:
+The memory store's three new methods need two helpers the store did not have. `findLocked` is the id lookup `Complete` used to run inline — moved to one place so the four methods that need it cannot drift apart. `copyTask` is how a read hands out what the store holds without handing out the store's own memory. Both live at the bottom of `internal/store/store.go`, beside `listLocked`:
+
+<!-- verify: internal/store/store.go at=task-endpoints -->
+```go title="internal/store/store.go"
+// findLocked returns the index of the task with the given id, or -1 when the
+// store holds none. The caller must hold mu; the helper never acquires it.
+func (s *MemoryStore) findLocked(id uuid.UUID) int {
+	for i, t := range s.tasks {
+		if t.ID == id {
+			return i
+		}
+	}
+	return -1
+}
+
+// copyTask returns a task whose tags slice is its own. It is how the read
+// methods hand out what they hold without handing out the store's own
+// memory: the struct is a value already, and the slice is the one field that
+// would still alias.
+func copyTask(t task.Task) task.Task {
+	t.Tags = slices.Clone(t.Tags)
+	return t
+}
+```
+
+`Complete` moves onto `findLocked` in the same change: its comment, its lock, and its checks stay, and the loop it used to carry inline becomes the helper:
+
+<!-- verify: internal/store/store.go at=task-endpoints -->
+```go title="internal/store/store.go"
+func (s *MemoryStore) Complete(ctx context.Context, id uuid.UUID, version int) error {
+	s.ops.Add(1)
+	if err := ctxErr(ctx, "complete task"); err != nil {
+		return err
+	}
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	i := s.findLocked(id)
+	if i < 0 {
+		return fmt.Errorf("complete task %s: %w", id, ErrNotFound)
+	}
+	if s.tasks[i].Version != version {
+		return fmt.Errorf("complete task %s: %w", id, ErrConflict)
+	}
+	s.tasks[i].Status = task.StatusDone
+	s.tasks[i].Version++
+	return nil
+}
+```
+
+`Get` uses both helpers under the read lock — the id lookup, then a copy whose label slice belongs to the caller:
 
 <!-- verify: internal/store/store.go at=task-endpoints -->
 ```go title="internal/store/store.go"
@@ -279,7 +332,28 @@ func (s *MemoryStore) Update(ctx context.Context, t task.Task) (task.Task, error
 }
 ```
 
-`Delete` is `Complete`'s shape with one difference: instead of moving the status, it removes the row with `slices.Delete`. Its two failures are the same wrapped pair.
+`Delete` is `Complete`'s shape with one difference: instead of moving the status, it removes the row with `slices.Delete`. Its two failures are the same wrapped pair:
+
+<!-- verify: internal/store/store.go at=task-endpoints -->
+```go title="internal/store/store.go"
+func (s *MemoryStore) Delete(ctx context.Context, id uuid.UUID, version int) error {
+	s.ops.Add(1)
+	if err := ctxErr(ctx, "delete task"); err != nil {
+		return err
+	}
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	i := s.findLocked(id)
+	if i < 0 {
+		return fmt.Errorf("delete task %s: %w", id, ErrNotFound)
+	}
+	if s.tasks[i].Version != version {
+		return fmt.Errorf("delete task %s: %w", id, ErrConflict)
+	}
+	s.tasks = slices.Delete(s.tasks, i, i+1)
+	return nil
+}
+```
 
 The database store's `Update` writes the columns and the labels in one `BEGIN CONCURRENT` transaction:
 
@@ -337,15 +411,29 @@ func (s *TursoStore) classifyWrite(ctx context.Context, op string, id uuid.UUID)
 }
 ```
 
+`Complete` had that switch inline; the same change replaces its tail with one call:
+
+<!-- verify: internal/store/turso.go at=task-endpoints -->
+```go title="internal/store/turso.go"
+	...
+	if n > 0 {
+		return nil
+	}
+	return s.classifyWrite(ctx, "complete task", id)
+}
+```
+
 The probe runs after the failed write, and its order is the contract: a task that is gone is a miss even when the version is stale too — re-reading a missing task is pointless, and re-reading a conflicting one is exactly the retry. All three writes share the helper, so every store reports the same sentences.
 
-Now regenerate the mocks:
+Now the generators. `go generate ./...` does not work by itself yet: it reaches the api package before the store's, and the api mock type-checks the store package — which does not compile until sqlc has written the new query methods. So the query generator runs by hand first, and the full walk follows. From the app's root:
 
+<!-- transcripts: authored -->
 ```bash
+$ go run github.com/sqlc-dev/sqlc/cmd/sqlc@v1.31.1 generate -f sqlc.yaml
 $ go generate ./...
 ```
 
-Silence is success: the two test mocks are rewritten to carry the three new methods, and the store's package compiles again. Run the shared suite — `go test -count=1 -v -run TestStoreConformance ./internal/store` — against both stores:
+Silence is success: sqlc rewrites the generated queries in place, the two test mocks are rewritten to carry the three new methods, and the store's package compiles again. Run the shared suite — `go test -count=1 -v -run TestStoreConformance ./internal/store` — against both stores:
 
 ```bash
         --- PASS: TestStoreConformance/MemoryStore/Get (0.00s)
@@ -1071,7 +1159,7 @@ internal/store/storetest/suite.go:264:24: too many errors
 
 The suite names only interface methods, so it is the first thing the compiler builds. Fix: add the three methods to both stores. The compiler stops after ten errors per package, so `go test -gcflags=-e` shows the whole list, and the two generated mocks fail the same way until they are regenerated.
 
-**Every route answers 404 — with echo's own body.**
+**Every route answers 404 — with echo's own body.** The two line numbers below come from the capture; in your copy they will differ, so read the messages rather than the numbers:
 
 ```bash
 --- FAIL: TestUpdateTask (0.00s)
@@ -1088,7 +1176,7 @@ The suite names only interface methods, so it is the first thing the compiler bu
         	Test:       	TestUnknownRoute_ErrorShape
 ```
 
-Two causes wear one failure. The status misses are the empty group — nothing hangs off `/api/v1` yet — and the shape miss is echo's default error handler. Fix: register the five routes and set `e.HTTPErrorHandler = s.handleError`; a route that does not exist then still says `Not Found`, but in the API's shape.
+Two causes wear one failure. The status misses are the empty group — nothing hangs off `/api/v1` yet — and the shape miss is echo's default error handler: the test compares the body against `errorJSON("not_found", "Not Found")` with `assert.JSONEq`, and the default answers `{"message":"Not Found"}`, so the decoded maps differ by exactly the missing `code`. Fix: register the five routes and set `e.HTTPErrorHandler = s.handleError`; a route that does not exist then still says `Not Found`, but in the API's shape.
 
 **The binder's words reach the client.**
 

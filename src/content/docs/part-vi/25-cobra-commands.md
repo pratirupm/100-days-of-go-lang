@@ -58,7 +58,9 @@ exit code.
 The tests come before the tool, as always. Create the folder `internal/cli`
 and, inside it, `cli_test.go`. It opens as an **external test package** —
 `package cli_test`, not `package cli` — so it can touch only what the
-constructor hands over: the store, the writers, the arguments.
+constructor hands over: the store, the writers, the arguments. The finished
+app's appendix holds this file in full — read the parts behind the `...`
+there as you type them.
 
 <!-- verify: internal/cli/cli_test.go at=cli-commands -->
 ```go title="internal/cli/cli_test.go"
@@ -150,6 +152,26 @@ func TestAdd(t *testing.T) {
 		assert.Equal(t, []string{"home", "work"}, got.Tags)
 		assert.Equal(t, got.ID.String()+"\n", out, "add prints the id the store assigned")
 	})
+
+	t.Run("--due tomorrow parses", func(t *testing.T) {
+		t.Parallel()
+
+		st := store.NewMemoryStore()
+		_, _, err := runCLI(t, st, "add", "call mom", "--due", "tomorrow")
+		require.NoError(t, err)
+
+		list, err := st.List(context.Background())
+		require.NoError(t, err)
+		require.Len(t, list, 1)
+		got := list[0]
+		// ParseDue resolves "tomorrow" against the command's own time.Now,
+		// so the expected date is one of two: the test's tomorrow, or its
+		// today when midnight crossed between the command and this check.
+		now := time.Now().UTC()
+		today := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, time.UTC)
+		assert.Contains(t, []time.Time{today, today.AddDate(0, 0, 1)}, got.Due)
+	})
+}
 ```
 
 The first case runs `add` the way a person would — a title, a due date, a
@@ -300,8 +322,9 @@ there; the two indirect companions appear in the second.
 
 ## The tree is one function
 
-Everything lives in `internal/cli/cli.go`. It opens with the package's job
-description:
+Everything lives in `internal/cli/cli.go`. The finished app's appendix holds
+this file in full; the pieces quoted here are the ones that carry the idea.
+It opens with the package's job description:
 
 <!-- verify: internal/cli/cli.go at=cli-commands -->
 ```go title="internal/cli/cli.go"
@@ -642,7 +665,8 @@ importer rejects changes nothing.
 ## main becomes wiring
 
 With the tree in its own package, `main` shrinks to the wiring: signals, the
-database handle, and the exit code.
+database handle, and the exit code. The finished app's appendix holds this
+file in full — the lines behind the `...` are there as you type them.
 
 <!-- verify: cmd/todo/main.go at=cli-commands -->
 ```go title="cmd/todo/main.go"

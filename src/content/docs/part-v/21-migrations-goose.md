@@ -25,7 +25,7 @@ Two rules come with the idea. A recipe that has already run is never edited: goo
 
 The store's tests ask whether tasks survive an open and a close. The new tests ask a different question: what shape does the database serve? They go in a new package, `internal/db`: the store will depend on the migrations, and the migrations will know nothing about the store.
 
-Create the folder `internal/db` and, inside it, `migrate_test.go`. It opens with the package and the helper that gives each test its own database:
+Create the folder `internal/db` and, inside it, `migrate_test.go`. The finished app's appendix holds this file in full — read the parts behind the `...` there as you type them. It opens with the package and the helper that gives each test its own database:
 
 <!-- verify: internal/db/migrate_test.go at=migrations -->
 ```go title="internal/db/migrate_test.go"
@@ -331,7 +331,7 @@ One difference from the constants stands out: no `IF NOT EXISTS`. That is delibe
 
 ## The package that applies it
 
-Create `internal/db/migrate.go`. It opens with the package's name, its imports, and one line that looks like a comment but is an instruction to the Go tool:
+Create `internal/db/migrate.go`. The finished app's appendix holds this file in full — read the parts behind the `...` there as you type them. It opens with the package's name, its imports, and one line that looks like a comment but is an instruction to the Go tool:
 
 <!-- verify: internal/db/migrate.go at=migrations -->
 ```go title="internal/db/migrate.go"
@@ -461,7 +461,7 @@ This is the functional shape of the two tables, not the `CREATE TABLE` text the 
 
 ## Move the store onto migrations
 
-The store is next. Delete the two constants that hold the `CREATE TABLE` statements and the loop that ran them, and add `todo/internal/db` to `turso.go`'s imports, beside `todo/internal/task`. Then change the constructor to:
+The store is next. Delete the two constants that hold the `CREATE TABLE` statements and the loop that ran them, and add `todo/internal/db` to `turso.go`'s imports, beside `todo/internal/task`. The finished app's appendix holds this file in full — read the parts behind the `...` there as you type them. Then change the constructor to:
 
 <!-- verify: internal/store/turso.go at=migrations -->
 ```go title="internal/store/turso.go"

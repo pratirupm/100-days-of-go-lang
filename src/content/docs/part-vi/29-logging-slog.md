@@ -35,7 +35,7 @@ Go's standard library ships this whole idea as `log/slog`. A `slog.Logger` is th
 
 ## The test comes first
 
-True to the habit, we describe the behavior before writing it. The new package is `internal/logging`, and its test file is `internal/logging/logging_test.go`. It opens with a helper that builds the logger with a buffer standing in for stderr and a real file in the test's own temp folder.
+True to the habit, we describe the behavior before writing it. The new package is `internal/logging`, and its test file is `internal/logging/logging_test.go`. The finished app's appendix holds this file in full — read the parts behind the `...` there as you type them. It opens with a helper that builds the logger with a buffer standing in for stderr and a real file in the test's own temp folder.
 
 <!-- verify: internal/logging/logging_test.go at=logging -->
 ```go title="internal/logging/logging_test.go"
@@ -350,7 +350,7 @@ require (
 )
 ```
 
-Now the package itself, `internal/logging/logging.go`. It opens with the rule written down as a comment, plus the imports.
+Now the package itself, `internal/logging/logging.go`. The finished app's appendix holds this file in full — the lines behind the `...` are there as you type them. It opens with the rule written down as a comment, plus the imports.
 
 <!-- verify: internal/logging/logging.go at=logging -->
 ```go title="internal/logging/logging.go"
@@ -644,7 +644,9 @@ The level reaches the handler in the pre-run hook, before anything logs.
 
 The `ok` in that `if` is the whole conversation: the process logger's handler has a `SetLevel`, so it gets retuned; any other logger keeps the level it was built with, and the flag is validated but inert. That fallback is deliberate.
 
-The commands log their writes, and only their writes.
+The commands log their writes, and only their writes. The finished app's
+appendix holds `internal/cli/cli.go` in full; the pieces quoted here are the
+ones that carry the idea.
 
 <!-- verify: internal/cli/cli.go at=logging -->
 ```go title="internal/cli/cli.go"
@@ -659,7 +661,7 @@ No command logs a read, and no command writes a record to its output writer. Eac
 
 ## Main builds the logger before the tree
 
-There is a circle to break. The logger needs the log path, the log path comes from configuration, and the tree — which is what parses flags — needs the logger at construction. So `main` resolves the configuration first, before the tree runs.
+There is a circle to break. The logger needs the log path, the log path comes from configuration, and the tree — which is what parses flags — needs the logger at construction. So `main` resolves the configuration first, before the tree runs. The finished app's appendix holds this file in full — the lines behind the `...` are there as you type them.
 
 <!-- verify: cmd/todo/main.go at=logging -->
 ```go title="cmd/todo/main.go"

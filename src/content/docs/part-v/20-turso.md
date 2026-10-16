@@ -89,7 +89,7 @@ The comment explains the package name: the suite imports `store`, so the
 file that *calls* the suite cannot live inside `store` — the package would
 import itself.
 
-Below the imports comes the one exported function:
+Below the imports comes the one exported function. The finished app's appendix holds this file in full — read the parts behind the `...` there as you type them:
 
 <!-- verify: internal/store/storetest/suite.go at=turso -->
 ```go title="internal/store/storetest/suite.go"
@@ -105,7 +105,7 @@ an empty store, completing, filtering, counting, sorting by due date,
 stats, and a canceled context. One case pins that an empty store returns
 `nil`, not an empty list.
 
-Now the runner, in a new file called `internal/store/conformance_test.go`:
+Now the runner, in a new file called `internal/store/conformance_test.go`. The finished app's appendix holds this file in full — read the parts behind the `...` there as you type them:
 
 <!-- verify: internal/store/conformance_test.go at=turso -->
 ```go title="internal/store/conformance_test.go"
@@ -187,7 +187,7 @@ including the new `storetest` package, which holds only the suite.
 
 ## The schema and the handle
 
-Now the code. Create `internal/store/turso.go`. It starts with the store's
+Now the code. Create `internal/store/turso.go`. The finished app's appendix holds this file in full — read the parts behind the `...` there as you type them. It starts with the store's
 type and the promise every store makes:
 
 <!-- verify: internal/store/turso.go at=turso -->
@@ -287,7 +287,8 @@ instead of failing immediately. Why only one? The driver's DSN grammar
 knows a handful of its own keys and silently ignores the rest — a copied
 SQLite DSN would open fine and configure nothing. The other setting goes
 where it can take effect: a wrapper around the connector, so every fresh
-connection runs it.
+connection runs it. The appendix holds this file in full — the lines behind
+the `...` are there as you type them:
 
 <!-- verify: internal/store/turso.go at=turso -->
 ```go title="internal/store/turso.go"
@@ -338,7 +339,8 @@ through `t.Cleanup`, so the file is closed even when a case fails.
 
 The task row and its label rows belong together, so `Add` writes them
 inside a **transaction** — a group of writes that either all happen or none
-do:
+do. The finished app's appendix holds this file in full — read the parts
+behind the `...` there as you type them:
 
 <!-- verify: internal/store/turso.go at=turso -->
 ```go title="internal/store/turso.go"
@@ -390,7 +392,8 @@ nothing.
 
 `Complete` changes one row's status. The catch: an `UPDATE` that matches no
 row is not an error — it is a successful statement that changed zero rows.
-So the not-found signal comes from the result:
+So the not-found signal comes from the result. The appendix holds this file
+in full — the lines behind the `...` are there as you type them:
 
 <!-- verify: internal/store/turso.go at=turso -->
 ```go title="internal/store/turso.go"

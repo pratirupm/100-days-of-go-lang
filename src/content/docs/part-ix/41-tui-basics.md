@@ -516,6 +516,7 @@ func TestTUI_LoadFailure(t *testing.T) {
 
 	final := tm.FinalModel(t).(tui.Model)
 	assert.Error(t, final.Err())
+}
 ```
 
 When the store will not answer at all, the loop produces the error frame — and the session still ends cleanly.

@@ -58,24 +58,12 @@ but the edges are sharp. We'll use a library that does that part for us:
 shape of a program; in echo's case, that's one function per address, with the
 request and the response already in hand.
 
-Add it the way we added the other libraries, from the app's root folder: run
-`go get github.com/labstack/echo/v4@latest`, then `go mod tidy`. The first
-command fetches echo; the second makes the project's list of dependencies
-match what the code actually uses.
-
-<!-- verify: go.mod at=api-skeleton -->
-```text title="go.mod"
-require (
-	github.com/gkampitakis/go-snaps v0.5.23
-	...
-	github.com/labstack/echo/v4 v4.16.0
-	...
-)
-```
-
-The first `require` block now lists echo at v4.16.0, beside the libraries we
-already had. `go mod tidy` also added seven small modules echo depends on,
-marked indirect — code echo uses that we never call directly.
+Echo arrives in a moment, together with the code that uses it — and the
+ordering matters in both directions. The tests we're about to write never
+import echo; they talk to the package through echo's own `http.Handler` entry
+point. And `go mod tidy` removes a requirement that nothing imports, so
+fetching the library before its code exists would tidy itself away. The fetch
+happens in the section where `internal/api/api.go` appears.
 
 ## Write the endpoint tests
 
@@ -516,6 +504,32 @@ and a failure becomes 503 — "not right now" — rather than 500, "the server i
 broken". `c.JSON` writes the status code and turns the map into JSON. The
 store call takes `c.Request().Context()`, the request's own cancellation, so a
 client that walks away stops the work it started.
+
+With the code in place, fetch the library from the app's root folder:
+
+<!-- transcripts: authored -->
+```bash
+$ go get github.com/labstack/echo/v4@v4.16.0
+$ go mod tidy
+```
+
+On its first run, `go get` prints a few `go: downloading` lines while it
+fetches the library; `go mod tidy` then fills in the checksums and marks
+echo's own dependencies as indirect — eight small modules we never call
+directly. The relevant part of `go.mod` now reads:
+
+<!-- verify: go.mod at=api-skeleton -->
+```text title="go.mod"
+require (
+	github.com/gkampitakis/go-snaps v0.5.23
+	...
+	github.com/labstack/echo/v4 v4.16.0
+	...
+)
+```
+
+The first `require` block lists echo at v4.16.0, beside the libraries we
+already had.
 
 ## The listen address
 
