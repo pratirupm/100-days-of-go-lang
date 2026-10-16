@@ -1,13 +1,13 @@
-// Strips quote-verification markers from the built HTML.
+// Strips internal bookkeeping markers from the built HTML.
 //
-// The markers (`<!-- verify: path at=tag -->`) stay in the Markdown source —
-// `bun run verify` reads them — but they name internal checkpoint tags, so
-// they must never reach the reader-facing pages.
+// The markers (`<!-- verify: path at=tag -->` and `<!-- transcripts: authored -->`)
+// stay in the Markdown source — the gates read them — but they name internal
+// checkpoint tags, so they must never reach the reader-facing pages.
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const MARKER = /<!--\s*verify:[^>]*-->\n?/g;
+const MARKER = /<!--\s*(?:verify|transcripts):[^>]*-->\n?/g;
 
 async function* htmlFiles(dir) {
 	for (const entry of await readdir(dir, { withFileTypes: true })) {

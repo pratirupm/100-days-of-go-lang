@@ -50,11 +50,30 @@ function check(body: string[], file: string[]): string | null {
 	const hasElision = block.some((l) => ELISION.test(l.trim()));
 	const seq = block.filter((l) => !ELISION.test(l.trim()));
 
+	// A line containing an inline `...`/`…` matches any file line that
+	// contains the segments around it, in order. This is how a leaked
+	// path inside a frozen quote is redacted without breaking the check.
+	const inline = /\.\.\.|…/;
+	const matches = (blockLine: string, fileLine: string): boolean => {
+		if (!inline.test(blockLine)) return fileLine === blockLine;
+		const segments = blockLine
+			.split(inline)
+			.map((s) => s.trim())
+			.filter((s) => s !== '');
+		let cursor = 0;
+		for (const segment of segments) {
+			const at = fileLine.indexOf(segment, cursor);
+			if (at === -1) return false;
+			cursor = at + segment.length;
+		}
+		return true;
+	};
+
 	if (!hasElision) {
 		for (let start = 0; start + seq.length <= file.length; start++) {
 			let ok = true;
 			for (let k = 0; k < seq.length; k++) {
-				if (trim(file[start + k]!) !== seq[k]) {
+				if (!matches(seq[k]!, trim(file[start + k]!))) {
 					ok = false;
 					break;
 				}
@@ -68,7 +87,7 @@ function check(body: string[], file: string[]): string | null {
 	for (const line of seq) {
 		let found = false;
 		for (; cursor < file.length; cursor++) {
-			if (trim(file[cursor]!) === line) {
+			if (matches(line, trim(file[cursor]!))) {
 				found = true;
 				cursor++;
 				break;

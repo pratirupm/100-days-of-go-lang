@@ -18,6 +18,10 @@ const NEW_DOCS = join(ROOT, 'src/content/docs');
 const OLD_LESSONS = join(ROOT, '..', 'go-todo-course', 'book', 'lessons');
 
 const SKIP = new Set(['index.mdx', '404.md', 'start-here.md']);
+// `<!-- transcripts: authored -->` above a fence exempts it: the block was
+// hand-edited for reader safety (e.g. a neutral scratch path) and its lines
+// are deliberately not verbatim from the first edition.
+const AUTHORED = /^<!--\s*transcripts:\s*authored\s*-->\s*$/;
 
 async function* walk(dir: string): AsyncGenerator<string> {
 	for (const entry of await readdir(dir, { withFileTypes: true })) {
@@ -62,6 +66,7 @@ for await (const file of walk(NEW_DOCS)) {
 
 	let inFence = false;
 	let terminal = false;
+	let authored = false;
 	let body: string[] = [];
 	const report = (lineNo: number, line: string) => {
 		console.log(`${rel}:${lineNo}  [fail] not found in ${oldPath.split('/').pop()} — ${line.trim().slice(0, 90)}`);
@@ -70,10 +75,15 @@ for await (const file of walk(NEW_DOCS)) {
 
 	for (let i = 0; i < lines.length; i++) {
 		const line = lines[i]!;
+		if (AUTHORED.test(line)) {
+			authored = true;
+			continue;
+		}
 		if (line.startsWith('```')) {
 			if (!inFence) {
 				inFence = true;
-				terminal = isTerminalFence(line.slice(3).trim());
+				terminal = isTerminalFence(line.slice(3).trim()) && !authored;
+				authored = false;
 				body = [];
 			} else {
 				if (terminal) {
