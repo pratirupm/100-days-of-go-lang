@@ -65,7 +65,7 @@ take the environment as a parameter: a function that looks up a name and
 returns its value. Production passes `os.Getenv`; the tests pass this adapter
 over a plain map.
 
-<!-- verify: internal/config/config_test.go at=config -->
+<!-- verify: internal/config/config_test.go at=HEAD -->
 ```go title="internal/config/config_test.go"
 package config_test
 
@@ -92,9 +92,10 @@ a lookup it controls, so no case touches the real environment of the machine
 running it, and the cases can run in parallel.
 
 Now the table. Each row holds an environment map, the flag's value, and the
-`Config` we expect back. Here is the head and the first row:
+`Config` we expect back. The fixture home is `/home/user` — any path works,
+because the test injects it — and every expected path below derives from it.
+Here is the head and the first row:
 
-<!-- verify: internal/config/config_test.go at=config -->
 ```go title="internal/config/config_test.go"
 // TestLoad is the precedence truth table: flags > environment > XDG defaults,
 // with the defaults themselves pinned against an injected HOME and injected
@@ -111,10 +112,10 @@ func TestLoad(t *testing.T) {
 	}{
 		{
 			name: "the defaults follow HOME when no XDG variable is set",
-			env:  map[string]string{"HOME": "/home/pm"},
+			env:  map[string]string{"HOME": "/home/user"},
 			want: config.Config{
-				DBPath:  "/home/pm/.local/share/todo/todo.db",
-				LogPath: "/home/pm/.local/state/todo/logs/todo.log",
+				DBPath:  "/home/user/.local/share/todo/todo.db",
+				LogPath: "/home/user/.local/state/todo/logs/todo.log",
 			},
 		},
 ```
@@ -124,30 +125,30 @@ their `.local` defaults. The rest of the table walks up the ladder — the XDG
 variables replacing the `HOME` fallback, `TODO_DB` and `TODO_LOG` overriding
 both, an empty flag falling through. Two rows are worth looking at closely:
 
-<!-- verify: internal/config/config_test.go at=config -->
+<!-- verify: internal/config/config_test.go at=HEAD -->
 ```go title="internal/config/config_test.go"
 		{
 			name: "a non-empty flag beats TODO_DB",
 			env: map[string]string{
-				"HOME":    "/home/pm",
+				"HOME":    "/home/user",
 				"TODO_DB": "/tmp/env.db",
 			},
 			dbFlag: "/tmp/flag.db",
 			want: config.Config{
 				DBPath:  "/tmp/flag.db",
-				LogPath: "/home/pm/.local/state/todo/logs/todo.log",
+				LogPath: "/home/user/.local/state/todo/logs/todo.log",
 			},
 		},
 		// ...
 		{
 			name: "a relative XDG_DATA_HOME is ignored, as the spec says",
 			env: map[string]string{
-				"HOME":          "/home/pm",
+				"HOME":          "/home/user",
 				"XDG_DATA_HOME": "relative/data",
 			},
 			want: config.Config{
-				DBPath:  "/home/pm/.local/share/todo/todo.db",
-				LogPath: "/home/pm/.local/state/todo/logs/todo.log",
+				DBPath:  "/home/user/.local/share/todo/todo.db",
+				LogPath: "/home/user/.local/state/todo/logs/todo.log",
 			},
 		},
 ```
@@ -160,7 +161,7 @@ environment.
 
 The loop runs every row as a subtest:
 
-<!-- verify: internal/config/config_test.go at=config -->
+<!-- verify: internal/config/config_test.go at=HEAD -->
 ```go title="internal/config/config_test.go"
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -177,7 +178,7 @@ The loop runs every row as a subtest:
 And one more test covers the failure: a default that needs `HOME` and finds
 none must return an error, not a half-built path.
 
-<!-- verify: internal/config/config_test.go at=config -->
+<!-- verify: internal/config/config_test.go at=HEAD -->
 ```go title="internal/config/config_test.go"
 // TestLoad_NoHome pins the error path: a default that needs HOME and finds
 // neither HOME nor an XDG variable is an error, not a half-built relative

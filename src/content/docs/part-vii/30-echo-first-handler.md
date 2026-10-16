@@ -245,17 +245,17 @@ holds the whole file; the pieces above are the ones that carry the idea.
 The config test grows a third setting. Every row of the truth table gains a
 `Listen` line, and a new table owns the flag:
 
-<!-- verify: internal/config/config_test.go at=api-skeleton -->
+<!-- verify: internal/config/config_test.go at=HEAD -->
 ```go title="internal/config/config_test.go"
 		{
 			name: "TODO_LISTEN overrides the default",
 			env: map[string]string{
-				"HOME":        "/home/pm",
+				"HOME":        "/home/user",
 				"TODO_LISTEN": "0.0.0.0:9090",
 			},
 			want: config.Config{
-				DBPath:  "/home/pm/.local/share/todo/todo.db",
-				LogPath: "/home/pm/.local/state/todo/logs/todo.log",
+				DBPath:  "/home/user/.local/share/todo/todo.db",
+				LogPath: "/home/user/.local/state/todo/logs/todo.log",
 				Listen:  "0.0.0.0:9090",
 			},
 		},
@@ -266,7 +266,7 @@ with `TODO_LISTEN`, and every expected config carries it. The new table pins
 the whole rule — a flag beats the environment, which beats the default — and
 these are the rows that matter:
 
-<!-- verify: internal/config/config_test.go at=api-skeleton -->
+<!-- verify: internal/config/config_test.go at=HEAD -->
 ```go title="internal/config/config_test.go"
 func TestListen(t *testing.T) {
 	t.Parallel()
@@ -299,7 +299,7 @@ func TestListen(t *testing.T) {
 Each row runs through the same loop as before, with `config.Listen` in place
 of `config.Load`:
 
-<!-- verify: internal/config/config_test.go at=api-skeleton -->
+<!-- verify: internal/config/config_test.go at=HEAD -->
 ```go title="internal/config/config_test.go"
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

@@ -12,7 +12,10 @@ pagefind: false
 > files wholesale. Generated code and artifacts (the `sqlc` output, the
 > `moq` mocks, the `templ` output, the SBOM) are not reproduced here —
 > `make generate` and `make sbom` produce them — and `go.sum` is what
-> `go mod tidy` resolves.
+> `go mod tidy` resolves. A few files are the app's own machinery rather
+> than part of the build the chapters walk through — the workflow files
+> under `.github/` and the `cmd/benchgate` tool — kept here so the tree
+> is complete.
 
 
 ## `go.mod`
@@ -203,10 +206,10 @@ jobs:
 
 ````yaml
 # deploy.yml — the first CD step: a deploy that a human dispatches, gated by
-# an environment, shipped over ssh. It takes effect when the repository gets
-# a remote and the production environment's secrets exist; until then it is
-# course content, and deploy/RUNBOOK.md's manual procedure is the same steps
-# by hand.
+# an environment, shipped over ssh. It takes effect once a remote and the
+# production environment's secrets exist; until then the file documents the
+# pipeline, and deploy/RUNBOOK.md's manual procedure is the same steps by
+# hand.
 #
 # The shape, and why:
 #
@@ -307,8 +310,8 @@ jobs:
 ````yaml
 # release.yml — the release: a v* tag is the decision, the workflow is the
 # record, and what it leaves behind is a draft until a human publishes it.
-# It takes effect when the repository gets a remote; until then it is course
-# content, and `make release-check` is the same pipeline run by hand.
+# It takes effect once a remote exists; until then the file documents the
+# pipeline, and `make release-check` is the same pipeline run by hand.
 #
 # The shape, and why:
 #
@@ -851,9 +854,8 @@ cover:
 ````markdown
 # todo — the reference application
 
-The application built test-first across the **Go Todo Course**. Every chapter
-ends with a checkpoint: an annotated git tag (`toolchain`, `task-methods`, …)
-that the book quotes from.
+The finished todo application from the book **Build a Todo App in Go** — the
+tree every quote and transcript in the book was captured from.
 
 It is not a starter project: the book carries the finished tree in full in
 its reference appendix, and readers build their own from chapter one.
@@ -3848,7 +3850,7 @@ deploy key rotates by replacing the `DEPLOY_SSH_KEY` secret and the matching
 deploy`), takes a `ref`, and runs the same steps above: `make check` on the
 exact ref, a `CGO_ENABLED=0` build, the key install, `scp`, the remote
 `install` + `systemctl restart`, and a `/ready` check through the loopback.
-It takes effect when the repository gets a remote and the environment's
+It takes effect once a remote and the environment's
 secrets exist.
 ````
 
@@ -4349,13 +4351,14 @@ implying them.
   whole graph, direct and indirect, and the test checks it against `go.mod`
   in both directions (`docs/sbom.cdx.json`). Updates arrive as explicit
   edits: a bump satisfies the allowlist test unchanged, a new module needs
-  its reason, and the SBOM is regenerated with `make sbom`. When the repo
-  gets a remote, Dependabot or Renovate raises the bumps and CI runs exactly
-  these gates; the bot is the messenger, not the authority.
-- **Vulnerability and lint gates.** `make vulncheck` runs `govulncheck`
+  its reason, and the SBOM is regenerated with `make sbom`. Once a remote
+  exists, Dependabot or Renovate raises the bumps and the workflows run
+  exactly these checks; the bot is the messenger, not the authority.
+- **Vulnerability and lint checks.** `make vulncheck` runs `govulncheck`
   v1.9.0 over the module; `make lint` runs golangci-lint v2.14.0 with
   staticcheck's full check set and gosec unfiltered; both run in `make
-  check` and in CI. Tools are pinned as `go run …@version` in the Makefile —
+  check` and in the workflows. Tools are pinned as `go run …@version` in
+  the Makefile —
   the same block CI reads.
 
 ## Residual risks
@@ -11738,9 +11741,10 @@ func Direct(mods []Module) []Module {
 // is therefore two edits in one commit: go.mod, and this map with its
 // reason.
 //
-// The reasons name the chapter that brought the module in, because this
-// repository is the course's answer key and the stack's history is part of
-// its documentation. Indirect requirements are deliberately not listed: they
+// The reasons name the chapter that brought the module in, because the
+// project is the finished application the book quotes, and the stack's
+// history is part of its documentation. Indirect requirements are
+// deliberately not listed: they
 // arrive through the direct ones' own go.mod files, and the bill of
 // materials (see sbom.go) is what pins them.
 var Allowlist = map[string]string{
@@ -17151,17 +17155,17 @@ func TestLoad(t *testing.T) {
 	}{
 		{
 			name: "the defaults follow HOME when no XDG variable is set",
-			env:  map[string]string{"HOME": "/home/pm"},
+			env:  map[string]string{"HOME": "/home/user"},
 			want: config.Config{
-				DBPath:  "/home/pm/.local/share/todo/todo.db",
-				LogPath: "/home/pm/.local/state/todo/logs/todo.log",
+				DBPath:  "/home/user/.local/share/todo/todo.db",
+				LogPath: "/home/user/.local/state/todo/logs/todo.log",
 				Listen:  config.DefaultListen,
 			},
 		},
 		{
 			name: "XDG_DATA_HOME and XDG_STATE_HOME replace the HOME fallback",
 			env: map[string]string{
-				"HOME":           "/home/pm",
+				"HOME":           "/home/user",
 				"XDG_DATA_HOME":  "/xdg/data",
 				"XDG_STATE_HOME": "/xdg/state",
 			},
@@ -17174,11 +17178,11 @@ func TestLoad(t *testing.T) {
 		{
 			name: "the two XDG variables are independent",
 			env: map[string]string{
-				"HOME":           "/home/pm",
+				"HOME":           "/home/user",
 				"XDG_STATE_HOME": "/xdg/state",
 			},
 			want: config.Config{
-				DBPath:  "/home/pm/.local/share/todo/todo.db",
+				DBPath:  "/home/user/.local/share/todo/todo.db",
 				LogPath: "/xdg/state/todo/logs/todo.log",
 				Listen:  config.DefaultListen,
 			},
@@ -17186,7 +17190,7 @@ func TestLoad(t *testing.T) {
 		{
 			name: "TODO_DB and TODO_LOG override the defaults",
 			env: map[string]string{
-				"HOME":     "/home/pm",
+				"HOME":     "/home/user",
 				"TODO_DB":  "/tmp/env.db",
 				"TODO_LOG": "/tmp/env.log",
 			},
@@ -17199,24 +17203,24 @@ func TestLoad(t *testing.T) {
 		{
 			name: "TODO_LISTEN overrides the default",
 			env: map[string]string{
-				"HOME":        "/home/pm",
+				"HOME":        "/home/user",
 				"TODO_LISTEN": "0.0.0.0:9090",
 			},
 			want: config.Config{
-				DBPath:  "/home/pm/.local/share/todo/todo.db",
-				LogPath: "/home/pm/.local/state/todo/logs/todo.log",
+				DBPath:  "/home/user/.local/share/todo/todo.db",
+				LogPath: "/home/user/.local/state/todo/logs/todo.log",
 				Listen:  "0.0.0.0:9090",
 			},
 		},
 		{
 			name: "TODO_OTEL_ENDPOINT turns trace export on",
 			env: map[string]string{
-				"HOME":               "/home/pm",
+				"HOME":               "/home/user",
 				"TODO_OTEL_ENDPOINT": "http://127.0.0.1:4318",
 			},
 			want: config.Config{
-				DBPath:       "/home/pm/.local/share/todo/todo.db",
-				LogPath:      "/home/pm/.local/state/todo/logs/todo.log",
+				DBPath:       "/home/user/.local/share/todo/todo.db",
+				LogPath:      "/home/user/.local/state/todo/logs/todo.log",
 				Listen:       config.DefaultListen,
 				OTelEndpoint: "http://127.0.0.1:4318",
 			},
@@ -17224,12 +17228,12 @@ func TestLoad(t *testing.T) {
 		{
 			name: "TODO_ADMIN_EMAIL names the bootstrap account",
 			env: map[string]string{
-				"HOME":             "/home/pm",
+				"HOME":             "/home/user",
 				"TODO_ADMIN_EMAIL": "admin@example.com",
 			},
 			want: config.Config{
-				DBPath:     "/home/pm/.local/share/todo/todo.db",
-				LogPath:    "/home/pm/.local/state/todo/logs/todo.log",
+				DBPath:     "/home/user/.local/share/todo/todo.db",
+				LogPath:    "/home/user/.local/state/todo/logs/todo.log",
 				Listen:     config.DefaultListen,
 				AdminEmail: "admin@example.com",
 			},
@@ -17237,12 +17241,12 @@ func TestLoad(t *testing.T) {
 		{
 			name: "an empty TODO_LISTEN falls through to the default",
 			env: map[string]string{
-				"HOME":        "/home/pm",
+				"HOME":        "/home/user",
 				"TODO_LISTEN": "",
 			},
 			want: config.Config{
-				DBPath:  "/home/pm/.local/share/todo/todo.db",
-				LogPath: "/home/pm/.local/state/todo/logs/todo.log",
+				DBPath:  "/home/user/.local/share/todo/todo.db",
+				LogPath: "/home/user/.local/state/todo/logs/todo.log",
 				Listen:  config.DefaultListen,
 			},
 		},
@@ -17262,55 +17266,55 @@ func TestLoad(t *testing.T) {
 		{
 			name: "a non-empty flag beats TODO_DB",
 			env: map[string]string{
-				"HOME":    "/home/pm",
+				"HOME":    "/home/user",
 				"TODO_DB": "/tmp/env.db",
 			},
 			dbFlag: "/tmp/flag.db",
 			want: config.Config{
 				DBPath:  "/tmp/flag.db",
-				LogPath: "/home/pm/.local/state/todo/logs/todo.log",
+				LogPath: "/home/user/.local/state/todo/logs/todo.log",
 				Listen:  config.DefaultListen,
 			},
 		},
 		{
 			name:   "an empty flag falls through to TODO_DB",
-			env:    map[string]string{"HOME": "/home/pm", "TODO_DB": "/tmp/env.db"},
+			env:    map[string]string{"HOME": "/home/user", "TODO_DB": "/tmp/env.db"},
 			dbFlag: "",
 			want: config.Config{
 				DBPath:  "/tmp/env.db",
-				LogPath: "/home/pm/.local/state/todo/logs/todo.log",
+				LogPath: "/home/user/.local/state/todo/logs/todo.log",
 				Listen:  config.DefaultListen,
 			},
 		},
 		{
 			name:   "an empty flag falls through to the default",
-			env:    map[string]string{"HOME": "/home/pm", "TODO_DB": ""},
+			env:    map[string]string{"HOME": "/home/user", "TODO_DB": ""},
 			dbFlag: "",
 			want: config.Config{
-				DBPath:  "/home/pm/.local/share/todo/todo.db",
-				LogPath: "/home/pm/.local/state/todo/logs/todo.log",
+				DBPath:  "/home/user/.local/share/todo/todo.db",
+				LogPath: "/home/user/.local/state/todo/logs/todo.log",
 				Listen:  config.DefaultListen,
 			},
 		},
 		{
 			name:   "the flag's path is used verbatim",
-			env:    map[string]string{"HOME": "/home/pm"},
+			env:    map[string]string{"HOME": "/home/user"},
 			dbFlag: "data/todo.db",
 			want: config.Config{
 				DBPath:  "data/todo.db",
-				LogPath: "/home/pm/.local/state/todo/logs/todo.log",
+				LogPath: "/home/user/.local/state/todo/logs/todo.log",
 				Listen:  config.DefaultListen,
 			},
 		},
 		{
 			name: "a relative XDG_DATA_HOME is ignored, as the spec says",
 			env: map[string]string{
-				"HOME":          "/home/pm",
+				"HOME":          "/home/user",
 				"XDG_DATA_HOME": "relative/data",
 			},
 			want: config.Config{
-				DBPath:  "/home/pm/.local/share/todo/todo.db",
-				LogPath: "/home/pm/.local/state/todo/logs/todo.log",
+				DBPath:  "/home/user/.local/share/todo/todo.db",
+				LogPath: "/home/user/.local/state/todo/logs/todo.log",
 				Listen:  config.DefaultListen,
 			},
 		},
@@ -17456,34 +17460,34 @@ func TestLogPath(t *testing.T) {
 	}{
 		{
 			name: "nothing set follows HOME",
-			env:  map[string]string{"HOME": "/home/pm"},
-			want: "/home/pm/.local/state/todo/logs/todo.log",
+			env:  map[string]string{"HOME": "/home/user"},
+			want: "/home/user/.local/state/todo/logs/todo.log",
 		},
 		{
 			name: "XDG_STATE_HOME replaces the HOME fallback",
-			env:  map[string]string{"HOME": "/home/pm", "XDG_STATE_HOME": "/xdg/state"},
+			env:  map[string]string{"HOME": "/home/user", "XDG_STATE_HOME": "/xdg/state"},
 			want: "/xdg/state/todo/logs/todo.log",
 		},
 		{
 			name: "TODO_LOG beats the default",
-			env:  map[string]string{"HOME": "/home/pm", "TODO_LOG": "/tmp/env.log"},
+			env:  map[string]string{"HOME": "/home/user", "TODO_LOG": "/tmp/env.log"},
 			want: "/tmp/env.log",
 		},
 		{
 			name: "a non-empty flag beats TODO_LOG",
-			env:  map[string]string{"HOME": "/home/pm", "TODO_LOG": "/tmp/env.log"},
+			env:  map[string]string{"HOME": "/home/user", "TODO_LOG": "/tmp/env.log"},
 			flag: "/tmp/flag.log",
 			want: "/tmp/flag.log",
 		},
 		{
 			name: "an empty flag falls through to TODO_LOG",
-			env:  map[string]string{"HOME": "/home/pm", "TODO_LOG": "/tmp/env.log"},
+			env:  map[string]string{"HOME": "/home/user", "TODO_LOG": "/tmp/env.log"},
 			want: "/tmp/env.log",
 		},
 		{
 			name: "an empty TODO_LOG falls through to the default",
-			env:  map[string]string{"HOME": "/home/pm", "TODO_LOG": ""},
-			want: "/home/pm/.local/state/todo/logs/todo.log",
+			env:  map[string]string{"HOME": "/home/user", "TODO_LOG": ""},
+			want: "/home/user/.local/state/todo/logs/todo.log",
 		},
 		{
 			name: "the flag's path is used verbatim",

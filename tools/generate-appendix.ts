@@ -77,7 +77,10 @@ pagefind: false
 > files wholesale. Generated code and artifacts (the \`sqlc\` output, the
 > \`moq\` mocks, the \`templ\` output, the SBOM) are not reproduced here —
 > \`make generate\` and \`make sbom\` produce them — and \`go.sum\` is what
-> \`go mod tidy\` resolves.
+> \`go mod tidy\` resolves. A few files are the app's own machinery rather
+> than part of the build the chapters walk through — the workflow files
+> under \`.github/\` and the \`cmd/benchgate\` tool — kept here so the tree
+> is complete.
 `;
 
 const tracked = execFileSync('git', ['-C', APP, 'ls-files'], { encoding: 'utf8' })

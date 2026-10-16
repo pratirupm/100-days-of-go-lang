@@ -512,17 +512,17 @@ const (
 
 The resolution table in `internal/config/config_test.go` gains one row for the new setting.
 
-<!-- verify: internal/config/config_test.go at=secrets -->
+<!-- verify: internal/config/config_test.go at=HEAD -->
 ```go title="internal/config/config_test.go"
 		{
 			name: "TODO_ADMIN_EMAIL names the bootstrap account",
 			env: map[string]string{
-				"HOME":             "/home/pm",
+				"HOME":             "/home/user",
 				"TODO_ADMIN_EMAIL": "admin@example.com",
 			},
 			want: config.Config{
-				DBPath:     "/home/pm/.local/share/todo/todo.db",
-				LogPath:    "/home/pm/.local/state/todo/logs/todo.log",
+				DBPath:     "/home/user/.local/share/todo/todo.db",
+				LogPath:    "/home/user/.local/state/todo/logs/todo.log",
 				Listen:     config.DefaultListen,
 				AdminEmail: "admin@example.com",
 			},

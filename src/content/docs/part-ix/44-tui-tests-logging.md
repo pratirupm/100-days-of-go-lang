@@ -143,7 +143,7 @@ logger appends rather than truncating.
 
 The path's rule gets a table. Add this to `internal/config/config_test.go`:
 
-<!-- verify: internal/config/config_test.go at=tui-tests -->
+<!-- verify: internal/config/config_test.go at=HEAD -->
 ```go title="internal/config/config_test.go"
 // TestLogPath is the log path's precedence table: the TUI's --debug-log flag
 // beats $TODO_LOG, which beats $XDG_STATE_HOME/todo/logs/todo.log, which
@@ -164,17 +164,17 @@ func TestLogPath(t *testing.T) {
 	}{
 		{
 			name: "nothing set follows HOME",
-			env:  map[string]string{"HOME": "/home/pm"},
-			want: "/home/pm/.local/state/todo/logs/todo.log",
+			env:  map[string]string{"HOME": "/home/user"},
+			want: "/home/user/.local/state/todo/logs/todo.log",
 		},
 		{
 			name: "XDG_STATE_HOME replaces the HOME fallback",
-			env:  map[string]string{"HOME": "/home/pm", "XDG_STATE_HOME": "/xdg/state"},
+			env:  map[string]string{"HOME": "/home/user", "XDG_STATE_HOME": "/xdg/state"},
 			want: "/xdg/state/todo/logs/todo.log",
 		},
 		{
 			name: "TODO_LOG beats the default",
-			env:  map[string]string{"HOME": "/home/pm", "TODO_LOG": "/tmp/env.log"},
+			env:  map[string]string{"HOME": "/home/user", "TODO_LOG": "/tmp/env.log"},
 			want: "/tmp/env.log",
 		},
 		...
