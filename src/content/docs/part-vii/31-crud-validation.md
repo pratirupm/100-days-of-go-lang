@@ -1001,7 +1001,14 @@ PASS
 ok  	todo/internal/api	0.006s
 ```
 
-Then start the server the way the last chapter showed, in a scratch directory with `TODO_DB` and `TODO_LOG` inside it, and make one claim per `curl`. The create, and two requests a rule turns away:
+Then start the server the way the last chapter showed — the binary in a scratch directory, `TODO_DB` and `TODO_LOG` inside it — on port `18081`:
+
+<!-- transcripts: authored -->
+```bash
+$ TODO_DB=todo.db TODO_LOG=todo.log ./todo-server --listen 127.0.0.1:18081 > stdout.txt 2> stderr.txt &
+```
+
+Every `curl` below uses that port. The create, and two requests a rule turns away:
 
 ```bash
 $ curl -s -i -X POST -H 'Content-Type: application/json' -d '{"title":"write the chapter","priority":5,"due":"2026-11-05T00:00:00Z","tags":["go","book"]}' http://127.0.0.1:18081/api/v1/tasks

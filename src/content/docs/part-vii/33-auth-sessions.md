@@ -663,14 +663,7 @@ panic: scs: no session data in context [recovered, repanicked]
 
 `sessions.Put` doesn't create a session; it writes into the one the middleware loaded into the request's context. Without the session layer in the stack, there is nothing to write into, and the library panics rather than dropping the write quietly. Fix: keep `echo.WrapMiddleware(sessions.LoadAndSave)` in the stack, inside the deadline. The failure is loud on purpose — a login that answers 200 is also proof the layer is installed.
 
-**The expired row is still in the table.** Nothing fails; the surprise is a query. After a session expires, lookups report it missing, and yet:
-
-```bash
-$ sqlite3 todo.db 'SELECT COUNT(*) FROM sessions'
-1
-```
-
-The expiry check in `FindSession` is what makes an expired row invisible — it is not a cleanup that may not have run. The session library never removes rows, so the dead row sits there until something deletes it. Fix: the boot-time `DeleteExpired` sweep. Enforcement and cleanup are two mechanisms, and only the first is on the request path.
+**The expired row is still in the table.** Nothing fails; the surprise is a query. After a session expires, lookups report it missing, and yet the row is still there. The sessions live in the database, and because the file is in Turso's MVCC format, stock `sqlite3` cannot open it — it answers `file is not a database`. The app reads the file through its own driver, which still finds the dead row: the session library never removes rows, so it sits there until something deletes it. The expiry check in `FindSession` is what makes an expired row invisible — it is not a cleanup that may not have run. Fix: the boot-time `DeleteExpired` sweep. Enforcement and cleanup are two mechanisms, and only the first is on the request path.
 
 <details>
 <summary>Going deeper: why the hash spends memory</summary>

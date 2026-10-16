@@ -819,76 +819,97 @@ Then the API's tests — `go test -count=1 -v ./internal/api` — every case pas
 ok  	todo/internal/api	0.578s
 ```
 
-Then a real server. Start it the way the last chapter showed, in a scratch folder with `TODO_DB` and `TODO_LOG` inside it, and keep the base URL in a shell variable — `$B` — so each command stays short. Two registrations first:
+Then a real server. Start it the way the last chapter showed, in a scratch folder with `TODO_DB` and `TODO_LOG` inside it — and with both binaries built earlier copied in: `todo-server` for the server and `todo` for the operator's command. Start it on the port the commands below use, and keep the base URL in a shell variable — `$B` — so each command stays short; every API route lives under `/api/v1`:
 
+<!-- transcripts: authored -->
 ```bash
-$ curl -s -X POST -H "Content-Type: application/json" --data '{"email":"alice@example.com","password":"correct horse battery staple"}' $B/auth/register
+$ TODO_DB=todo.db TODO_LOG=todo.log ./todo-server --listen 127.0.0.1:18085 > stdout.txt 2> stderr.txt &
+$ B=http://127.0.0.1:18085
+```
+
+Two registrations first, each command creating its account's jar with `-c`:
+
+<!-- transcripts: authored -->
+```bash
+$ curl -s -c alice.jar -X POST -H "Content-Type: application/json" --data '{"email":"alice@example.com","password":"correct horse battery staple"}' $B/api/v1/auth/register
 {"id":"01a13e98-d063-7c95-b041-f75010677b34","email":"alice@example.com","created_at":"2026-10-15T08:06:04Z","is_admin":false}
 
-$ curl -s -X POST -H "Content-Type: application/json" --data '{"email":"bob@example.com","password":"correct horse battery staple"}' $B/auth/register
+$ curl -s -c bob.jar -X POST -H "Content-Type: application/json" --data '{"email":"bob@example.com","password":"correct horse battery staple"}' $B/api/v1/auth/register
 {"id":"01a13e98-d086-71fe-8339-56bdd2f49a3a","email":"bob@example.com","created_at":"2026-10-15T08:06:04Z","is_admin":false}
 ```
 
-Both users log in — the login route is the one the last chapter built, and each cookie is kept in a shell variable — and each creates one task:
+Both users log in — the login route is the one the last chapter built — and `-c` writes each session cookie into that account's jar; from here on, `-b` presents it:
 
+<!-- transcripts: authored -->
 ```bash
-$ # both users log in; each cookie is kept in a shell variable
-$ curl -s -X POST -H "Cookie: session=v-99PSDWWOp4MBVyDHD5LhI6Lez8DOQofWHgJuQUwaU" -H 'Content-Type: application/json' --data '{"title":"bob'\''s secret plan","tags":["private"]}' $B/tasks
+$ curl -s -c alice.jar -X POST -H "Content-Type: application/json" --data '{"email":"alice@example.com","password":"correct horse battery staple"}' $B/api/v1/auth/login
+$ curl -s -c bob.jar -X POST -H "Content-Type: application/json" --data '{"email":"bob@example.com","password":"correct horse battery staple"}' $B/api/v1/auth/login
+```
+
+Each login answers `200` with the user, and each user creates one task — bob's first:
+
+<!-- transcripts: authored -->
+```bash
+$ curl -s -b bob.jar -H 'Content-Type: application/json' --data '{"title":"bob'\''s secret plan","tags":["private"]}' $B/api/v1/tasks
 {"id":"01a13e98-efc9-72f3-85e5-52dd0e9ebaa8","title":"bob's secret plan","status":"Todo","priority":3,"due":null,"tags":["private"],"version":1}
 
-$ curl -s -X POST -H "Cookie: session=wxAU6zL4qlwOElpU-fCaTfjDtDp3yCMlVPVGmXBska0" -H 'Content-Type: application/json' --data '{"title":"alice'\''s own task"}' $B/tasks
+$ curl -s -b alice.jar -H 'Content-Type: application/json' --data '{"title":"alice'\''s own task"}' $B/api/v1/tasks
 {"id":"01a13e98-efd0-7085-ae2e-cfb6862044dd","title":"alice's own task","status":"Todo","priority":3,"due":null,"tags":[],"version":1}
 
-$ curl -s -H "Cookie: session=wxAU6zL4qlwOElpU-fCaTfjDtDp3yCMlVPVGmXBska0" $B/tasks
+$ curl -s -b alice.jar $B/api/v1/tasks
 {"tasks":[{"id":"01a13e98-efd0-7085-ae2e-cfb6862044dd","title":"alice's own task","status":"Todo","priority":3,"due":null,"tags":[],"version":1}]}
 ```
 
 Alice's list carries her task and nothing else. Then the foreign-task table on the wire: Alice probes Bob's task three ways, and every answer is the same 404 with the same body a made-up id gets:
 
+<!-- transcripts: authored -->
 ```bash
-$ curl -s -i -H "Cookie: session=wxAU6zL4qlwOElpU-fCaTfjDtDp3yCMlVPVGmXBska0" $B/tasks/01a13e98-efc9-72f3-85e5-52dd0e9ebaa8 | head -1
+$ curl -s -i -b alice.jar $B/api/v1/tasks/01a13e98-efc9-72f3-85e5-52dd0e9ebaa8 | head -1
 HTTP/1.1 404 Not Found
-$ curl -s -H "Cookie: session=wxAU6zL4qlwOElpU-fCaTfjDtDp3yCMlVPVGmXBska0" $B/tasks/01a13e98-efc9-72f3-85e5-52dd0e9ebaa8
+$ curl -s -b alice.jar $B/api/v1/tasks/01a13e98-efc9-72f3-85e5-52dd0e9ebaa8
 {"code":"not_found","message":"task not found"}
 
-$ curl -s -i -X PATCH -H "Cookie: session=wxAU6zL4qlwOElpU-fCaTfjDtDp3yCMlVPVGmXBska0" -H 'Content-Type: application/json' --data '{"version":1,"status":"Done"}' $B/tasks/01a13e98-efc9-72f3-85e5-52dd0e9ebaa8 | head -1
+$ curl -s -i -X PATCH -b alice.jar -H 'Content-Type: application/json' --data '{"version":1,"status":"Done"}' $B/api/v1/tasks/01a13e98-efc9-72f3-85e5-52dd0e9ebaa8 | head -1
 HTTP/1.1 404 Not Found
-$ curl -s -X PATCH -H "Cookie: session=wxAU6zL4qlwOElpU-fCaTfjDtDp3yCMlVPVGmXBska0" -H 'Content-Type: application/json' --data '{"version":1,"status":"Done"}' $B/tasks/01a13e98-efc9-72f3-85e5-52dd0e9ebaa8
+$ curl -s -X PATCH -b alice.jar -H 'Content-Type: application/json' --data '{"version":1,"status":"Done"}' $B/api/v1/tasks/01a13e98-efc9-72f3-85e5-52dd0e9ebaa8
 {"code":"not_found","message":"task not found"}
 
-$ curl -s -i -X DELETE -H "Cookie: session=wxAU6zL4qlwOElpU-fCaTfjDtDp3yCMlVPVGmXBska0" "$B/tasks/01a13e98-efc9-72f3-85e5-52dd0e9ebaa8?version=1" | head -1
+$ curl -s -i -X DELETE -b alice.jar "$B/api/v1/tasks/01a13e98-efc9-72f3-85e5-52dd0e9ebaa8?version=1" | head -1
 HTTP/1.1 404 Not Found
-$ curl -s -X DELETE -H "Cookie: session=wxAU6zL4qlwOElpU-fCaTfjDtDp3yCMlVPVGmXBska0" "$B/tasks/01a13e98-efc9-72f3-85e5-52dd0e9ebaa8?version=1"
+$ curl -s -X DELETE -b alice.jar "$B/api/v1/tasks/01a13e98-efc9-72f3-85e5-52dd0e9ebaa8?version=1"
 {"code":"not_found","message":"task not found"}
 ```
 
 An anonymous request gets the check's own 401, and Bob's task is still there, untouched, when he reads it back:
 
+<!-- transcripts: authored -->
 ```bash
-$ curl -s -i $B/tasks | head -1
+$ curl -s -i $B/api/v1/tasks | head -1
 HTTP/1.1 401 Unauthorized
-$ curl -s $B/tasks
+$ curl -s $B/api/v1/tasks
 {"code":"unauthorized","message":"authentication required"}
 
-$ curl -s -H "Cookie: session=v-99PSDWWOp4MBVyDHD5LhI6Lez8DOQofWHgJuQUwaU" $B/tasks/01a13e98-efc9-72f3-85e5-52dd0e9ebaa8
+$ curl -s -b bob.jar $B/api/v1/tasks/01a13e98-efc9-72f3-85e5-52dd0e9ebaa8
 {"id":"01a13e98-efc9-72f3-85e5-52dd0e9ebaa8","title":"bob's secret plan","status":"Todo","priority":3,"due":null,"tags":["private"],"version":1}
 ```
 
-The server was stopped, and the local operator ran the grant against the same file:
+The server was stopped, and the local operator ran the grant against the same file. The `todo` binary is the one built earlier for the command line — copy it into the same scratch folder, beside `todo-server` — and `TODO_DB=todo.db` is the value the server was started with, so the command opens the database the server just wrote:
 
+<!-- transcripts: authored -->
 ```bash
-$ ./todo admin grant alice@example.com
+$ TODO_DB=todo.db ./todo admin grant alice@example.com
 granted admin to alice@example.com
 
-$ ./todo admin grant nobody@example.com
+$ TODO_DB=todo.db ./todo admin grant nobody@example.com
 grant admin to nobody@example.com: concurrent transaction: user not found
 exit: 1
 ```
 
 The server came back up, and Alice's next login shows the flag the command wrote:
 
+<!-- transcripts: authored -->
 ```bash
-$ curl -s -X POST -H 'Content-Type: application/json' --data '{"email":"alice@example.com","password":"correct horse battery staple"}' $B/auth/login
+$ curl -s -X POST -H 'Content-Type: application/json' --data '{"email":"alice@example.com","password":"correct horse battery staple"}' $B/api/v1/auth/login
 {"id":"01a13e98-d063-7c95-b041-f75010677b34","email":"alice@example.com","created_at":"2026-10-15T08:06:04Z","is_admin":true}
 ```
 
@@ -950,10 +971,11 @@ The handlers call `Scoped` before they list or get, and a mock with no `ScopedFu
 
 The mock follows the interface, not the other way around.
 
-**The grant's miss wears the transaction's wrapper.** An email no user holds:
+**The grant's miss wears the transaction's wrapper.** An email no user holds, with the command pointed at the same database the server used:
 
+<!-- transcripts: authored -->
 ```bash
-$ ./todo admin grant nobody@example.com
+$ TODO_DB=todo.db ./todo admin grant nobody@example.com
 grant admin to nobody@example.com: concurrent transaction: user not found
 exit: 1
 ```

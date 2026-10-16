@@ -845,10 +845,11 @@ Building the logger from a plain JSON handler leaves the flag validated but iner
 
 **`logging: open log file: ... no such file or directory`.** The first run on a fresh account fails before the command starts.
 
+<!-- transcripts: authored -->
 ```bash
 $ XDG_DATA_HOME=$PWD/xdg-data XDG_STATE_HOME=$PWD/xdg-state ../todo-nomkdir add 'call mom' >out.txt 2>err.txt
 $ cat err.txt
-logging: open log file: open /tmp/opencode/wt-logging-scratch/nomkdir/xdg-state/todo/logs/todo.log: no such file or directory
+logging: open log file: open /tmp/…/nomkdir/xdg-state/todo/logs/todo.log: no such file or directory
 $ echo "exit: $?"
 exit: 1
 ```

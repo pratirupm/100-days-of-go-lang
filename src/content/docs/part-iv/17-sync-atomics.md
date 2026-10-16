@@ -621,21 +621,22 @@ and the label listing calls the counting method while holding its own — hangs
 under four readers and one writer; the timeout turns the hang into a stack
 dump:
 
+<!-- transcripts: authored -->
 ```text
 goroutine 7 [sync.RWMutex.Lock]:
 …
 rlocktrap.TestTrap(0xb51741dc248?)
-	/tmp/opencode/ch17-rlock-trap/trap_test.go:59 +0x11c
+	/tmp/…/trap_test.go:59 +0x11c
 …
 
 goroutine 8 [sync.RWMutex.RLock]:
 …
 rlocktrap.(*store).CountByTag(0xb51741b6600)
-	/tmp/opencode/ch17-rlock-trap/trap_test.go:17 +0x4a
+	/tmp/…/trap_test.go:17 +0x4a
 rlocktrap.(*store).Tags(0x0?)
-	/tmp/opencode/ch17-rlock-trap/trap_test.go:30 +0x9e
+	/tmp/…/trap_test.go:30 +0x9e
 rlocktrap.TestTrap.func1()
-	/tmp/opencode/ch17-rlock-trap/trap_test.go:53 +0x65
+	/tmp/…/trap_test.go:53 +0x65
 …
 ```
 

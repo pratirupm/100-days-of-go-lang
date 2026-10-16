@@ -498,9 +498,10 @@ pool — so there is no unsynchronized pair to find.
 The `done` channel looks optional. It is not, and the way to see that is to
 measure. Make a throwaway copy of the app outside the project:
 
+<!-- transcripts: authored -->
 ```bash
-$ cp -r . /tmp/opencode/ch15-lab
-$ cd /tmp/opencode/ch15-lab
+$ cp -r . ../ch15-lab
+$ cd ../ch15-lab
 ```
 
 In the copy, drop the `done` channel and its `defer`, and rewrite the
@@ -560,7 +561,9 @@ waits forever — not for an hour. The leak is permanent, not slow.
 Now copy your app's `internal/store/stats.go` over the lab's copy and run
 the identical probe:
 
+<!-- transcripts: authored -->
 ```bash
+$ cp ../todo/internal/store/stats.go internal/store/stats.go
 $ go test -v -run TestStatsWithinGoroutineProbe -count=1 ./internal/store
 === RUN   TestStatsWithinGoroutineProbe
     leakprobe_test.go:24: goroutines before=2 after=2 delta=0 over 100 calls
@@ -575,8 +578,10 @@ none. The fixed watchers take their `done` case and exit, because
 
 Delete the lab:
 
+<!-- transcripts: authored -->
 ```bash
-$ rm -rf /tmp/opencode/ch15-lab
+$ cd ..
+$ rm -rf ch15-lab
 ```
 
 The lab was never part of the app.

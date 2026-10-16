@@ -498,12 +498,16 @@ composes them, where a browser would meet them.
 
 ## Look at the page
 
-Start the server the way the earlier web work showed — a scratch folder with
-its own database and log file — and sign in through the API the way the auth
-work showed; `curl -c alice.jar` keeps the cookie a login sets. The captures
-below use `$B` for the server's address, and `alice.jar` and `bob.jar` for
-the two accounts' cookie files. The tasks go in like this — alice's three
-first, in the order the page lists them, then bob's one:
+Start the server the way the earlier web work showed — `TODO_DB=todo.db
+TODO_LOG=todo.log ./todo-server --listen 127.0.0.1:18087`, in a scratch folder
+with its own database and log file — and register and sign in the two accounts
+as the authorization work showed, with `-c` writing each login's cookie into
+that account's jar.
+
+The captures below use `$B` for the server's address
+(`B=http://127.0.0.1:18087`) and the two jars from the authorization work,
+`alice.jar` and `bob.jar`. The tasks go in like this — alice's three first,
+in the order the page lists them, then bob's one:
 
 <!-- transcripts: authored -->
 ```bash

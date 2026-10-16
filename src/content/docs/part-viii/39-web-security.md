@@ -148,7 +148,7 @@ The bound is applied inside echo's own id layer, after echo has set the response
 
 An over-long id is replaced with a freshly generated one — and because the response header is the copy the client reads back, the client sees the id that will be logged.
 
-The `Secure` layer keeps every header it names, and the audit changed two values:
+The `Secure` layer keeps every header it names, and this hardening pass changed two values:
 
 <!-- verify: internal/api/middleware.go at=web-security -->
 ```go title="internal/api/middleware.go"
@@ -233,7 +233,7 @@ One header is replaced before the handler writes, and every other header still r
 
 ## The cookie's new name
 
-The app sets exactly one cookie — the session ticket — and the audit found every flag already right: `Secure`, `HttpOnly`, `SameSite=Lax`, `Path=/`, a 24-hour lifetime. The change is the name.
+The app sets exactly one cookie — the session ticket — and this hardening pass found every flag already right: `Secure`, `HttpOnly`, `SameSite=Lax`, `Path=/`, a 24-hour lifetime. The change is the name.
 
 <!-- verify: internal/api/sessions.go at=web-security -->
 ```go title="internal/api/sessions.go"
@@ -475,7 +475,7 @@ Every package passes, and the api and web lines are the ones that matter here: t
 
 ## Talk to the server
 
-Start the server as before — the binary in a scratch folder, `TODO_DB` and `TODO_LOG` inside it — register an account, and walk the claims. The login page first:
+Start the server as before — `TODO_DB=todo.db TODO_LOG=todo.log ./todo-server --listen 127.0.0.1:18089` — register an account, and walk the claims. The login page first:
 
 ```bash
 $ curl -s -D login.headers -o login.html http://127.0.0.1:18089/login
@@ -485,7 +485,7 @@ Set-Cookie: __Host-session=OhvzY2bVcfF5…; Path=/; Expires=Fri, 16 Oct 2026 10:
 ...
 ```
 
-The response carries the pages' policy, and the cookie it sets is named `__Host-session`, with every flag from the audit. Now submit the form — with the token the page embedded and the cookie it set:
+The response carries the pages' policy, and the cookie it sets is named `__Host-session`, with every flag already right. Now submit the form — with the token the page embedded and the cookie it set:
 
 ```bash
 $ curl -s -D login-post.headers -o login-post.html -X POST -H "Content-Type: application/x-www-form-urlencoded" --data "csrf_token=G3M3ZWHCATHX…&email=ada@example.com&password=correct horse battery staple" --cookie "__Host-session=OhvzY2bVcfF5…" http://127.0.0.1:18089/login

@@ -928,7 +928,7 @@ A 404 in echo's own shape, because no handler claimed that address. Now stop
 the server the way a service manager would, and look at what it left behind:
 
 ```bash
-$ kill -TERM 3497036
+$ kill -TERM $pid; wait $pid; echo "exit: $?"
 exit: 0
 ```
 

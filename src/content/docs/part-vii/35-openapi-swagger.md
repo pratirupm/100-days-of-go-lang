@@ -40,7 +40,9 @@ import (
 )
 ```
 
-The cases share the helpers the other API tests define — `get`, `stubAuth`, `discardLogger` — so this file adds only what the description needs. First, a small type for the part of the document the check reads:
+The cases share the helpers the other API tests define. The finished app's appendix holds `internal/api/api_test.go` in full — read the parts behind the `...` there as you type them.
+
+`get` drives one request through the handler without a socket, `stubAuth` is the authenticator that panics if a route reaches it, `discardLogger` throws records away, and `newTestAPI` builds the server for the cases that are not about auth. This file adds only what the description needs. First, a small type for the part of the document the check reads:
 
 <!-- verify: internal/api/docs_test.go at=openapi -->
 ```go title="internal/api/docs_test.go"
@@ -394,7 +396,7 @@ One route serves the document and the page's own files. It goes in `New`, beside
 
 The page is public — no session — and that is deliberate. The document describes routes an anonymous caller can already probe: a task request without a session gets the same 401 it would get anywhere, and that refusal already says the route exists. The document carries shapes, not data. And the page a client would log in through is the page a login wall would refuse.
 
-A request for the page still rides the whole stack. With the server running, and `B` standing for its address, ask for it:
+A request for the page still rides the whole stack. Start the server as before — `TODO_DB=todo.db TODO_LOG=todo.log ./todo-server --listen 127.0.0.1:18086` in a scratch folder — and keep its address in `$B` (`B=http://127.0.0.1:18086`). Ask for the page:
 
 ```bash
 $ curl -si $B/swagger/index.html | head -14
@@ -528,7 +530,7 @@ GET    /healthz                 Liveness probe
 GET    /ready                   Readiness probe
 ```
 
-Five task routes, three auth routes, two health routes; the four request bodies, the three response shapes, and the error pair. Open the page while the server runs — at `http://localhost:8080/swagger/index.html` — and it renders the title, the operations, and the shapes, each operation with a form that sends a real request.
+Five task routes, three auth routes, two health routes; the four request bodies, the three response shapes, and the error pair. Open the page while the server runs — at `http://127.0.0.1:18086/swagger/index.html` — and it renders the title, the operations, and the shapes, each operation with a form that sends a real request.
 
 ## If something went wrong
 

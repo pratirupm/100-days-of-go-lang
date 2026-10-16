@@ -845,8 +845,9 @@ One line, one exit code: the error names the variable that was missing.
 creates the database file, but it never creates folders. Point `--db` into a
 path whose parent is missing and the open fails with:
 
+<!-- transcripts: authored -->
 ```bash
-open turso store /tmp/opencode/probe-missing/nested/todo.db: enable mvcc: turso: error: I/O error (open): entity not found
+open turso store /tmp/…/nested/todo.db: enable mvcc: turso: error: I/O error (open): entity not found
 ```
 
 The fix is in `openStore`: `os.MkdirAll(filepath.Dir(dbPath), 0o700)` creates

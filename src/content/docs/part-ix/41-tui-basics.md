@@ -7,7 +7,7 @@ sidebar:
 
 The todo app answers commands and serves pages now, but every run of it starts, does one job, and ends. A **terminal interface** is the other kind of program: it takes over the terminal window, draws a screen of its own, and stays open until you tell it to leave. If you have ever used `top` or a full-screen editor, you have used one.
 
-Today the task list gets one. The new program is `todo-tui`, and it reads the same database the command-line tool writes: add a task with `todo add`, press one key in the interface, and the new row appears. The keys are few on purpose — move, reload, quit — and the whole screen is drawn from one value.
+Today the task list gets one. The new program is `todo-tui`, and it reads the same database the command-line tool writes: add tasks with `todo add` before you start it, and the interface lists them when it opens. The keys are few on purpose — move, reload, quit — and the whole screen is drawn from one value.
 
 The engine under the screen is an **event loop**, and the loop itself comes from a library called **Bubble Tea**. Our job is to give it the data and the rules.
 
@@ -262,8 +262,8 @@ func TestModel_Reload(t *testing.T) {
 	seed(t, st, "write the chapter")
 	m := load(t, tui.New(context.Background(), st))
 
-	// The store changes behind the model's back, the way the CLI changes
-	// it while the TUI is open.
+	// The store changes behind the model's back ...
+	// ...
 	seed(t, st, "buy milk")
 
 	next, cmd := m.Update(key("r"))
@@ -472,7 +472,7 @@ The session starts a program around a loaded model and waits for the first frame
 }
 ```
 
-A task appears behind the model's back — the way the CLI adds one while the interface is open — `r` reloads, and the new row shows up while the cursor stays where it was. `q` quits, and the final model is the state the session ended in: cursor 1, four tasks, no error.
+A task appears behind the model's back — the test seeds it straight into the store — `r` reloads, and the new row shows up while the cursor stays where it was. `q` quits, and the final model is the state the session ended in: cursor 1, four tasks, no error.
 
 The other two sessions cover the empty store and the failure frame:
 
@@ -1173,7 +1173,7 @@ j/k: move, r: reload, q: quit
 > [x] buy milk
 ```
 
-Move with `j` and `k`: the marker follows, and the renderer rewrites only the rows that changed. Press `r` after adding a task in another window, and the new row appears. `q` leaves, and the terminal is exactly as it was. With nothing in the database, the frame says so:
+Move with `j` and `k`: the marker follows, and the renderer rewrites only the rows that changed. Press `r` and the list is read again from the database — the tasks added with the CLI before the interface started. `q` leaves, and the terminal is exactly as it was. With nothing in the database, the frame says so:
 
 ```text
 todo: 0 tasks
@@ -1211,9 +1211,10 @@ Run it in a real terminal window. A process without a terminal has nothing to op
 
 **`WaitFor: condition not met after 5s. Last output:`.** A session waited for a frame that never arrived:
 
+<!-- transcripts: authored -->
 ```text
---- FAIL: TestTUI_SecondWait (5.06s)
-    drill_waitfor_test.go:23: WaitFor: condition not met after 5s. Last output:
+--- FAIL: TestTUI_KeysDriveTheFrame (5.06s)
+    teatest_test.go:26: WaitFor: condition not met after 5s. Last output:
 
 FAIL
 FAIL	todo/internal/tui	5.064s

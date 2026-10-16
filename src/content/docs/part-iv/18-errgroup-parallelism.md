@@ -499,20 +499,21 @@ Expected `[]int{1}`, got `[]int{1, 2}`: task 2 ran after task 1 had already fail
 
 **Two helpers writing to the same slice.** `fn` runs from several helpers at once — that's the point — so anything `fn` shares needs a lock or a hand-off, like the counting pool's partials. An `fn` that appends to a shared slice without a lock makes the race detector open the run with:
 
+<!-- transcripts: authored -->
 ```text
 ==================
 WARNING: DATA RACE
 Read at 0x00c000016180 by goroutine 10:
   todo/internal/store.TestProcess_RaceProbe.func1()
-      /tmp/opencode/ch18-unlocked/internal/store/raceprobe_test.go:17 +0x38
+      /tmp/…/internal/store/raceprobe_test.go:17 +0x38
   todo/internal/store.Process.func1()
-      /tmp/opencode/ch18-unlocked/internal/store/batch.go:63 +0x14f
+      /tmp/…/internal/store/batch.go:63 +0x14f
   golang.org/x/sync/errgroup.(*Group).Go.func1()
       …/go/pkg/mod/golang.org/x/sync@v0.24.0/errgroup/errgroup.go:93 +0x86
 
 Previous write at 0x00c000016180 by goroutine 12:
   todo/internal/store.TestProcess_RaceProbe.func1()
-      /tmp/opencode/ch18-unlocked/internal/store/raceprobe_test.go:17 +0xad
+      /tmp/…/internal/store/raceprobe_test.go:17 +0xad
 ==================
 ```
 

@@ -634,6 +634,40 @@ Vulnerability #1: GO-2026-5932
 
 `x/crypto` is on the allowlist because the app hashes passwords with its `argon2` package. `openpgp` lives in the same module, nothing here imports it, and there is nothing to upgrade to: the package is abandoned, not patched. The report is recorded rather than hidden, because an audit that hides what it found is not an audit.
 
+## Names for the scanners
+
+The commands in the last two sections are long, and they are meant to be run again — after a dependency moves, whenever the review asks. The `Makefile` keeps the project's long commands under names, and the audit adds three. Each name is a recipe around one pinned scanner:
+
+<!-- verify: Makefile at=audit -->
+```make title="Makefile"
+# vulncheck runs the Go vulnerability database over the module and reports
+# what the code can reach. A module-level advisory for a package nothing
+# imports is not a finding the gate can fix, and the tool's summary says so
+# in its own words: symbol results, then package results, then module
+# results. The database is fetched from vuln.go.dev on first run and cached.
+vulncheck:
+	$(GOVULNCHECK) ./...
+
+# leaks scans the whole git history — every commit, not the working tree —
+# for credentials. A key that reached a commit reached every clone, so the
+# scan is over history, and the CI checkout is deep for the same reason.
+leaks:
+	$(GITLEAKS) git . --no-banner --no-color
+
+# sbom writes the CycloneDX bill of materials the audit commits. It scans
+# the repository's manifests: the Go module graph and the workflow's actions.
+# The file catalogers are off (-file), so every component is a package purl
+# and nothing carries the machine's own paths — that is what makes the
+# committed document portable and what the SBOM test checks. Regenerating it
+# is a deliberate act (syft is a heavyweight build, and the timestamp and
+# serial change on every run), so this target is not part of check; the test
+# in internal/audit is what keeps the committed copy honest.
+sbom:
+	$(SYFT) scan dir:. --source-name todo --select-catalogers=-file --quiet -o cyclonedx-json=docs/sbom.cdx.json
+```
+
+Read the three names against the sections above. `make vulncheck` runs the same `govulncheck` command the vulnerability scan showed, built from the pin at the top of the file the way every other tool in the file is built. `make sbom` runs the same `syft` command that wrote the document — and the SBOM test's failure message has been naming `make sbom` since the test was written, so the message and the recipe now agree. The third name is for credentials: `gitleaks` reads the project's recorded history for a secret that should never have been written down, and `make leaks` is how it runs.
+
 ## Turning the floors up
 
 The linter's policy file gets two settings the review insists on. Add them under `linters.settings`, beside the `errcheck` block that is already there.
@@ -829,7 +863,7 @@ FAIL
 FAIL	todo/internal/audit	0.004s
 ```
 
-The message names the fix: regenerate the document with the `syft` command from "The bill of materials".
+The message names the fix: `make sbom` runs the `syft` command from "The bill of materials" and writes the document again.
 
 **`ST1020: comment on exported function NewSessionManager should be of the form "NewSessionManager ..." (staticcheck)`.** The comment no longer leads with its function's name. Make it begin with the name and keep the prose that follows.
 

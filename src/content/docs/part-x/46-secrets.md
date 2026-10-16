@@ -695,12 +695,13 @@ $ TODO_ADMIN_KEY=demo-admin-key-9e1a7d40-rotated todo-server --listen 127.0.0.1:
 
 The file variant next, in a fresh scratch folder. A key file that any other account can read stops the boot before it serves anything, names the mode it found, and does not echo the key. The same file at 0600 boots, and the newline it was written with is trimmed off the key.
 
+<!-- transcripts: authored -->
 ```bash
 $ printf 'demo-file-key-7a1f42c8\n' > admin-key && chmod 0644 admin-key && stat -c '%a %n' admin-key
 644 admin-key
 
 $ TODO_ADMIN_KEY_FILE=$PWD/admin-key todo-server --listen 127.0.0.1:18049
-secret: TODO_ADMIN_KEY_FILE: /tmp/opencode/secrets-capture/admin-key is mode 0644; a credential file must not be readable by group or other
+secret: TODO_ADMIN_KEY_FILE: /tmp/…/admin-key is mode 0644; a credential file must not be readable by group or other
 exit code: 1
 
 $ chmod 0600 admin-key && stat -c '%a %n' admin-key
@@ -723,9 +724,10 @@ exit: 1
 
 And the refused boot's footprint, in its own run: the directory holds the operator's key file and nothing else — no log, no database.
 
+<!-- transcripts: authored -->
 ```bash
 $ TODO_ADMIN_KEY_FILE=$PWD/footprint/admin-key todo-server --listen 127.0.0.1:18052
-secret: TODO_ADMIN_KEY_FILE: /tmp/opencode/secrets-capture/footprint/admin-key is mode 0644; a credential file must not be readable by group or other
+secret: TODO_ADMIN_KEY_FILE: /tmp/…/footprint/admin-key is mode 0644; a credential file must not be readable by group or other
 exit code: 1
 
 $ ls -A footprint/
@@ -762,8 +764,9 @@ bootstrap admin admin@example.com: concurrent transaction: verify password: not 
 
 **The key file's mode is the problem.** The refusal names the mode it found and never echoes the key:
 
+<!-- transcripts: authored -->
 ```bash
-secret: TODO_ADMIN_KEY_FILE: /tmp/opencode/secrets-capture/admin-key is mode 0644; a credential file must not be readable by group or other
+secret: TODO_ADMIN_KEY_FILE: /tmp/…/admin-key is mode 0644; a credential file must not be readable by group or other
 ```
 
 Any group or other bit on the file is refused. `chmod 0600` fixes it, and `0400` is fine too. The check is a tripwire for a misconfigured secret — the box below says what it does not cover.

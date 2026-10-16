@@ -211,6 +211,71 @@ ok  	todo/internal/task	0.003s
 
 Zero findings, and every package passes. The comment on the helper is now true, and not one test changed to make it so.
 
+## The long commands get names
+
+The commands above are long, and they are only getting longer: every tool the book adds arrives as a `go run` with a version pinned inside it. Writing a command like that out by hand invites a typo in a version number, and a typo in a version number runs a different tool than the one you meant.
+
+The project keeps its long commands in a file called `Makefile`, one name per command. Create it at the app's root with exactly this content:
+
+<!-- verify: Makefile at=lint -->
+```makefile title="Makefile"
+# The local gate. CI runs the same targets, so a green run here is a green
+# run there. Tool versions are pinned here, once.
+
+GOLANGCI_LINT_VERSION := v2.14.0
+MOQ_VERSION           := v0.8.0
+
+GOLANGCI_LINT := go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@$(GOLANGCI_LINT_VERSION)
+
+.PHONY: fmt vet test race lint generate check bench cover
+
+# fmt fails when any .go file is not gofmt-clean.
+fmt:
+	@unformatted="$$(gofmt -l .)"; \
+	if [ -n "$$unformatted" ]; then \
+		echo "gofmt would rewrite:"; echo "$$unformatted"; exit 1; \
+	fi
+
+vet:
+	go vet ./...
+
+test:
+	go test -count=1 ./...
+
+race:
+	go test -race -count=1 ./...
+
+lint:
+	$(GOLANGCI_LINT) run
+
+# generate runs every //go:generate directive in the module. The moq version
+# in the directive is written literally: go generate expands environment
+# variables ($VAR), never make variables, so $(MOQ_VERSION) there would reach
+# moq as that literal text. The check below keeps the directive and the pin
+# above in sync; it is a no-op while no directive exists yet.
+generate:
+	@pin="$$(grep -o 'matryer/moq@[^ ]*' internal/store/store.go || true)"; \
+	if [ -n "$$pin" ] && [ "$$pin" != "matryer/moq@$(MOQ_VERSION)" ]; then \
+		echo "internal/store/store.go pins $$pin; the Makefile pins matryer/moq@$(MOQ_VERSION)"; exit 1; \
+	fi
+	go generate ./...
+
+# check is the full local gate: format, vet, lint, regenerate — failing if
+# that changed anything, because generated code must be committed — then test.
+check: fmt vet lint generate
+	@git diff --exit-code || { echo "generated files are stale: run make generate and commit"; exit 1; }
+	go test -count=1 ./...
+
+bench:
+	go test -bench=. -benchmem -count=10 ./internal/store
+
+cover:
+	go test -count=1 -coverprofile=coverage.out ./...
+	go tool cover -func=coverage.out | tail -1
+```
+
+Each name in the file is a **recipe**: the command, or several commands, that run under that name. `make fmt` checks the layout of every Go file, `make test` runs the tests, and `make lint` runs the long `go run` line from above. The version pins sit at the top of the file, and each recipe builds its command from them, so a tool's version is written once and nowhere else. `make check` runs several recipes in order — layout, vet, lint, and the generator — and then the tests, so the whole set is one command. The file grows as the book needs more: when a long command earns repeating, it gets a name, and the pages after this one use the name.
+
 ## Let a generator write the fake
 
 The store's interface has eight methods, and one test needs a stand-in that fails on demand. `TestCompleteAll` scripts a failure for id 2 while ids 1 and 3 behave normally — and the real store cannot produce that failure, because `Complete` only fails for ids that do not exist.

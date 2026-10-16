@@ -557,6 +557,19 @@ FAIL
 
 Read the last line first: it names the regeneration step, the shortcut for the command above. The `-` side is the golden file; the `+` side is what the migrations now serve. If the change was meant, the regenerated file is the record of it; if it wasn't, the failing test just caught it.
 
+The message's last line — `regenerate it with: make schema-update` — names a shortcut. The `Makefile` keeps the project's long commands under names, and the golden's regeneration earns one now. Add the recipe to the `Makefile`, with the comment that says when to reach for it:
+
+<!-- verify: Makefile at=migrations -->
+```make title="Makefile"
+# schema-update rewrites the schema golden from the embedded migrations, for
+# the one case the drift check cannot decide for you: a schema change you
+# made on purpose.
+schema-update:
+	UPDATE_SCHEMA=1 go test -run TestMigratedSchemaMatchesGolden ./internal/db
+```
+
+The test's failure message has been naming `make schema-update` since it was written; now the name is a recipe that exists. `make schema-update` runs the `UPDATE_SCHEMA=1` line from above, so the message's last line is a command you can run.
+
 ## If something went wrong
 
 **The build stops on the goose import.**

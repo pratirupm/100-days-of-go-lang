@@ -1117,8 +1117,9 @@ The capture's terminal had no color, so the help line's bullets render as
 spaces here; yours will draw them. And the file the session left behind holds
 both records:
 
+<!-- transcripts: authored -->
 ```text
-{"time":"2026-10-15T16:03:24.244790337+05:30","level":"DEBUG","msg":"config resolved","api":"http://127.0.0.1:1","log":"/tmp/opencode/tui-capture/tui-debug.log"}
+{"time":"2026-10-15T16:03:24.244790337+05:30","level":"DEBUG","msg":"config resolved","api":"http://127.0.0.1:1","log":"/tmp/…/tui-debug.log"}
 {"time":"2026-10-15T16:03:25.239800842+05:30","level":"WARN","msg":"sign in failed","email":"alice@example.com","err":"POST /api/v1/auth/login: Post \"http://127.0.0.1:1/api/v1/auth/login\": dial tcp 127.0.0.1:1: connect: connection refused"}
 ```
 
@@ -1170,9 +1171,10 @@ Previous write at 0x000000c50780 by goroutine 63:
 
 Two programs processing a space key at the same time race on memory the
 libraries share. The program tests in the file therefore do not run in
-parallel — they drive real programs and take turns. The binary cannot hit
-this: one process runs one program. The last "Going deeper" box has the
-whole mechanism.
+parallel — they drive real programs and take turns. Delete the
+`t.Parallel()` line from `TestProgram_EntersAndLeavesAltScreen` — the file
+still carries it from earlier. The binary cannot hit this: one process runs
+one program. The last "Going deeper" box has the whole mechanism.
 
 <details>
 <summary>Going deeper: why the golden is the frame, not the terminal stream</summary>

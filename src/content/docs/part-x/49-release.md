@@ -537,7 +537,38 @@ GORELEASER    := go run github.com/goreleaser/goreleaser/v2@$(GORELEASER_VERSION
 
 Every tool in the file has a line like it: `go run` downloads that exact
 version, builds it with your Go, and runs it — nothing is installed and
-nothing needs upgrading. And the recipe itself, after the deploy recipe:
+nothing needs upgrading.
+
+One more name sits above the release recipe: the deployment's dry run. It
+wraps the parts of the deployment that can be checked on this machine — it
+builds the server into a scratch folder, points copies of the unit files at
+it, asks `systemd-analyze` to parse them and score the server's hardening,
+and runs the two tests that prove a stop drains and a backup restores:
+
+<!-- verify: Makefile at=release -->
+```make title="Makefile"
+deploy-check:
+	@command -v systemd-analyze >/dev/null || { echo "deploy-check needs systemd-analyze"; exit 1; }
+	@tmp="$$(mktemp -d)"; trap 'rm -rf "$$tmp"' EXIT; \
+	go build -o "$$tmp/todo-server" ./cmd/todo-server; \
+	install -m 0400 /dev/null "$$tmp/admin-key"; \
+	install -D -m 0755 deploy/todo-backup.sh "$$tmp/todo-backup"; \
+	sed -e "s|/usr/local/bin/todo-server|$$tmp/todo-server|" \
+	    -e "s|/etc/todo/admin-key|$$tmp/admin-key|" \
+	    deploy/todo-server.service > "$$tmp/todo-server.service"; \
+	sed -e "s|/usr/local/lib/todo/todo-backup|$$tmp/todo-backup|" \
+	    -e "s|/usr/local/bin/todo|$$tmp/todo-server|" \
+	    deploy/todo-backup.service > "$$tmp/todo-backup.service"; \
+	cp deploy/todo-backup.timer "$$tmp/todo-backup.timer"; \
+	systemd-analyze verify "$$tmp/todo-server.service" "$$tmp/todo-backup.service" "$$tmp/todo-backup.timer"; \
+	systemd-analyze security --offline=yes --threshold=25 "$$tmp/todo-server.service" | tail -1
+	go test -count=1 -run 'TestGracefulShutdown_Drains|TestBackupScript_Restores' ./cmd/todo-server
+```
+
+Every line works on copies in a scratch folder: the unit files in the
+project name the installed paths, so the check rewrites them rather than
+touching the machine's real ones. And the release recipe itself comes after
+it:
 
 <!-- verify: Makefile at=release -->
 ```make title="Makefile"

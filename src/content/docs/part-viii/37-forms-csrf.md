@@ -51,10 +51,11 @@ func TestCSRF_RefusesPostWithoutToken(t *testing.T) {
 }
 ```
 
-Three helpers in `web_test.go` do the browser's half: `postForm` sends one
-form post, `testSession` mints a signed-in cookie without a login, and
-`csrfFrom` reads a page's hidden stamp. The `403` and its JSON body are the
-one refusal shape every route already uses.
+Four helpers in `web_test.go` do the browser's half: `postForm` sends one
+form post, `testSession` mints a signed-in cookie without a login, `csrfFrom`
+reads a hidden stamp out of a page's body, and `csrfToken` fetches a page and
+returns the stamp it embedded — the one the next case calls. The `403` and
+its JSON body are the one refusal shape every route already uses.
 
 The second case is the working half (`internal/web/forms_test.go`) — post the
 form with its stamp, and the answer is a redirect to the list, with the task
@@ -970,10 +971,11 @@ Every case passes. Next, look at it with a browser's eyes.
 
 ## Look at it work
 
-Start the server as in the earlier work and keep its address in `$B`; an
-account from the sign-in work can log in through the form now. The session
-cookie is presented in an explicit header, and long values are trimmed with
-`...`.
+Start the server as in the earlier work — `TODO_DB=todo.db TODO_LOG=todo.log
+./todo-server --listen 127.0.0.1:18088` — and keep its address in `$B`
+(`B=http://127.0.0.1:18088`); an account from the sign-in work can log in
+through the form now. The session cookie is presented in an explicit header,
+and long values are trimmed with `...`.
 
 An anonymous visitor is sent to the login page, which renders the form and
 starts the session the stamp lives in:

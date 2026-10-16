@@ -170,7 +170,9 @@ func TestStaticAssets_UnknownPathsAre404(t *testing.T) {
 }
 ```
 
-Not found, in the app's usual voice. And one small piece of test furniture, the request a browser makes when it holds a copy:
+Not found, in the app's usual voice. A fourth case ties the page to the stylesheet: `TestPage_LinksTheDesignSystem` fetches the login page, reads the stylesheet's URL out of the page's own output, and asks for it — a link the server does not serve would be a broken page.
+
+And one small piece of test furniture, the request a browser makes when it holds a copy:
 
 <!-- verify: internal/web/assets_test.go at=web-assets -->
 ```go title="internal/web/assets_test.go"
@@ -667,7 +669,7 @@ Everything passes. The stylesheet travels inside the binary, the server versions
 
 ## Look at it from a browser
 
-Start the server the way the earlier web work showed, sign in, and ask for the stylesheet the way a browser does. The captures below use `$B` for the server's address, and `session=...` stands in for the session cookie's value.
+Start the server the way the earlier web work showed — `TODO_DB=todo.db TODO_LOG=todo.log ./todo-server --listen 127.0.0.1:18089` — sign in, and ask for the stylesheet the way a browser does. The captures below use `$B` for the server's address (`B=http://127.0.0.1:18089`), and `session=...` stands in for the session cookie's value.
 
 ```bash
 $ curl -si $B/static/app.css | sed -n '1,10p'

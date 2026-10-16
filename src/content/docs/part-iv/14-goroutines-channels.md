@@ -585,16 +585,17 @@ Every `++` is a read-modify-write: read the old number, add one, write it back.
 Two helpers can read the same number and lose one increment. The detector opens
 the run with:
 
+<!-- transcripts: authored -->
 ```text
 ==================
 WARNING: DATA RACE
 Read at 0x00c0001369a0 by goroutine 26:
   todo/internal/store.(*MemoryStore).Stats.func1()
-      /tmp/opencode/ch14-lab/internal/store/stats.go:39 +0x184
+      /tmp/…/internal/store/stats.go:39 +0x184
 
 Previous write at 0x00c0001369a0 by goroutine 25:
   todo/internal/store.(*MemoryStore).Stats.func1()
-      /tmp/opencode/ch14-lab/internal/store/stats.go:39 +0x199
+      /tmp/…/internal/store/stats.go:39 +0x199
 ...
 ==================
 ```
@@ -632,14 +633,15 @@ instead of before the `go`:
 `Wait` can look at the counter before any helper has added to it: it sees zero
 and returns, and the joiner closes the channel while a helper is still sending:
 
+<!-- transcripts: authored -->
 ```text
 panic: send on closed channel
 
 goroutine 10 [running]:
 main.main.func1()
-	/tmp/opencode/ch14-scratch/addinside/main.go:15 +0xa5
+	/tmp/…/addinside/main.go:15 +0xa5
 created by main.main in goroutine 1
-	/tmp/opencode/ch14-scratch/addinside/main.go:12 +0x98
+	/tmp/…/addinside/main.go:12 +0x98
 ```
 
 The WaitGroup is not a counter you can fill in from anywhere: `Add` belongs
@@ -648,12 +650,13 @@ before `go`, so `Wait` cannot pass while a helper is unaccounted for.
 **Forgetting `close`.** A pool whose joiner never closes the channel ranges
 forever:
 
+<!-- transcripts: authored -->
 ```text
 fatal error: all goroutines are asleep - deadlock!
 
 goroutine 1 [chan receive]:
 main.main()
-	/tmp/opencode/ch14-scratch/neverclose/main.go:12 +0xcd
+	/tmp/…/neverclose/main.go:12 +0xcd
 exit status 2
 ```
 

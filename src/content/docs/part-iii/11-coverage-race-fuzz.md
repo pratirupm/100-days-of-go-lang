@@ -526,24 +526,25 @@ to `data` at the same moment. Run it:
 $ go run -race main.go
 ```
 
+<!-- transcripts: authored -->
 ```text
 ==================
 WARNING: DATA RACE
 Read at 0x00c00012e030 by goroutine 8:
   main.main.func1()
-      /tmp/opencode/ch11-race/main.go:16 +0xcc
+      /tmp/…/main.go:16 +0xcc
 
 Previous write at 0x00c00012e030 by goroutine 9:
   main.main.func2()
-      /tmp/opencode/ch11-race/main.go:22 +0x14d
+      /tmp/…/main.go:22 +0x14d
 
 Goroutine 8 (running) created at:
   main.main()
-      /tmp/opencode/ch11-race/main.go:13 +0x139
+      /tmp/…/main.go:13 +0x139
 
 Goroutine 9 (finished) created at:
   main.main()
-      /tmp/opencode/ch11-race/main.go:19 +0x1dc
+      /tmp/…/main.go:19 +0x1dc
 ==================
 ...
 len: 20
