@@ -142,6 +142,18 @@ a[href^='/days/day-'].done::before {
 	color: var(--sl-color-accent-high);
 }
 
+/* Installed (standalone) polish: keep content clear of notches and home
+   bars when the book runs as an app. */
+@media (display-mode: standalone) {
+	.sidebar-content {
+		padding-bottom: env(safe-area-inset-bottom);
+	}
+
+	main {
+		padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+	}
+}
+
 /* --- Warm palette: paper & amber, dark by default ---------------------- */
 
 :root {
