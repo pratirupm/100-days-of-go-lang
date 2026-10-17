@@ -56,7 +56,10 @@
 		const count = set.size;
 		const next = nextOpen(set);
 		overview.innerHTML =
-			'<div class="tracker-card">' +
+			// not-content opts the card out of Starlight's Markdown flow spacing:
+			// without it, "* + *" margins sneak 16px above every element after
+			// the first and knock the action buttons row out of alignment.
+			'<div class="tracker-card not-content">' +
 			`<div class="tracker-count"><strong>${count}</strong> / ${DAYS} days complete</div>` +
 			`<div class="tracker-bar" role="progressbar" aria-valuemin="0" aria-valuemax="${DAYS}" aria-valuenow="${count}"><span style="width:${percent(count)}%"></span></div>` +
 			(next
