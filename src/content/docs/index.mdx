@@ -6,7 +6,11 @@ head:
   - tag: script
     attrs:
       type: application/ld+json
-    content: '{"@context":"https://schema.org","@type":"Course","name":"100 Days of Go Lang","description":"Learn Go Lang by building a todo web app: 100 days of hands-on lessons, from an empty folder to a complete application with a CLI, an API, and a browser UI.","url":"https://pratirupm.github.io/100-days-of-go-lang/","sameAs":"https://github.com/pratirupm/100-days-of-go-lang","inLanguage":"en","isAccessibleForFree":true}'
+    content: '{"@context":"https://schema.org","@type":"Course","name":"100 Days of Go Lang","description":"Learn Go Lang by building a todo web app: 100 days of hands-on lessons, from an empty folder to a complete application with a CLI, an API, and a browser UI.","url":"https://pratirupm.github.io/100-days-of-go-lang/","sameAs":"https://github.com/pratirupm/100-days-of-go-lang","inLanguage":"en","isAccessibleForFree":true,"hasCourseInstance":{"@type":"CourseInstance","courseMode":"online"}}'
+  - tag: script
+    attrs:
+      type: application/ld+json
+    content: '{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is this Go course free?","acceptedAnswer":{"@type":"Answer","text":"Yes — the whole book is free to read online, with no sign-up and no account."}},{"@type":"Question","name":"Do I need programming experience?","acceptedAnswer":{"@type":"Answer","text":"No. The course starts from an empty folder and assumes nothing beyond a terminal, an editor, and Go 1.26 or newer."}},{"@type":"Question","name":"What will I build?","acceptedAnswer":{"@type":"Answer","text":"A complete todo app in Go Lang: a command-line tool, a REST API, a server-rendered web UI, and a terminal UI — with a database, tests, authentication, and deployment."}},{"@type":"Question","name":"How long does the course take?","acceptedAnswer":{"@type":"Answer","text":"About two to three hours a day. The first 60 days are written — 50 build days and 10 review days; the next 40, on production ground and data structures, are on the way."}},{"@type":"Question","name":"Is this book really written by an AI?","acceptedAnswer":{"@type":"Answer","text":"Yes. The prose is machine-written; every command and transcript in it was executed and verified for real. The disclaimer explains exactly what that means."}}]}'
 hero:
   title: 100 Days of Go Lang
   tagline: The first 60 days build a real Go application from an empty folder — the next 40 go past it. They're on the way.
@@ -17,10 +21,54 @@ hero:
       variant: primary
 ---
 
-No programming experience needed: you'll learn Go Lang by building a real
-todo web app — a command-line tool, a web API, and a browser interface — one
-small piece a day, with tests that keep the code honest along the way.
+No programming experience needed: you'll learn **Go Lang** by building a real
+**todo web app** — a command-line tool, a web API, and a browser interface —
+one small piece a day, with tests that keep the code honest along the way.
 
 <div id="tracker-overview"></div>
 
-*This book was written by an AI — [read the full disclaimer](/100-days-of-go-lang/disclaimer/).*
+## Build a real todo app in Go
+
+Over 100 days you'll write a complete application from an empty folder: a
+**Golang CLI** with cobra, a **REST API** with echo, a server-rendered **web
+UI** with templ, a **terminal UI** with Bubble Tea, and a database layer with
+Turso and sqlc — plus the tests, security work, and deployment that hold it
+all together. Every command and every line of output in the lessons comes
+from a real run of the finished app.
+
+## Learn Go Lang from zero
+
+The course assumes no programming experience. You start with your first
+failing test and end with a released application: structs, interfaces,
+generics, concurrency, context, SQL, HTTP, sessions, and observability —
+each introduced exactly when the app needs it.
+
+## How the 100 days work
+
+The first 60 days are written — 50 build days and 10 review days, about two
+to three hours each. [Start here](/100-days-of-go-lang/start-here/) explains
+the rhythm, or jump straight to
+[Day 1 — The first test](/100-days-of-go-lang/days/day-01/). Your progress
+is saved in your browser, and the whole book works offline once installed.
+
+## Frequently asked questions
+
+**Is this Go course free?** Yes — the whole book is free to read online,
+with no sign-up and no account.
+
+**Do I need programming experience?** No. The course starts from an empty
+folder and assumes nothing beyond a terminal, an editor, and Go 1.26 or
+newer.
+
+**What will I build?** A complete todo app in Go Lang: a command-line tool,
+a REST API, a server-rendered web UI, and a terminal UI — with a database,
+tests, authentication, and deployment.
+
+**How long does the course take?** About two to three hours a day. The first
+60 days are written — 50 build days and 10 review days; the next 40, on
+production ground and data structures, are on the way.
+
+**Is this book really written by an AI?** Yes. The prose is machine-written;
+every command and transcript in it was executed and verified for real. The
+[disclaimer](/100-days-of-go-lang/disclaimer/) explains exactly what that
+means.

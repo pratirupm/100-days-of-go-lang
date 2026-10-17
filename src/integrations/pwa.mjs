@@ -6,7 +6,7 @@
 // The cache version hashes the URL list, so a new build installs a new
 // worker, activates it immediately, and deletes the old cache.
 import { createHash } from 'node:crypto';
-import { readdir, writeFile } from 'node:fs/promises';
+import { readdir, readFile, writeFile } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -124,6 +124,16 @@ self.addEventListener('fetch', (event) => {
 });
 `;
 				await writeFile(join(root, 'sw.js'), sw);
+
+				// A `sitemap.xml` alias: search consoles and humans type that
+				// URL; Astro emits `sitemap-index.xml`. Same content.
+				try {
+					const index = await readFile(join(root, 'sitemap-index.xml'), 'utf8');
+					await writeFile(join(root, 'sitemap.xml'), index);
+				} catch {
+					// No sitemap in this build (site config missing); fine.
+				}
+
 				logger.info(`wrote sw.js — ${urls.length} precached URLs, version ${version}`);
 			},
 		},
