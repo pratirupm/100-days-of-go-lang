@@ -19,6 +19,11 @@ const APP = join(ROOT, '..', 'go-todo-app');
 const OUT_DIR = join(ROOT, 'src/content/docs/appendices/the-finished-app');
 const INDEX = join(ROOT, 'src/content/docs/appendices/the-finished-app.md');
 
+// The base path, read from astro.config.mjs (one source of truth); links the
+// generator writes must carry it for the link validator.
+const config = await readFile(join(ROOT, 'astro.config.mjs'), 'utf8');
+const BASE = config.match(/const base = '([^']+)'/)?.[1] ?? '';
+
 const EXCLUDE_EXACT = new Set([
 	'go.sum',
 	'docs/sbom.cdx.json',
@@ -121,14 +126,14 @@ const indexParts: string[] = [
 ];
 for (const slug of order) {
 	const group = groups.get(slug)!;
-	indexParts.push(`- [${group.label}](/appendices/the-finished-app/${slug}/) — ${group.files.length} files\n`);
+	indexParts.push(`- [${group.label}](${BASE}/appendices/the-finished-app/${slug}/) — ${group.files.length} files\n`);
 }
 
 for (const slug of order) {
 	const group = groups.get(slug)!;
 	const parts: string[] = [
 		`---\ntitle: "${group.label} — the finished app"\nsidebar:\n  hidden: true\ntableOfContents: false\npagefind: false\n---\n\n`,
-		`Part of [The finished app (spoilers)](/appendices/the-finished-app/).\n`,
+		`Part of [The finished app (spoilers)](${BASE}/appendices/the-finished-app/).\n`,
 	];
 	for (const file of group.files) {
 		const content = (await readFile(join(APP, file), 'utf8')).replace(/\n+$/, '');

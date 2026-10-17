@@ -46,14 +46,14 @@ background, not part of the build.
 
 A word on the shape of the journey: the app becomes complete and working well
 before the last page, and the first sixty days stand on their own. Beyond
-them, the course keeps going: [the next thirty days](/next-30/whats-coming/)
+them, the course keeps going: [the next thirty days](/100-days-of-go-lang/next-30/whats-coming/)
 go past the app into production ground, and
-[ten more](/dsa-10/whats-coming/) cover data structures and algorithms. Those
+[ten more](/100-days-of-go-lang/dsa-10/whats-coming/) cover data structures and algorithms. Those
 forty are on the way — the sixty are yours now.
 
 One more thing before you start: **this book was written by an AI**. Every
 command and transcript in it was executed and verified for real, but the
-prose is machine-written — [the full disclaimer](/disclaimer/) explains
+prose is machine-written — [the full disclaimer](/100-days-of-go-lang/disclaimer/) explains
 exactly what that means.
 
 ## If you get stuck
@@ -62,7 +62,7 @@ exactly what that means.
 - Chapters list the errors they can produce, with the fix, under
   "If something went wrong".
 - As a last resort, the finished app appears in full in
-  [The finished app (spoilers)](/appendices/the-finished-app/) — but give it
+  [The finished app (spoilers)](/100-days-of-go-lang/appendices/the-finished-app/) — but give it
   an honest try first. Struggling a little is how the learning happens.
 
-Ready? [Day 1 — The first test](/days/day-01/) is next.
+Ready? [Day 1 — The first test](/100-days-of-go-lang/days/day-01/) is next.

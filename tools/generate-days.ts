@@ -16,6 +16,12 @@ const ROOT = new URL('..', import.meta.url).pathname;
 const OUT = join(ROOT, 'src/content/docs/days');
 const CHAPTERS = join(ROOT, 'src/chapters');
 
+// The base path, read from astro.config.mjs (one source of truth). Links the
+// generator writes must carry it — Starlight's link validator checks sources
+// against base-prefixed routes.
+const config = await readFile(join(ROOT, 'astro.config.mjs'), 'utf8');
+const BASE = config.match(/const base = '([^']+)'/)?.[1] ?? '';
+
 type Chapter = {
 	n: number;
 	title: string;
@@ -53,7 +59,7 @@ const parts: Part[] = [
 			{ n: 7, title: 'Generics', slug: '/part-ii/07-generics-and-stdlib/', hours: 2.5, bullets: ['write a function that works for many types with a type parameter;', 'reach for the standard library’s `slices` and `maps` helpers first.'] },
 			{ n: 8, title: 'Custom types', slug: '/part-ii/08-custom-types-encodings/', hours: 2.5, bullets: ['define custom types that know how to render and parse themselves;', 'round-trip them through text and pin the encodings with table tests.'] },
 		],
-		review: 'open [the finished app’s appendix](/appendices/the-finished-app/) and find the `Store` interface — see how small it stayed.',
+		review: `open [the finished app’s appendix](${BASE}/appendices/the-finished-app/) and find the \`Store\` interface — see how small it stayed.`,
 	},
 	{
 		roman: 'III',
@@ -186,9 +192,9 @@ about one and a half. The days don't have to be consecutive: the plan is a
 pace, not a deadline.
 
 The next thirty days go past the app into production ground — containers,
-clouds, queues, and the rest — and [ten more](/dsa-10/whats-coming/) cover
-data structures and algorithms. Both are on the way;
-[what's coming](/next-30/whats-coming/) holds the working list.
+clouds, queues, and the rest — and [ten more](${BASE}/dsa-10/whats-coming/)
+cover data structures and algorithms. Both are on the way;
+[what's coming](${BASE}/next-30/whats-coming/) holds the working list.
 
 The app is complete and working by Day 47 (the web interface, tested); the
 last days ship it and tune it, and Day 60 closes the first stretch.
@@ -228,7 +234,7 @@ ${lesson}
 <div class="day-tracker" data-day="${day}"></div>
 `,
 		});
-		indexLines.push(`- [Day ${day} — ${c.title}](/days/day-${String(day).padStart(2, '0')}/) · about ${badge}\n`);
+		indexLines.push(`- [Day ${day} — ${c.title}](${BASE}/days/day-${String(day).padStart(2, '0')}/) · about ${badge}\n`);
 		day++;
 	}
 	dayPages.push({
@@ -243,13 +249,13 @@ sidebar:
 
 - Re-run the whole suite: \`go test ./...\`.
 - Read any **Going deeper** boxes you skipped on days ${day - part.chapters.length}–${day - 1}.
-- Compare your tree with [The finished app](/appendices/the-finished-app/).
+- Compare your tree with [The finished app](${BASE}/appendices/the-finished-app/).
 - If everything is green, take the win. And if you're curious: ${part.review}
 
 <div class="day-tracker" data-day="${day}"></div>
 `,
 	});
-	indexLines.push(`- [Day ${day} — Review: Part ${part.roman}](/days/day-${String(day).padStart(2, '0')}/) · about 1.5 hours\n`);
+	indexLines.push(`- [Day ${day} — Review: Part ${part.roman}](${BASE}/days/day-${String(day).padStart(2, '0')}/) · about 1.5 hours\n`);
 	day++;
 }
 

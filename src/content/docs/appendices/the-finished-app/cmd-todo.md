@@ -7,7 +7,7 @@ pagefind: false
 ---
 
 
-Part of [The finished app (spoilers)](/appendices/the-finished-app/).
+Part of [The finished app (spoilers)](/100-days-of-go-lang/appendices/the-finished-app/).
 
 
 ## `cmd/todo/integration_test.go`

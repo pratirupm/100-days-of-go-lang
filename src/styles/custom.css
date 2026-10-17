@@ -1,5 +1,6 @@
 /* The book's typeface: 0xProto — https://github.com/0xType/0xProto
-   Self-hosted (SIL Open Font License; see /fonts/0xProto-LICENSE.txt).
+   Self-hosted (SIL Open Font License; see src/assets/fonts/0xProto-LICENSE.txt).
+   The URLs are relative so Vite bundles, hashes, and base-prefixes them.
    Noto Sans Symbols 2 covers the marks captured tool output uses (✎ ✓ ✗),
    which 0xProto does not draw; its unicode-range CSS loads it only when a
    page needs those glyphs. */
@@ -11,7 +12,7 @@
 	font-style: normal;
 	font-weight: 400;
 	font-display: swap;
-	src: url('/fonts/0xProto-Regular.woff2') format('woff2');
+	src: url('../assets/fonts/0xProto-Regular.woff2') format('woff2');
 }
 
 @font-face {
@@ -19,7 +20,7 @@
 	font-style: normal;
 	font-weight: 700;
 	font-display: swap;
-	src: url('/fonts/0xProto-Bold.woff2') format('woff2');
+	src: url('../assets/fonts/0xProto-Bold.woff2') format('woff2');
 }
 
 @font-face {
@@ -27,7 +28,7 @@
 	font-style: italic;
 	font-weight: 400;
 	font-display: swap;
-	src: url('/fonts/0xProto-Italic.woff2') format('woff2');
+	src: url('../assets/fonts/0xProto-Italic.woff2') format('woff2');
 }
 
 /* 0xProto everywhere: body text, headings, UI, and code — with the symbol

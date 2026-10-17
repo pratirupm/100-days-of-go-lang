@@ -6,16 +6,24 @@ import starlightLinksValidator from 'starlight-links-validator';
 // 100 Days of Go Lang — the book site.
 // Astro + Starlight, run with Bun. `bun run build` emits a static site to dist/.
 import stripVerifyMarkers from './src/integrations/strip-verify-markers.mjs';
+import baseLinks from './src/integrations/base-links.mjs';
 import pwa from './src/integrations/pwa.mjs';
 
 // Register the service worker only in production builds; the dev server
 // must never cache itself.
 const isBuild = process.env.NODE_ENV === 'production';
 
+// The book deploys as a GitHub Pages project site:
+// https://pratirupm.github.io/100-days-of-go-lang/
+const site = 'https://pratirupm.github.io';
+const base = '/100-days-of-go-lang';
+
 export default defineConfig({
-	// Placeholder until the book has a real home; keeps the sitemap happy.
-	site: 'https://example.com/',
+	site,
+	base,
 	integrations: [
+		// Markdown links get the base path before the link validator runs.
+		baseLinks({ base }),
 		// Verification markers stay in the source for `bun run verify`,
 		// but are stripped from the pages readers see.
 		stripVerifyMarkers(),
@@ -47,21 +55,36 @@ export default defineConfig({
 					content:
 						"(() => { try { if (localStorage.getItem('starlight-theme') === null) localStorage.setItem('starlight-theme', 'dark'); } catch {} })();",
 				},
-				{ tag: 'script', attrs: { src: '/keys.js', defer: true } },
-				{ tag: 'script', attrs: { src: '/tracker.js', defer: true } },
+				// The tracker's scripts build links from this base.
+				{ tag: 'script', content: `document.documentElement.dataset.base = '${base}';` },
+				{ tag: 'script', attrs: { src: `${base}/keys.js`, defer: true } },
+				{ tag: 'script', attrs: { src: `${base}/tracker.js`, defer: true } },
 				// Installable, offline-first: manifest, theme chrome, and the
 				// service-worker registration (production builds only).
-				{ tag: 'link', attrs: { rel: 'manifest', href: '/manifest.webmanifest' } },
+				{ tag: 'link', attrs: { rel: 'manifest', href: `${base}/manifest.webmanifest` } },
 				{ tag: 'meta', attrs: { name: 'theme-color', content: '#1e1915' } },
 				{ tag: 'meta', attrs: { name: 'apple-mobile-web-app-capable', content: 'yes' } },
-				{ tag: 'meta', attrs: { name: 'apple-mobile-web-app-title', content: 'Todo in Go' } },
-				{ tag: 'link', attrs: { rel: 'apple-touch-icon', href: '/icons/apple-touch-icon.png' } },
+				{ tag: 'meta', attrs: { name: 'apple-mobile-web-app-title', content: '100 Days' } },
+				{ tag: 'link', attrs: { rel: 'apple-touch-icon', href: `${base}/icons/apple-touch-icon.png` } },
 				...(isBuild
 					? [
 							{
 								tag: 'script',
+								content: `if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('${base}/sw.js'));`,
+							},
+							// Google Analytics (gtag) — production only, so local
+							// work never reports.
+							{
+								tag: 'script',
+								attrs: {
+									async: true,
+									src: 'https://www.googletagmanager.com/gtag/js?id=G-TT2SJTQ6KY',
+								},
+							},
+							{
+								tag: 'script',
 								content:
-									"if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));",
+									"window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-TT2SJTQ6KY');",
 							},
 						]
 					: []),
@@ -95,7 +118,8 @@ export default defineConfig({
 		}),
 		// The offline-first service worker + precache manifest, written into
 		// dist at the end of every build. Last, so Starlight's Pagefind
-		// index exists by the time the manifest is collected.
-		pwa(),
+		// index exists by the time the manifest is collected. The base keeps
+		// every precached URL inside the Pages subpath.
+		pwa({ base }),
 	],
 });

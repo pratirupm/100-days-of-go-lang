@@ -13,6 +13,7 @@
     "transcripts": "bun tools/check-transcripts.ts",
     "appendix": "bun tools/generate-appendix.ts",
     "days": "bun tools/generate-days.ts",
+    "prefix-base": "bun tools/prefix-base.ts",
     "icons": "bun tools/icons.ts",
     "check": "bun run lint && bun run verify && bun run transcripts && bun run build"
   },

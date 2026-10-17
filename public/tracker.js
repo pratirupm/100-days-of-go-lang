@@ -7,6 +7,9 @@
 (() => {
 	const KEY = 'gtb.progress.v1';
 	const DAYS = 60;
+	// The site's base path ('' at the root, '/100-days-of-go-lang' on Pages),
+	// set by an inline script in the page head.
+	const BASE = document.documentElement.dataset.base ?? '';
 
 	const read = () => {
 		try {
@@ -28,7 +31,7 @@
 		}
 	};
 
-	const dayLink = (n) => `/days/day-${String(n).padStart(2, '0')}/`;
+	const dayLink = (n) => `${BASE}/days/day-${String(n).padStart(2, '0')}/`;
 	const nextOpen = (set) => {
 		for (let i = 1; i <= DAYS; i++) if (!set.has(i)) return i;
 		return null;

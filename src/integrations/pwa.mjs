@@ -29,7 +29,7 @@ async function* walk(dir) {
 	}
 }
 
-export default function pwa() {
+export default function pwa({ base = '' } = {}) {
 	return {
 		name: 'pwa',
 		hooks: {
@@ -42,15 +42,14 @@ export default function pwa() {
 					if (rel === '/sw.js') continue;
 					if (rel.endsWith('.html')) {
 						if (rel === '/404.html') continue;
-						urls.push(rel === '/index.html' ? '/' : rel.replace(/index\.html$/, ''));
+						urls.push(base + (rel === '/index.html' ? '/' : rel.replace(/index\.html$/, '')));
 					} else if (
 						rel.startsWith('/_astro/') ||
-						rel.startsWith('/fonts/') ||
 						rel.startsWith('/icons/') ||
 						rel.startsWith('/pagefind/') ||
 						EXACT.has(rel)
 					) {
-						urls.push(rel);
+						urls.push(base + rel);
 					}
 				}
 				urls.sort();
@@ -60,7 +59,7 @@ export default function pwa() {
 const VERSION = '${version}';
 const PRECACHE = ${JSON.stringify(urls)};
 const CACHE = 'gtb-' + VERSION;
-const OFFLINE = '/offline/';
+const OFFLINE = '${base}/offline/';
 
 self.addEventListener('install', (event) => {
 	event.waitUntil(

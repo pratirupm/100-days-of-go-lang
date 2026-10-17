@@ -33,7 +33,7 @@ title: Credits
 Go, of course — and a stack the book introduces one piece at a time: Turso,
 echo, templ, sqlc, goose, cobra, scs, argon2id, uuid, testify, go-cmp,
 go-snaps, moq, Bubble Tea, Lip Gloss, OpenTelemetry, Prometheus, and
-GoReleaser. [Beyond this book](/appendices/beyond-this-book/) has the fuller
+GoReleaser. [Beyond this book](/100-days-of-go-lang/appendices/beyond-this-book/) has the fuller
 list, with the alternatives each one had.
 
 ## Thanks
