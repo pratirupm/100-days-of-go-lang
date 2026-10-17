@@ -1,5 +1,6 @@
 ---
 title: "internal/config — the finished app"
+description: "The finished app, file by file: internal/config (spoilers)."
 sidebar:
   hidden: true
 tableOfContents: false

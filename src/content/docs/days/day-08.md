@@ -1,5 +1,6 @@
 ---
 title: "Day 8 — Generics"
+description: "Write one small helper that works for any element type, then let the standard library's generic tools do the rest."
 sidebar:
   order: 8
 chapter: 7

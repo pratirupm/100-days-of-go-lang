@@ -1,5 +1,6 @@
 ---
 title: "Day 40 — Authorization"
+description: "Give every task an owner, scope each request to the signed-in user, and keep a trail of who did what."
 sidebar:
   order: 40
 chapter: 34

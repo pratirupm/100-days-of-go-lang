@@ -1,5 +1,6 @@
 ---
 title: "Day 17 — Goroutines and channels"
+description: "Compute the store's task summary across four helpers running at once — and prove the answer matches a plain one-at-a-time count."
 sidebar:
   order: 17
 chapter: 14

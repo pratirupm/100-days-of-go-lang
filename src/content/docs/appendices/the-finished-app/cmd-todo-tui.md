@@ -1,5 +1,6 @@
 ---
 title: "cmd/todo-tui — the finished app"
+description: "The finished app, file by file: cmd/todo-tui (spoilers)."
 sidebar:
   hidden: true
 tableOfContents: false

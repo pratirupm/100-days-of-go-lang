@@ -1,5 +1,6 @@
 ---
 title: The 10 days of DSA
+description: "Ten days of data structures and algorithms in Go — complexity, trees, graphs, sorting, and interview-shaped practice, measured with tests and benchmarks."
 sidebar:
   label: What's coming
   order: 1

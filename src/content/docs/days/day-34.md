@@ -1,5 +1,6 @@
 ---
 title: "Day 34 — Logging"
+description: "Give the app a diary — records of what it did, on stderr for the moment and in a JSON log file that outlives the run."
 sidebar:
   order: 34
 chapter: 29

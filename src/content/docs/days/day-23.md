@@ -1,5 +1,6 @@
 ---
 title: "Day 23 — Export and import"
+description: "Write every task to a file as JSON, read it back, and replace the file in one step that never leaves half a document."
 sidebar:
   order: 23
 chapter: 19

@@ -1,5 +1,6 @@
 ---
 title: "Day 49 — A terminal interface"
+description: "Build a full-screen terminal interface for the task list — a program that waits for a key, redraws, and waits again."
 sidebar:
   order: 49
 chapter: 41

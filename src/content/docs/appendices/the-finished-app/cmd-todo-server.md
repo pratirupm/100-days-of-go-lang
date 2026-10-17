@@ -1,5 +1,6 @@
 ---
 title: "cmd/todo-server — the finished app"
+description: "The finished app, file by file: cmd/todo-server (spoilers)."
 sidebar:
   hidden: true
 tableOfContents: false

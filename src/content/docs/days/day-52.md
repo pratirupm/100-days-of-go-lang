@@ -1,5 +1,6 @@
 ---
 title: "Day 52 — Testing the terminal UI"
+description: "Give the full-screen interface a memory — records in a log file that outlives the session, and whole frames recorded in files its tests compare against."
 sidebar:
   order: 52
 chapter: 44

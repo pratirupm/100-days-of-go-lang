@@ -1,5 +1,6 @@
 ---
 title: "Day 15 — Linters and code generation"
+description: "Point Go's own checker and a stricter linter at the code, then let a generator write a test fake that keeps up with the store's interface."
 sidebar:
   order: 15
 chapter: 13

@@ -1,5 +1,6 @@
 ---
 title: "Day 59 — Making it faster"
+description: "Measure where the app spends its time at a hundred thousand tasks, then make the changes the numbers point at."
 sidebar:
   order: 59
 chapter: 50

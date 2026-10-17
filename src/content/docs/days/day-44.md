@@ -1,5 +1,6 @@
 ---
 title: "Day 44 — Forms"
+description: "Give the pages hands — forms that create, edit, complete, and delete tasks, each carrying a stamp that proves it came from your own page."
 sidebar:
   order: 44
 chapter: 37

@@ -1,5 +1,6 @@
 ---
 title: "Day 6 — Interfaces and fakes"
+description: "Give the store a name for what it must do, then build a stand-in that can fail on command."
 sidebar:
   order: 6
 chapter: 5

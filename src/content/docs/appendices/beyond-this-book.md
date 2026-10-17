@@ -1,5 +1,6 @@
 ---
 title: Beyond this book
+description: "Where to go after the course: the standard library, the tools the book chose, and roads into production."
 sidebar:
   order: 2
 ---

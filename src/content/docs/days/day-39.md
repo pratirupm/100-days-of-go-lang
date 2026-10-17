@@ -1,5 +1,6 @@
 ---
 title: "Day 39 — Users and sessions"
+description: "Teach the API who is asking — users with scrambled passwords, a login that hands out a session cookie, and a logout that takes it away."
 sidebar:
   order: 39
 chapter: 33

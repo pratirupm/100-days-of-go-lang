@@ -1,5 +1,6 @@
 ---
 title: "Day 7 — Organizing the code"
+description: "Move the app's packages under internal/ and add the first runnable command — written test-first."
 sidebar:
   order: 7
 chapter: 6

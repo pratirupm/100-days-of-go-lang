@@ -1,5 +1,6 @@
 ---
 title: "Day 54 — Tracing and metrics"
+description: "Follow every request with a trace, count the traffic on a metrics endpoint, and keep the memory profiles admin-only."
 sidebar:
   order: 54
 chapter: 45

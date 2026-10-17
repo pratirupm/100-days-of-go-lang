@@ -1,5 +1,6 @@
 ---
 title: "internal/cli — the finished app"
+description: "The finished app, file by file: internal/cli (spoilers)."
 sidebar:
   hidden: true
 tableOfContents: false

@@ -163,15 +163,18 @@ const parts: Part[] = [
 
 const hours = (h: number) => (h === Math.floor(h) ? `${h} hours` : `${h} hours`);
 
-// The lesson body for chapter N, read from the source tree (front matter
-// stripped — the day page carries its own).
-async function lessonFor(n: number): Promise<string> {
+// The lesson body and description for chapter N, read from the source tree
+// (front matter stripped — the day page carries its own).
+async function chapterFor(n: number): Promise<{ description: string; body: string }> {
 	const prefix = String(n).padStart(2, '0') + '-';
 	const files = (await readdir(CHAPTERS)).filter((f) => f.startsWith(prefix));
 	if (files.length !== 1) throw new Error(`chapter ${n}: expected one source, found ${files.length}`);
 	const text = await readFile(join(CHAPTERS, files[0]!), 'utf8');
-	const match = text.match(/^---\n[\s\S]*?\n---\n+/);
-	return (match ? text.slice(match[0].length) : text).trimEnd();
+	const match = text.match(/^---\n([\s\S]*?)\n---\n+/);
+	const front = match ? match[1]! : '';
+	const description = (front.match(/^description:\s*(.+)$/m)?.[1] ?? '').trim();
+	const body = (match ? text.slice(match[0].length) : text).trimEnd();
+	return { description, body };
 }
 
 const dayPages: { day: number; text: string }[] = [];
@@ -180,6 +183,7 @@ const indexLines: string[] = [];
 
 indexLines.push(`---
 title: The 60 days
+description: "The course plan, day by day: fifty build days and ten review days, with your progress saved in this browser only."
 sidebar:
   label: Overview
   order: 0
@@ -211,11 +215,12 @@ for (const part of parts) {
 	indexLines.push(`\n### Part ${part.roman} — ${part.name}\n`);
 	for (const c of part.chapters) {
 		const badge = hours(c.hours);
-		const lesson = await lessonFor(c.n);
+		const lesson = await chapterFor(c.n);
 		dayPages.push({
 			day,
 			text: `---
 title: "Day ${day} — ${c.title}"
+description: ${JSON.stringify(lesson.description || `Day ${day} of 100 Days of Go Lang: ${c.title}.`)}
 sidebar:
   order: ${day}
 chapter: ${c.n}
@@ -229,7 +234,7 @@ ${c.bullets.map((b) => `- ${b}`).join('\n')}
 ${c.split ? `\n:::tip[If you only have two hours]\n${c.split}\n:::\n` : ''}
 ---
 
-${lesson}
+${lesson.body}
 
 <div class="day-tracker" data-day="${day}"></div>
 `,

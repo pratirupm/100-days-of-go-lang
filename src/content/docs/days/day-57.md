@@ -1,5 +1,6 @@
 ---
 title: "Day 57 — Deploying"
+description: "Put the server on a real machine — a unit that keeps it running, a proxy that faces the internet, and a backup that runs itself."
 sidebar:
   order: 57
 chapter: 48

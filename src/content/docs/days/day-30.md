@@ -1,5 +1,6 @@
 ---
 title: "Day 30 — A command-line tool"
+description: "Give the app its real commands — add, list, done, stats, and import — built as a cobra tree that tests can drive."
 sidebar:
   order: 30
 chapter: 25

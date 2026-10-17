@@ -1,5 +1,6 @@
 ---
 title: You're offline
+description: "You're offline — everything you have visited still works."
 sidebar:
   hidden: true
 pagefind: false

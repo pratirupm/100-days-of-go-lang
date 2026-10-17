@@ -1,5 +1,6 @@
 ---
 title: "Day 50 — Styling the terminal UI"
+description: "Give the terminal interface a face — color, a text input, and the keys that add and complete tasks."
 sidebar:
   order: 50
 chapter: 42

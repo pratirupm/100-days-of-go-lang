@@ -1,5 +1,6 @@
 ---
 title: "Day 25 — Database migrations"
+description: "Move the schema out of the code and into numbered migration files that goose applies every time the store opens."
 sidebar:
   order: 25
 chapter: 21

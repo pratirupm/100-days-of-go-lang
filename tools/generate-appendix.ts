@@ -120,7 +120,7 @@ await rm(OUT_DIR, { recursive: true, force: true });
 await mkdir(OUT_DIR, { recursive: true });
 
 const indexParts: string[] = [
-	`---\ntitle: The finished app (spoilers)\nsidebar:\n  order: 1\ntableOfContents: false\npagefind: false\n---\n\n`,
+	`---\ntitle: The finished app (spoilers)\ndescription: The finished application, file by file — the state every chapter builds toward, with spoilers.\nsidebar:\n  order: 1\ntableOfContents: false\npagefind: false\n---\n\n`,
 	INTRO,
 	`\n## The files, by directory\n\n`,
 ];
@@ -132,7 +132,7 @@ for (const slug of order) {
 for (const slug of order) {
 	const group = groups.get(slug)!;
 	const parts: string[] = [
-		`---\ntitle: "${group.label} — the finished app"\nsidebar:\n  hidden: true\ntableOfContents: false\npagefind: false\n---\n\n`,
+		`---\ntitle: "${group.label} — the finished app"\ndescription: "The finished app, file by file: ${group.label} (spoilers)."\nsidebar:\n  hidden: true\ntableOfContents: false\npagefind: false\n---\n\n`,
 		`Part of [The finished app (spoilers)](${BASE}/appendices/the-finished-app/).\n`,
 	];
 	for (const file of group.files) {

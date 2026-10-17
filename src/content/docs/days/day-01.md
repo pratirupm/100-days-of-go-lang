@@ -1,5 +1,6 @@
 ---
 title: "Day 1 — The first test"
+description: "Set up the project and write your first test — before the code it tests exists."
 sidebar:
   order: 1
 chapter: 1

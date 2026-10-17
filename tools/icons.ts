@@ -40,4 +40,13 @@ await sharp(Buffer.from(maskable)).resize(512, 512).png().toFile(join(OUT, 'mask
 await sharp(Buffer.from(icon)).resize(180, 180).png().toFile(join(OUT, 'apple-touch-icon.png'));
 await writeFile(join(ROOT, 'public/favicon.svg'), icon + '\n');
 
-console.log('wrote icons to public/icons (192, 512, maskable-512, apple-touch-icon) and public/favicon.svg');
+// The Open Graph card: 1200×630, espresso ground, amber check, the name.
+const og = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630">
+	<rect width="1200" height="630" fill="${BG}"/>
+	<path d="M 520 200 L 570 250 L 690 130" fill="none" stroke="${FG}" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+	<text x="600" y="400" text-anchor="middle" font-family="DejaVu Sans, Verdana, sans-serif" font-size="76" font-weight="bold" fill="${FG}">100 Days of Go Lang</text>
+	<text x="600" y="480" text-anchor="middle" font-family="DejaVu Sans, Verdana, sans-serif" font-size="34" fill="#e8e2d8">A 100-day Go course for beginners</text>
+</svg>`;
+await sharp(Buffer.from(og)).png().toFile(join(ROOT, 'public/og.png'));
+
+console.log('wrote icons to public/icons (192, 512, maskable-512, apple-touch-icon), public/favicon.svg, and public/og.png');

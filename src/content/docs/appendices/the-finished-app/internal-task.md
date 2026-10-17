@@ -1,5 +1,6 @@
 ---
 title: "internal/task — the finished app"
+description: "The finished app, file by file: internal/task (spoilers)."
 sidebar:
   hidden: true
 tableOfContents: false

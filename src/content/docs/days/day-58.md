@@ -1,5 +1,6 @@
 ---
 title: "Day 58 — Releases"
+description: "Stamp a version name into every build, then turn the app into downloadable archives with one command."
 sidebar:
   order: 58
 chapter: 49

@@ -1,5 +1,6 @@
 ---
 title: "Day 4 — When things go wrong"
+description: "Give failures identity — an error that carries the field that failed, and one shared \"not found\" error the store wraps with context."
 sidebar:
   order: 4
 chapter: 4

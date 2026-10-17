@@ -1,5 +1,6 @@
 ---
 title: "Day 3 — A list of tasks"
+description: "Give tasks an ID and labels, then build a store that adds, lists, filters, counts, and sorts them in memory."
 sidebar:
   order: 3
 chapter: 3

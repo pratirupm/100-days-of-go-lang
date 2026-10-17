@@ -1,5 +1,6 @@
 ---
 title: Disclaimer
+description: "This book was written by an AI — what was verified for real, and the usual fine print."
 ---
 
 ## Written by an AI
@@ -31,6 +32,9 @@ with your own run, trust your run — and the official documentation.
 - **Accuracy.** Every effort was made to verify the material against real
   runs at the time of writing. Software changes; commands, versions, and
   outputs may differ on your machine, and errors may remain.
+- **Analytics.** The hosted site counts visits with Google Analytics. Your
+  reading progress is different: it lives in your browser's own storage and
+  is never sent anywhere.
 - **Trademarks and links.** Product names, logos, and trademarks are the
   property of their respective owners and are used for identification only.
   External links are provided for convenience; they are not endorsements,

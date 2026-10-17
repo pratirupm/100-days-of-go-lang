@@ -1,5 +1,6 @@
 ---
 title: "Day 18 — select and timeouts"
+description: "Teach the counting pool to give up early — wait on several channels at once, and stop a call when its deadline passes."
 sidebar:
   order: 18
 chapter: 15

@@ -1,5 +1,6 @@
 ---
 title: "Day 11 — Table-driven tests"
+description: "Give the suite one standard shape — named cases, subtests, parallel runs, and testify — and add the 200-character title limit."
 sidebar:
   order: 11
 chapter: 9

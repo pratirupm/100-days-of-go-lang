@@ -1,5 +1,6 @@
 ---
 title: "Day 56 — The security audit"
+description: "Walk through the app asking how it could be abused, then write the checks that keep the answers honest."
 sidebar:
   order: 56
 chapter: 47

@@ -1,5 +1,6 @@
 ---
 title: "internal/benchgate — the finished app"
+description: "The finished app, file by file: internal/benchgate (spoilers)."
 sidebar:
   hidden: true
 tableOfContents: false

@@ -1,5 +1,6 @@
 ---
 title: "Day 36 — The first API endpoint"
+description: "Turn the todo app into a web server that answers two health questions over HTTP and stops politely when asked."
 sidebar:
   order: 36
 chapter: 30

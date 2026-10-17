@@ -1,5 +1,6 @@
 ---
 title: "Day 9 — Custom types"
+description: "Give Status and Priority types of their own — with rules the compiler checks and a text form the JSON decoder respects."
 sidebar:
   order: 9
 chapter: 8

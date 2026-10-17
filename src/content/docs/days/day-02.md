@@ -1,5 +1,6 @@
 ---
 title: "Day 2 — Structs and methods"
+description: "Grow the task with a status, a priority, and an optional due date, and teach it to describe itself in one line."
 sidebar:
   order: 2
 chapter: 2

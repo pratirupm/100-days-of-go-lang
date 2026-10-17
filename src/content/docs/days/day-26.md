@@ -1,5 +1,6 @@
 ---
 title: "Day 26 — Queries with sqlc"
+description: "Turn the store's hand-written SQL into named queries that a tool checks against the schema and turns into typed Go."
 sidebar:
   order: 26
 chapter: 22

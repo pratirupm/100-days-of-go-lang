@@ -1,5 +1,6 @@
 ---
 title: Credits
+description: "Who and what made 100 Days of Go Lang: the AI assistant, the site toolchain, the typefaces, and the application stack."
 ---
 
 ## Written with

@@ -1,5 +1,6 @@
 ---
 title: "Day 21 — Running work in parallel"
+description: "Run a job over every task with a fixed crew of helpers — stop at the first error, and stop when the caller cancels."
 sidebar:
   order: 21
 chapter: 18

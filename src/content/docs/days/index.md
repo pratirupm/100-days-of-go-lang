@@ -1,5 +1,6 @@
 ---
 title: The 60 days
+description: "The course plan, day by day: fifty build days and ten review days, with your progress saved in this browser only."
 sidebar:
   label: Overview
   order: 0

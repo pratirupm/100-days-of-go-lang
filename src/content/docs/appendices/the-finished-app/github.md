@@ -1,5 +1,6 @@
 ---
 title: ".github — the finished app"
+description: "The finished app, file by file: .github (spoilers)."
 sidebar:
   hidden: true
 tableOfContents: false

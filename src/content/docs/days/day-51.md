@@ -1,5 +1,6 @@
 ---
 title: "Day 51 — Talking to the API"
+description: "Point the terminal interface at the HTTP API, so it signs in and asks the server for everything it shows."
 sidebar:
   order: 51
 chapter: 43

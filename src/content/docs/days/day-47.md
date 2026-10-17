@@ -1,5 +1,6 @@
 ---
 title: "Day 47 — Testing the pages"
+description: "Save every page as a reviewed snapshot and pin its heading structure — with a clock the tests can set."
 sidebar:
   order: 47
 chapter: 40

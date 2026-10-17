@@ -1,5 +1,6 @@
 ---
 title: "cmd/todo — the finished app"
+description: "The finished app, file by file: cmd/todo (spoilers)."
 sidebar:
   hidden: true
 tableOfContents: false

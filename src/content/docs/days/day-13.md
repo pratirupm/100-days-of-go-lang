@@ -1,5 +1,6 @@
 ---
 title: "Day 13 — Coverage, races, and fuzzing"
+description: "Three tools that check what tests can't — which lines ran, which inputs break a promise, and which memory accesses race."
 sidebar:
   order: 13
 chapter: 11

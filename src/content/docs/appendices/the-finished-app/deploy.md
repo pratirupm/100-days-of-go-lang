@@ -1,5 +1,6 @@
 ---
 title: "deploy — the finished app"
+description: "The finished app, file by file: deploy (spoilers)."
 sidebar:
   hidden: true
 tableOfContents: false

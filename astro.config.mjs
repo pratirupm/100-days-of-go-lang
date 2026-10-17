@@ -66,6 +66,32 @@ export default defineConfig({
 				{ tag: 'meta', attrs: { name: 'apple-mobile-web-app-capable', content: 'yes' } },
 				{ tag: 'meta', attrs: { name: 'apple-mobile-web-app-title', content: '100 Days' } },
 				{ tag: 'link', attrs: { rel: 'apple-touch-icon', href: `${base}/icons/apple-touch-icon.png` } },
+				// Social cards and structured data. Starlight emits the core OG
+				// tags itself; these add the image and the site schema.
+				{
+					tag: 'meta',
+					attrs: { property: 'og:image', content: `${site}${base}/og.png` },
+				},
+				{
+					tag: 'meta',
+					attrs: {
+						property: 'og:image:alt',
+						content: '100 Days of Go Lang — an amber check on espresso',
+					},
+				},
+				{ tag: 'meta', attrs: { name: 'twitter:image', content: `${site}${base}/og.png` } },
+				{
+					tag: 'script',
+					attrs: { type: 'application/ld+json' },
+					content: JSON.stringify({
+						'@context': 'https://schema.org',
+						'@type': 'WebSite',
+						name: '100 Days of Go Lang',
+						url: `${site}${base}/`,
+						description:
+							'A 100-day Go course: the first 60 days build a real application from an empty folder; the next 40 are on the way.',
+					}),
+				},
 				...(isBuild
 					? [
 							{

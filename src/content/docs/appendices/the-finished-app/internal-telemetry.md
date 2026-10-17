@@ -1,5 +1,6 @@
 ---
 title: "internal/telemetry — the finished app"
+description: "The finished app, file by file: internal/telemetry (spoilers)."
 sidebar:
   hidden: true
 tableOfContents: false

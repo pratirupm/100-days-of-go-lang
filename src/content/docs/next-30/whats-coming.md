@@ -1,5 +1,6 @@
 ---
 title: The next 30 days
+description: "The 30 days after the course: Kubernetes, Docker, AWS, CI/CD, PostgreSQL, Kafka, Redis, gRPC, WebSockets, and the rest of production ground — the working list."
 sidebar:
   label: What's coming
   order: 1

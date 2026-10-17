@@ -1,5 +1,6 @@
 ---
 title: "internal/api — the finished app"
+description: "The finished app, file by file: internal/api (spoilers)."
 sidebar:
   hidden: true
 tableOfContents: false

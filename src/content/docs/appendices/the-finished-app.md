@@ -1,5 +1,6 @@
 ---
 title: The finished app (spoilers)
+description: The finished application, file by file — the state every chapter builds toward, with spoilers.
 sidebar:
   order: 1
 tableOfContents: false

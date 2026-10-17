@@ -138,9 +138,40 @@
 	cursor: pointer;
 }
 
-a[href^='/days/day-'].done::before {
+a.day-link.done::before {
 	content: '✓ ';
 	color: var(--sl-color-accent-high);
+}
+
+/* The compact tracker widget: the top of the sidebar, every page. */
+.tracker-widget {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+	margin: 0 0 0.75rem;
+	padding: 0.6rem 0.75rem;
+	border: 1px solid var(--sl-color-hairline);
+	border-radius: 0.5rem;
+	background: var(--sl-color-bg-nav);
+	font-size: var(--sl-text-sm);
+}
+
+.tracker-widget-count {
+	color: var(--sl-color-white);
+	font-weight: 600;
+}
+
+.tracker-widget .tracker-bar {
+	height: 0.35rem;
+}
+
+.tracker-widget-link {
+	color: var(--sl-color-text-accent);
+	text-decoration: none;
+}
+
+.tracker-widget-link:hover {
+	text-decoration: underline;
 }
 
 /* Installed (standalone) polish: keep content clear of notches and home

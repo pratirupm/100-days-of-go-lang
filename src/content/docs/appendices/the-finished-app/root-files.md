@@ -1,5 +1,6 @@
 ---
 title: "The project root — the finished app"
+description: "The finished app, file by file: The project root (spoilers)."
 sidebar:
   hidden: true
 tableOfContents: false

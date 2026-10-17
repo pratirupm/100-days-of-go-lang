@@ -1,5 +1,6 @@
 ---
 title: "Day 37 — Tasks over HTTP"
+description: "Five routes that read, create, change, and remove tasks — with validation, one error shape, and a version that refuses stale writes."
 sidebar:
   order: 37
 chapter: 31

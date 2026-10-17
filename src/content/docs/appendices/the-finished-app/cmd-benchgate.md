@@ -1,5 +1,6 @@
 ---
 title: "cmd/benchgate — the finished app"
+description: "The finished app, file by file: cmd/benchgate (spoilers)."
 sidebar:
   hidden: true
 tableOfContents: false

@@ -1,5 +1,6 @@
 ---
 title: "Day 32 — Output formats"
+description: "Give the tool two voices — an aligned table for people and a stable JSON shape for programs — behind one flag."
 sidebar:
   order: 32
 chapter: 27

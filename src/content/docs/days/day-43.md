@@ -1,5 +1,6 @@
 ---
 title: "Day 43 — The first web page"
+description: "Build the app's first web page — the signed-in user's tasks, drawn by a browser, rendered with templ."
 sidebar:
   order: 43
 chapter: 36

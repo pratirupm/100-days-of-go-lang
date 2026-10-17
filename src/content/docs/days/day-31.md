@@ -1,5 +1,6 @@
 ---
 title: "Day 31 — Configuration"
+description: "Let the database path come from a flag, an environment variable, or a sensible default instead of living in the code."
 sidebar:
   order: 31
 chapter: 26

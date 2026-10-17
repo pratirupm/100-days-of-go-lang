@@ -1,5 +1,6 @@
 ---
 title: "Day 38 — Middleware"
+description: "Wrap every request in one ordered stack — an id, a log record, a panic catcher, a time limit, a size limit, compression, and security headers."
 sidebar:
   order: 38
 chapter: 32
