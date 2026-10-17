@@ -22,15 +22,28 @@ export default defineConfig({
 			components: {
 				// The chapter title area gains the day badge (Day N · ≈3 hours).
 				PageTitle: './src/components/PageTitle.astro',
+				// Dark is the default theme for a reader with no stored choice.
+				ThemeProvider: './src/components/ThemeProvider.astro',
 			},
 			// Long code lines wrap instead of clipping — a beginner must
-			// never wonder whether a line continues past the edge.
+			// never wonder whether a line continues past the edge. The warm
+			// gruvbox pair matches the paper-and-amber palette.
 			expressiveCode: {
 				defaultProps: { wrap: true },
+				themes: ['gruvbox-light-soft', 'gruvbox-dark-soft'],
 			},
 			// Arrow-key navigation between chapters, and the client-side
-			// progress tracker (localStorage only).
+			// progress tracker (localStorage only). The first script gives a
+			// first-time visitor a stored `dark` choice — Starlight's theme
+			// select otherwise re-applies `auto` (the system setting) on
+			// load, undoing the dark-first default. An explicit `auto` (an
+			// empty stored value) is respected.
 			head: [
+				{
+					tag: 'script',
+					content:
+						"(() => { try { if (localStorage.getItem('starlight-theme') === null) localStorage.setItem('starlight-theme', 'dark'); } catch {} })();",
+				},
 				{ tag: 'script', attrs: { src: '/keys.js', defer: true } },
 				{ tag: 'script', attrs: { src: '/tracker.js', defer: true } },
 			],

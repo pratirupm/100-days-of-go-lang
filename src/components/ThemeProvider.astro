@@ -1,0 +1,41 @@
+---
+// Starlight's ThemeProvider with one change: when the reader has no stored
+// preference, the theme falls back to dark instead of the system setting —
+// this book is dark-first. "Auto" in the theme picker still follows the
+// system once chosen. Everything else is copied from the original component
+// (the inline script avoids a flash of the wrong theme).
+import { Icon } from '@astrojs/starlight/components';
+---
+
+{/* This is intentionally inlined to avoid FOUC. */}
+<script is:inline>
+	window.StarlightThemeProvider = (() => {
+		const storedTheme =
+			typeof localStorage !== 'undefined' && localStorage.getItem('starlight-theme');
+		const theme = storedTheme || 'dark';
+		document.documentElement.dataset.theme = theme === 'light' ? 'light' : 'dark';
+		return {
+			updatePickers(theme = storedTheme || 'dark') {
+				document.querySelectorAll('starlight-theme-select').forEach((picker) => {
+					const select = picker.querySelector('select');
+					if (select) select.value = theme;
+					/** @type {HTMLTemplateElement | null} */
+					const tmpl = document.querySelector(`#theme-icons`);
+					const newIcon = tmpl && tmpl.content.querySelector('.' + theme);
+					if (newIcon) {
+						const oldIcon = picker.querySelector('svg.label-icon');
+						if (oldIcon) {
+							oldIcon.replaceChildren(...newIcon.cloneNode(true).childNodes);
+						}
+					}
+				});
+			},
+		};
+	})();
+</script>
+
+<template id="theme-icons">
+	<Icon name="sun" class="light" />
+	<Icon name="moon" class="dark" />
+	<Icon name="laptop" class="auto" />
+</template>
