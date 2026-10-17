@@ -11,7 +11,7 @@ Instant is a claim about a small list. What happens at a hundred thousand tasks?
 
 So we measure. The tool for measuring a running program is a **profiler**: it watches the program work and writes down where the time goes, like a time-and-motion study on a workshop floor. A benchmark says how slow a whole operation is; the profile says which parts to blame.
 
-Two changes come out of the profile, and one ceiling. By the end, finding a single task among a hundred thousand goes from 35 milliseconds to under a quarter of a millisecond — and we can say why, because we watched it happen.
+Three changes come out of the profile, and one ceiling. By the end, finding a single task among a hundred thousand goes from 35 milliseconds to under a quarter of a millisecond — and we can say why, because we watched it happen.
 
 ## A bigger list to measure against
 
@@ -530,7 +530,7 @@ The constant argues for the size: a statement that repeats exactly is one the dr
 // what this code did before: it cost a hash table with one entry per task,
 // one string per id for the map's keys, and one more lookup per tag row.
 // The walk costs neither. What it cannot do is tolerate an unordered slice:
-// a task out of order would take the rows of its neighbour, which is why the
+// a task out of order would take the rows of its ..., which is why the
 // precondition is written here and why the conformance suite — which asserts
 // every task's tags on every list query — is the test that holds it.
 //
@@ -590,7 +590,7 @@ func (s *TursoStore) attachTagChunk(ctx context.Context, tasks []task.Task) erro
 }
 ```
 
-The precondition is the load-bearing part: the walk is only correct while the tasks are in id order, because a task out of order would collect its neighbour's labels. The comment says so, the conformance suite from the database work asserts every task's labels on every list query, and one new test pins the chunk boundary itself:
+The precondition is the load-bearing part: the walk is only correct while the tasks are in id order, because a task out of order would collect its neighbor's labels. The comment says so, the conformance suite from the database work asserts every task's labels on every list query, and one new test pins the chunk boundary itself:
 
 <!-- verify: internal/store/turso_test.go at=optimization -->
 ```go title="internal/store/turso_test.go"
@@ -599,7 +599,7 @@ The precondition is the load-bearing part: the walk is only correct while the ta
 // every task's tags must arrive whole — the first task, the task on the
 // boundary, and the last one. The walk pairs the two ordered streams, so a
 // bug at a boundary would either drop a chunk's tags or attach them to the
-// neighbour, and this is the test that says so.
+// ..., and this is the test that says so.
 func TestTursoStore_TagsAcrossChunks(t *testing.T) {
 	t.Parallel()
 
@@ -636,7 +636,7 @@ func TestTursoStore_TagsAcrossChunks(t *testing.T) {
 }
 ```
 
-The test adds 513 tasks — one more than a chunk — each carrying its own label plus one they all share, and checks the first, the last, and every task between through both `List` and `ByTag`. A bug at a chunk boundary would drop labels or attach a neighbour's, and this is the test that would say so.
+The test adds 513 tasks — one more than a chunk — each carrying its own label plus one they all share, and checks the first, the last, and every task between through both `List` and `ByTag`. A bug at a chunk boundary would drop labels or attach a neighbor's, and this is the test that would say so.
 
 The honest accounting of the change has two sides. A list read moves 21 MB less — 383 MB down to 362 MB — because the map and its key strings are gone, and the statement no longer grows with the list. In exchange, the per-chunk bookkeeping adds about fifteen thousand small objects on top of twelve million, roughly a tenth of a percent. The time barely moves; the win is the bytes and the bounded statement. Both numbers are written down, because a trade you cannot see is a trade you cannot defend.
 

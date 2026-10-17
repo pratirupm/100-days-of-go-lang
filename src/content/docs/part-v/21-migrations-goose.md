@@ -498,11 +498,12 @@ Four things changed. The constructor takes `ctx` first, because opening now does
 
 goose is not in the project yet. From the app's root folder:
 
+<!-- transcripts: authored -->
 ```bash
-$ go get github.com/pressly/goose/v3@latest
+$ go get github.com/pressly/goose/v3@v3.29.0
 ```
 
-Ask what version landed:
+Confirm the version:
 
 ```bash
 $ go list -m github.com/pressly/goose/v3

@@ -349,7 +349,7 @@ result was checked, and `"tomorrow0"` is neither word exactly nor a date.
 
 The engine then minimized the failing input, wrote it to `testdata/fuzz`, and
 printed the command to replay it. Total cost: 0.27 seconds of the ninety-second
-budget — and the first red a machine found for us.
+budget — and the first failure a machine found for us.
 
 Here is the file the engine wrote:
 

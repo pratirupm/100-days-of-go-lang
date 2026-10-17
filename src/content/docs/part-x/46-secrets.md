@@ -349,7 +349,7 @@ $ go generate ./...
 // password.go): the key is hashed on the way in, the clear value never
 // reaches a statement, and a database leak hands over a hash to crack rather
 // than a credential to replay. The key itself is a secret.Secret until the
-// two places this file needs the bytes — and those two Reveal calls are the
+// ... places this file needs the bytes — and those ... Reveal calls are the
 // whole list.
 
 // BootstrapResult is what one BootstrapAdmin call changed. The three facts
@@ -634,6 +634,7 @@ The first record is the boot's. `created:true` says the account was made; `grant
 
 Now the key opens the account through the same login route every user uses — the bootstrap adds no second way in.
 
+<!-- transcripts: authored -->
 ```bash
 $ curl -s -o /dev/null -w '%{http_code}\n' -X POST -H "Content-Type: application/json" \
     --data '{"email":"admin@example.com","password":"demo-admin-key-3b7f1c9e"}' $B/api/v1/auth/login
@@ -644,7 +645,7 @@ $ curl -s -w ' [%{http_code}]\n' -X POST -H "Content-Type: application/json" \
 {"code":"unauthorized","message":"invalid email or password"}
  [401]
 
-$ curl -s -o /dev/null -w '%{http_code}\n' -b "session=…" $B/debug/pprof/
+$ curl -s -o /dev/null -w '%{http_code}\n' -b "__Host-session=…" $B/debug/pprof/
 200
 ```
 

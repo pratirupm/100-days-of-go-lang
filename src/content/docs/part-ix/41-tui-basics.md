@@ -829,7 +829,7 @@ func (m Model) Init() tea.Cmd { return loadTasks(m.ctx, m.store) }
 
 <!-- verify: internal/tui/tui.go at=tui-event-loop -->
 ```go title="internal/tui/tui.go"
-// Update implements tea.Model: the whole of the model's behaviour, one
+// Update implements tea.Model: the whole of the model's ... one
 // message in, the next state and an optional command out. Key presses are
 // the only input; the store never reaches the model except through the
 // messages its commands produce.
@@ -1158,7 +1158,7 @@ func openStore(ctx context.Context, dbPath string) (store.Store, func() error, e
 
 It creates the database's folder if it does not exist and hands back the store with its close function. It is the CLI's opener, in this binary's own main: both open the same database the same way. (The elided comment records that a later change replaces this side of the program with the API client.)
 
-Start it in a terminal the way you start the other binaries — `go run ./cmd/todo-tui`. The tasks are the ones the CLI added: both read the same database. The frame is the one `View` builds — a header counting the tasks, the rows with their markers, and the keys on the last line.
+Build it the way you built the server — `go build -o todo-tui ./cmd/todo-tui` — then start it in a terminal: `./todo-tui`. The tasks are the ones the CLI added: both read the same database. The frame is the one `View` builds — a header counting the tasks, the rows with their markers, and the keys on the last line.
 
 ```text
 todo: 3 tasks

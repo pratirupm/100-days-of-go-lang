@@ -600,9 +600,10 @@ that times a deadline — one that calls `StatsWithin(time.Nanosecond)` a
 thousand times and complains when a call finishes before the timer fires.
 Run it a few times and it fails, then passes, from the same binary:
 
+<!-- transcripts: authored -->
 ```text
 === RUN   TestStatsWithinOneNanosecond
-    flaky_test.go:23: completed=2 of 1000 calls; a timing assertion is red here and green on the next run
+    flaky_test.go:23: completed=2 of 1000 calls; a timing assertion that fails here and passes on the next run
 --- FAIL: TestStatsWithinOneNanosecond (0.05s)
 …
 --- PASS: TestStatsWithinOneNanosecond (0.05s)

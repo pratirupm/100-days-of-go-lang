@@ -296,8 +296,9 @@ touched yet.
 
 cobra is not in the project yet. From the app's root folder:
 
+<!-- transcripts: authored -->
 ```bash
-$ go get github.com/spf13/cobra@latest
+$ go get github.com/spf13/cobra@v1.10.2
 $ go mod tidy
 ```
 
@@ -1019,9 +1020,9 @@ clock.
 
 The database orders its tasks by id, and `0199…` sorts before the `01a1…`
 ids, so the imported task appears first. The memory store the tests use lists
-in insertion order instead. Both are fine: the interface promises the tasks,
-not a particular order — so if you write your own tool over the store, sort
-the list yourself when order matters.
+in insertion order instead. Both are fine: the interface does not promise one
+order across implementations — so if you write your own tool over the store,
+sort the list yourself when order matters.
 
 </details>
 

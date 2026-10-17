@@ -760,8 +760,9 @@ lifecycle pair, and the quiet test all passed on the first run.
 
 ## Watch it choose a database
 
-Build the program the way you have before — `go build -o ./todo ./cmd/todo` —
-then copy the `todo` file into an empty scratch folder and run it from there.
+Build the program the way you have before —
+`CGO_ENABLED=0 go build -o ./todo ./cmd/todo` — then copy the `todo` file
+into an empty scratch folder and run it from there.
 Start with the default, giving the run its own XDG data folder so the
 experiment cannot touch your real one:
 

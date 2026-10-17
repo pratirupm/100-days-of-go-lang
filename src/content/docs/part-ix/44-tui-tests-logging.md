@@ -500,11 +500,11 @@ anything else happens.
 
 ## The log path, resolved on its own
 
-Start with the path. The command-line tool's rule already exists: a flag
-beats `$TODO_LOG`, which beats the state folder, which falls back to HOME.
-The interface needs exactly that rule and nothing else from the
-configuration — it opens no database — so the rule moves into a function of
-its own. In `internal/config/config.go`:
+Start with the path. The rule already exists for the command-line tool:
+`$TODO_LOG` beats the state folder, which falls back to HOME. The interface
+needs the same rule with one addition on top — its own `--debug-log` flag —
+and nothing else from the configuration; it opens no database, so the rule
+moves into a function of its own. In `internal/config/config.go`:
 
 <!-- verify: internal/config/config.go at=tui-tests -->
 ```go title="internal/config/config.go"
@@ -1113,9 +1113,10 @@ sign in: POST /api/v1/auth/login: Post "http://127.0.0.1:1/api/v1/auth/login": �
 enter sign in    tab next field    ctrl+c quit
 ```
 
-The capture's terminal had no color, so the help line's bullets render as
-spaces here; yours will draw them. And the file the session left behind holds
-both records:
+The capture's terminal was wide, so the help line is the full help — one key
+per column, with the column spacing between the groups. On a narrow terminal
+the same keys fall back to the one-line help, separated by bullets. And the
+file the session left behind holds both records:
 
 <!-- transcripts: authored -->
 ```text

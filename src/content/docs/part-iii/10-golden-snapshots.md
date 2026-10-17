@@ -17,7 +17,7 @@ from then on the test compares the output against the file. A file recorded
 this way is called a **snapshot**.
 
 We'll record two things this way: the CLI listing, and the four shapes a task
-line can take. Then we'll practise the part that matters most — reading what
+line can take. Then we'll practice the part that matters most — reading what
 was recorded, and knowing what to do when the output changes on purpose.
 
 ## A file that holds the expected output

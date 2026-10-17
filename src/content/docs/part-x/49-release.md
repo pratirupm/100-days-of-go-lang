@@ -181,7 +181,7 @@ package version
 
 // Version is the release version, stamped at build time. A plain `go build`
 // leaves the default; only the release pipeline changes it, and only to the
-// tag the commit was built for.
+// tag the ... was built for.
 var Version = "dev"
 ```
 
@@ -386,7 +386,10 @@ The other two builds inherit the anchor:
     binary: todo-tui
 ```
 
-Each names only what differs from it. Now the archives and the checksums:
+Each names only what differs from it. The archives carry the project's
+`README.md`; if yours has none yet, create a minimal one at the project root
+— a title and a sentence about the app are enough. Now the archives and the
+checksums:
 
 <!-- verify: .goreleaser.yaml at=release -->
 ```yaml title=".goreleaser.yaml"
@@ -681,11 +684,12 @@ why, so nobody "updates" it back into a broken state. The rule behind it:
 **`build failed: build for todo does not contain a main function` — the tool
 ran without a plan.**
 
+<!-- transcripts: authored -->
 ```bash
   ⨯ release failed after 0s
     error=
     │ build failed: build for todo does not contain a main function
-    │ Learn more at https://goreleaser.com/errors/no-main
+    │ Learn more at https://goreleaser.com/resources/errors/no-main/
     target=windows_386_sse2
 exit status 1
 ```

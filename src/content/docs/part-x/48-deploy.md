@@ -194,7 +194,7 @@ Environment=TODO_ADMIN_EMAIL=admin@example.com
 Environment=TODO_ADMIN_KEY_FILE=%d/admin-key
 ```
 
-`LoadCredential` copies the operator's key file into a private directory for the service, owned by the service user and readable by no one else. `%d` is that directory, so the app reads the copy and never `/etc/todo`. A misconfigured source fails the boot with the mode named, instead of quietly replacing the account's credential.
+`LoadCredential` copies the operator's key file into a private directory for the service, owned by the service user and readable by no one else. `%d` is that directory, so the app reads the copy and never `/etc/todo`. The copy is always 0400, so the app's own mode check cannot fail on this path. That check guards a run that points `TODO_ADMIN_KEY_FILE` straight at a file, as the drill below does: a key readable by group or other stops the boot, and the message names the mode.
 
 The memory ceiling and the lifecycle:
 
@@ -479,7 +479,7 @@ The install starts with the two programs:
    sudo install -m 0755 todo-server todo /usr/local/bin/
 ```
 
-`CGO_ENABLED=0` asks for self-contained programs — no C libraries needed on the server — and `-trimpath` keeps your folder names out of them. Copy both to `/usr/local/bin`; the CLI is not decoration, because the backup job checks its copies with it.
+`CGO_ENABLED=0` asks for programs built without a C toolchain — nothing extra to install on the machine that builds them — and `-trimpath` keeps your folder names out of them. The database engine still calls into the system's C library while it runs, which every Linux server already carries. Copy both to `/usr/local/bin`; the CLI is not decoration, because the backup job checks its copies with it.
 
 Then the files themselves:
 
@@ -514,7 +514,7 @@ The admin credential is generated once and kept owner-only:
    sudo chmod 0400 /etc/todo/admin-key
 ```
 
-`openssl rand -base64 24` prints a random key; keep a copy in your password manager. The rest writes it to `/etc/todo/admin-key`, owned by root and readable by no one else — the mode the boot insists on.
+`openssl rand -base64 24` prints a random key; keep a copy in your password manager. The rest writes it to `/etc/todo/admin-key`, owned by root and readable by no one else — the mode the app checks whenever it reads the file directly, as the drill below does.
 
 Then start it, and look through the front door:
 

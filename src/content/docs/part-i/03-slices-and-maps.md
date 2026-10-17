@@ -20,7 +20,7 @@ store starts as a test.
 
 ## The store's job
 
-Five behaviours, one per question:
+Five behaviors, one per question:
 
 - `Add` takes a task, gives it the next number — starting at 1 — and
   hands it back, so the caller learns the number.
@@ -349,7 +349,7 @@ decides which sorting tool the implementation reaches for.
 }
 ```
 
-That's the contract: five behaviours, four tests, one file. Type it
+That's the contract: five behaviors, four tests, one file. Type it
 exactly — the failure below is what this file produces, line for line.
 
 ## Watch it fail

@@ -789,7 +789,14 @@ Every package passes, snapshots included. From here on, the same run compares th
 
 ## Try the real tool
 
-Build the tool the way you have before — `CGO_ENABLED=0 go build -o ./todo ./cmd/todo` — and run it from a scratch folder with `TODO_DB` pointed at a scratch file, so your real list stays out of the demo. Four tasks in, one marked done:
+Build the tool the way you have before — `CGO_ENABLED=0 go build -o ./todo ./cmd/todo` — and run it from a scratch folder. Point `TODO_DB` at a scratch file there, so your real list stays out of the demo:
+
+<!-- transcripts: authored -->
+```bash
+$ export TODO_DB=$PWD/demo.db
+```
+
+Four tasks in, one marked done:
 
 ```bash
 $ ./todo add "buy milk" --due 2026-11-01 --tag home

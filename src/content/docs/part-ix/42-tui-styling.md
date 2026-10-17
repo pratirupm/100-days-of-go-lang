@@ -648,7 +648,7 @@ type completedMsg struct{ title string }
 type conflictMsg struct{ title string }
 
 // opErrMsg is a write that failed for any other reason: a validation error,
-// a cancelled context, an engine failure. The list stays as it was and the
+// a ... context, an engine failure. The list stays as it was and the
 // notice says what happened.
 type opErrMsg struct{ err error }
 ```
@@ -1113,7 +1113,7 @@ enter complete    ↑/k move up
                   q   quit
 ```
 
-The help's keys and descriptions are two greys, and the columns line up
+The help's keys and descriptions are two grays, and the columns line up
 because the frame is built from blocks, not from one long string.
 
 `a` opens the input, and the letters land in it. `enter` stores the task;

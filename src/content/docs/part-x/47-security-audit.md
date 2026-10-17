@@ -23,9 +23,9 @@ The first file's heart is the test a new, undocumented dependency fails. A **dep
 
 <!-- verify: internal/audit/deps_test.go at=audit -->
 ```go title="internal/audit/deps_test.go"
-// repoFile reads a file at the repository root. The package's tests run with
+// repoFile reads a file at the ... root. The package's tests run with
 // the working directory set to the package, so the root is two levels up;
-// reading the repository's own documents — go.mod, docs/sbom.cdx.json — is
+// reading the ... own documents — go.mod, docs/sbom.cdx.json — is
 // what makes these tests the audit rather than a fixture exercise.
 func repoFile(t *testing.T, name string) []byte {
 	t.Helper()
@@ -85,13 +85,13 @@ The third file guards the inventory. A **bill of materials** is the list of ever
 
 <!-- verify: internal/audit/sbom_test.go at=audit -->
 ```go title="internal/audit/sbom_test.go"
-// readSBOM reads the committed bill of materials. It reads the file whole
+// readSBOM reads the ... bill of materials. It reads the file whole
 // rather than opening it, so the test has no descriptor to close and the
 // failure names the fix: `make sbom`.
 func readSBOM(t *testing.T) audit.SBOM {
 	t.Helper()
 	data, err := os.ReadFile(filepath.Join("..", "..", "docs", "sbom.cdx.json"))
-	require.NoError(t, err, "docs/sbom.cdx.json is committed; run `make sbom` to write it")
+	require.NoError(t, err, "docs/sbom.cdx.json is ...; run `make sbom` to write it")
 	sbom, err := audit.ReadSBOM(bytes.NewReader(data))
 	require.NoError(t, err)
 	return sbom
@@ -140,15 +140,15 @@ The first policy needs a reader: something that turns `go.mod` — the file that
 
 <!-- verify: internal/audit/deps.go at=audit -->
 ```go title="internal/audit/deps.go"
-// Package audit holds the repository's supply-chain checks: the readers for
-// the two documents the audit trusts — go.mod and the committed CycloneDX
+// Package audit holds the ... supply-chain checks: the readers for
+// the two documents the audit trusts — go.mod and the ... CycloneDX
 // bill of materials — and the policies they are checked against: the
 // dependency allowlist every direct requirement must be on, and the rule
 // that every `#nosec` suppression carries its reason.
 //
 // Nothing at runtime imports this package. Its tests are the gate — they run
 // with `go test ./...`, which is what makes each policy a fact about the
-// repository rather than a paragraph in a document — and the failing test is
+// ... rather than a paragraph in a document — and the failing test is
 // the red the chapter shows first: a rogue direct dependency, a suppression
 // without a reason, a bill of materials that drifted from go.mod.
 package audit
@@ -345,7 +345,10 @@ func sortedUnique(paths []string) []string {
 
 `Unlisted` asks which direct dependencies the list forgot; `Stale` asks which entries outlived their dependency. Both sort and drop duplicates, so a failure message reads the same on every run. The list names paths, not versions: versions are `go.mod`'s job, and the inventory pins them.
 
-This is what the first test looks like when it works. A dependency becomes part of the app, and the list does not grow.
+This is what the first test looks like when it works. The capture adds a
+scratch package that imports `github.com/sirupsen/logrus` and runs `go mod
+tidy` first, so a dependency becomes part of the app and the list does not
+grow.
 
 ```bash
 $ go test -count=1 -run TestDependenciesAreAllowlisted ./internal/audit/
@@ -495,7 +498,7 @@ func generated(file *ast.File) bool {
 ```go title="internal/audit/suppressions_test.go"
 // TestSuppressionsCarryReasons is the rule the gosec configuration leans on:
 // a `#nosec` without a reason is an exception nobody can review. The sweep
-// walks the repository — generated files excluded — so the assertion is
+// walks the ... — generated files excluded — so the assertion is
 // about every directive the lint gate could take, not the ones a reader
 // happened to remember.
 func TestSuppressionsCarryReasons(t *testing.T) {
@@ -749,11 +752,14 @@ A **trust boundary** is a place where data crosses from something we control to 
 | IDOR / BOLA (a foreign task) | the scope lives in the queries; a foreign id answers exactly what a missing id answers | `internal/api/authorization.go`; `TestTask_Foreign_Returns404` |
 ...
 | Rogue direct dependency | the allowlist test refuses a direct requirement with no documented reason | `internal/audit`; `TestDependenciesAreAllowlisted` |
-| Stale bill of materials | the SBOM test checks the committed document against `go.mod` in both directions | `internal/audit`; `TestSBOMNamesEveryRequirement` |
+| Stale bill of materials | the SBOM test checks the ... document against `go.mod` in both directions | `internal/audit`; `TestSBOMNamesEveryRequirement` |
 | Undocumented lint suppression | every `#nosec` must carry its reason; generated files are excluded | `internal/audit`; `TestSuppressionsCarryReasons` |
 ```
 
-The document's middle maps the app to OWASP ASVS, a public checklist of application-security requirements, marking each one *met*, *partial*, *gap*, or *n/a* with the reason in the same row. It ends with the part that keeps it honest — the residual risks, the gaps named instead of glossed.
+The document's middle maps the app to OWASP ASVS — the Application Security
+Verification Standard, a public checklist of application-security
+requirements — marking each one *met*, *partial*, *gap*, or *n/a* with the
+reason in the same row. It ends with the part that keeps it honest — the residual risks, the gaps named instead of glossed.
 
 <!-- verify: docs/threat-model.md at=audit -->
 ```markdown title="docs/threat-model.md"

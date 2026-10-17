@@ -32,7 +32,7 @@ browser is the pattern to copy: it asks, and the server answers with a page.
 The interface is about to work the same way — it asks for the task list and
 asks the server to make changes.
 
-The server is the only program that touches the file now: one writer, many
+The interface's only way to the file is the server now: one writer, many
 askers. The arrangement buys two habits.
 
 First, the list on screen is a snapshot — the server handed it over at the
@@ -837,7 +837,7 @@ calls and answers with whatever a case scripts:
 ```go title="internal/tui/tui_test.go"
 // fakeClient is the model's seam: the API as the tests script it. It
 // implements tui.Client with one field per answer — the tasks a list serves,
-// the error each call fails with — so a test states the API's behaviour as
+// the error each call fails with — so a test states the API's ... as
 // data and the model's reaction is what is under test. The mutex guards the
 // state because the teatest runs call the fake from the program's command
 // goroutine while the test goroutine reads the counters.

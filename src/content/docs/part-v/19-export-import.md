@@ -59,8 +59,9 @@ functions do not move — and nothing else changes either.
 
 Create `internal/store/export_test.go`, next to the store's other test files.
 Its imports are the ones those files use, plus `bytes`, `encoding/json`,
-`io`, `os`, `path/filepath`, and `strings`; the compiler will name anything
-you miss.
+`fmt`, `io`, `os`, `path/filepath`, and `strings`; the compiler will name
+anything you miss. The finished app's appendix holds this file in full — read
+the parts behind the `...` there as you type them.
 
 Every test is built around one fixture: three tasks, so every case can spell
 the same expected document.
@@ -85,7 +86,8 @@ every field a task has.
 
 ## The round trip
 
-The first test exports the fixture and imports it into a fresh store.
+The first test, `TestExportImport_RoundTrip`, exports the fixture and imports
+it into a fresh store.
 
 <!-- verify: internal/store/export_test.go at=export-import -->
 ```go title="internal/store/export_test.go"
@@ -141,7 +143,8 @@ is `Done`, because the export was taken after `Complete`.
 Four smaller tests pin the rules of reading a document.
 
 An import is not a restore. The document carries ids, but the importing store
-assigns its own, exactly as `Add` always does:
+assigns its own, exactly as `Add` always does — the test is
+`TestImportJSON_AssignsFreshIDs`:
 
 <!-- verify: internal/store/export_test.go at=export-import -->
 ```go title="internal/store/export_test.go"
@@ -163,7 +166,8 @@ The document says `"ID":42`; the imported task lands with id 2. The
 document's ids are the exporting store's numbering, meaningful inside the
 document and nowhere else.
 
-The version is read, not just written:
+The version is read, not just written —
+`TestImportJSON_RejectsUnknownVersion`:
 
 <!-- verify: internal/store/export_test.go at=export-import -->
 ```go title="internal/store/export_test.go"
@@ -184,7 +188,8 @@ The version is read, not just written:
 the number. The reader refuses it before adding anything: the count is zero
 and the store is empty.
 
-A malformed task names its position:
+A malformed task names its position —
+`TestImportJSON_MalformedElementNamesIndex`:
 
 <!-- verify: internal/store/export_test.go at=export-import -->
 ```go title="internal/store/export_test.go"
@@ -206,7 +211,8 @@ broken JSON. Both fail at the second task, and the error says `task 1`,
 counting from zero. The first task is already in the store: the import adds
 as it reads.
 
-One more test keeps the reader flexible:
+One more test keeps the reader flexible —
+`TestImportJSON_IgnoresUnknownTaskFields`:
 
 <!-- verify: internal/store/export_test.go at=export-import -->
 ```go title="internal/store/export_test.go"
@@ -225,8 +231,9 @@ field needs no new version; a change that breaks the shape does.
 ## Prove it streams
 
 Import reads the document one task at a time instead of reading all of it
-first. That claim gets a test of its own, built from a reader that hands over
-one byte per call and counts them:
+first. That claim gets a test of its own —
+`TestImportJSON_StreamsFromAChunkedReader` — built from a reader that hands
+over one byte per call and counts them:
 
 <!-- verify: internal/store/export_test.go at=export-import -->
 ```go title="internal/store/export_test.go"
@@ -248,8 +255,8 @@ func (r *byteCountingReader) Read(p []byte) (int, error) {
 A store that wraps `MemoryStore` records the reader's count at the moment
 each task is added. An importer that swallowed the whole document first would
 record the same number every time; this test asserts that every recorded
-position is short of the document's end and strictly increasing. That is what
-"adds as it reads" means.
+position is short of the document's end, and that the first add happened
+before the second. That is what "adds as it reads" means.
 
 ## Prove the file survives a failure
 
@@ -257,9 +264,9 @@ position is short of the document's end and strictly increasing. That is what
 directories refuse writes, programs are killed. Three tests pin the
 destination around a failure.
 
-The first exports three times and checks the directory afterwards;
-`t.TempDir()` gives the test a fresh directory that is removed when the test
-ends:
+The first, `TestWriteExportFile_NoTempLeftovers`, exports three times and
+checks the directory afterwards; `t.TempDir()` gives the test a fresh
+directory that is removed when the test ends:
 
 <!-- verify: internal/store/export_test.go at=export-import -->
 ```go title="internal/store/export_test.go"
@@ -281,12 +288,14 @@ After three exports the directory holds exactly one file — the export — and
 no leftovers. A lingering `.tmp-` file is what a crash can leave behind; a
 successful write must not.
 
-The middle test makes the directory read-only with `os.Chmod(dir, 0o500)`, so
-the temp file cannot be created at all, then checks that the export file's
-bytes are exactly the ones from before the failure. It skips itself when
+The middle test, `TestWriteExportFile_FailedWriteKeepsOldFile`, makes the
+directory read-only with `os.Chmod(dir, 0o500)`, so the temp file cannot be
+created at all, then checks that the export file's bytes are exactly the ones
+from before the failure. It skips itself when
 running as root, because root ignores directory permissions.
 
-The last test fails the document's source instead:
+The last test, `TestWriteExportFile_SourceFailureRemovesTemp`, fails the
+document's source instead:
 
 <!-- verify: internal/store/export_test.go at=export-import -->
 ```go title="internal/store/export_test.go"
@@ -481,10 +490,10 @@ somewhere else and renaming.
 	}()
 ```
 
-`os.CreateTemp` creates a brand-new file beside the destination, with a
-random suffix ending in `.tmp-`. The deferred function removes it on any
-failure before the rename; success clears `tmpName`, so the remove is skipped.
-The document is streamed into the temp:
+`os.CreateTemp` creates a brand-new file beside the destination, named
+`<destination>.tmp-` followed by a random part. The deferred function removes
+it on any failure before the rename; success clears `tmpName`, so the remove
+is skipped. The document is streamed into the temp:
 
 <!-- verify: internal/store/export.go at=export-import -->
 ```go title="internal/store/export.go"
@@ -549,12 +558,58 @@ ok  	todo/internal/store	1.301s
 
 Fifty runs in a row pass.
 
-The file ends with two benchmarks, `BenchmarkExport` and `BenchmarkImport`.
-The export one writes to `io.Discard` — a writer that throws text away — so
-it measures the encoding; the import one exports the document once and
-imports it into a fresh store on every repetition. The allocations scale with
-the number of tasks, not the size of the document — about four per exported
-task and seven per imported one.
+The file ends with two benchmarks. `BenchmarkExport` writes to `io.Discard` —
+a writer that throws text away — so it measures the encoding; `BenchmarkImport`
+exports the document once and imports it into a fresh store on every
+repetition:
+
+<!-- verify: internal/store/export_test.go at=export-import -->
+```go title="internal/store/export_test.go"
+// BenchmarkExport measures one full export of a seeded store. The writer is
+// io.Discard: the cost under measurement is the encoding — the bufio writer,
+// one json.Marshal per task, the header and the separators — not the
+// destination. The call writes to its writer, so it cannot be optimized
+// away; no sink is needed.
+func BenchmarkExport(b *testing.B) {
+	for _, n := range benchSizes {
+		s := seedStore(n)
+		b.Run(fmt.Sprintf("n=%d", n), func(b *testing.B) {
+			b.ReportAllocs()
+			for i := 0; i < b.N; i++ {
+				if err := ExportJSON(benchCtx, s, io.Discard); err != nil {
+					b.Fatal(err)
+				}
+			}
+		})
+	}
+}
+
+// BenchmarkImport measures one full import of the document the same store
+// exports, into a fresh store each iteration: the decode of every task plus
+// the Add that stores it, which is what an import actually costs. The
+// document is exported once, before the timer starts.
+func BenchmarkImport(b *testing.B) {
+	for _, n := range benchSizes {
+		var buf bytes.Buffer
+		if err := ExportJSON(benchCtx, seedStore(n), &buf); err != nil {
+			b.Fatal(err)
+		}
+		doc := buf.Bytes()
+		b.Run(fmt.Sprintf("n=%d", n), func(b *testing.B) {
+			b.ReportAllocs()
+			for i := 0; i < b.N; i++ {
+				s := NewMemoryStore()
+				if _, err := ImportJSON(benchCtx, s, bytes.NewReader(doc)); err != nil {
+					b.Fatal(err)
+				}
+			}
+		})
+	}
+}
+```
+
+The allocations scale with the number of tasks, not the size of the document —
+about four per exported task and seven per imported one.
 
 ## If something went wrong
 

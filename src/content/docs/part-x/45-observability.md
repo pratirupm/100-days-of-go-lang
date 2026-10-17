@@ -651,13 +651,14 @@ ok  	todo/internal/telemetry	0.007s
 
 Every package passes.
 
-Then a real server, started as before — a scratch folder with `TODO_DB` and `TODO_LOG` inside it, two users registered, one granted admin by the command line — with the base URL in `$B` and each login's cookie in a file (`jar-ada.txt`, `jar-bob.txt`).
+Then a real server, started as before — a scratch folder with `TODO_DB` and `TODO_LOG` inside it, two users registered, one granted admin by the command line — with the base URL in `$B` and each login's cookie in a file (`alice.jar`, `bob.jar`).
 
 The first scrape finds no request series at all, and the runtime's numbers already there:
 
+<!-- transcripts: authored -->
 ```bash
 $ curl -s $B/metrics | grep -cE "^todo_http"
-todo_http lines: 0
+0
 ```
 
 ```bash
@@ -669,23 +670,24 @@ process_resident_memory_bytes 6.180864e+07
 
 A counter family has no series until a label set is used, so before any traffic the request families do not exist — while the runtime's own readings, `go_gc_duration_seconds_count`, `go_goroutines`, and `process_resident_memory_bytes`, are already there.
 
-Now five requests of five kinds, two of them failures:
+Now six requests of five kinds, three of them failures:
 
+<!-- transcripts: authored -->
 ```bash
 $ curl -s $B/healthz ; curl -s $B/healthz
 {"status":"ok"}
 {"status":"ok"}
 
-$ curl -s -b jar-ada.txt $B/api/v1/tasks
+$ curl -s -b alice.jar $B/api/v1/tasks
 {"tasks":[]}
 
-$ curl -s -b jar-ada.txt $B/api/v1/tasks/01a13ec6-0000-7000-8000-000000000000
+$ curl -s -b alice.jar $B/api/v1/tasks/01a13ec6-0000-7000-8000-000000000000
 {"code":"not_found","message":"task not found"}
 
 $ curl -s $B/api/v1/tasks          # no session
 {"code":"unauthorized","message":"authentication required"}
 
-$ curl -s -X POST -H "Content-Type: application/json" --data '{"title":""}' -b jar-ada.txt $B/api/v1/tasks
+$ curl -s -X POST -H "Content-Type: application/json" --data '{"title":""}' -b alice.jar $B/api/v1/tasks
 {"code":"validation_failed","message":"validation failed","fields":[{"field":"title","message":"cannot be empty"}]}
 ```
 
@@ -723,15 +725,16 @@ Every record carries one request id and one trace id, traveling together.
 
 Now the profiles, three answers:
 
+<!-- transcripts: authored -->
 ```bash
 $ curl -s -o /dev/null -w "%{http_code}\n" $B/debug/pprof/          # anonymous
 401
 
-$ curl -s -b jar-bob.txt -w " [%{http_code}]\n" $B/debug/pprof/     # bob, not an admin
+$ curl -s -b bob.jar -w " [%{http_code}]\n" $B/debug/pprof/     # bob, not an admin
 {"code":"forbidden","message":"admin required"}
  [403]
 
-$ curl -s -b jar-ada.txt -w " [%{http_code}]\n" $B/debug/pprof/ | grep -oE "<a href=.[a-z]+"
+$ curl -s -b alice.jar -w " [%{http_code}]\n" $B/debug/pprof/ | grep -oE "<a href=.[a-z]+"
 <a href='allocs
 <a href='block
 <a href='cmdline
@@ -741,8 +744,9 @@ $ curl -s -b jar-ada.txt -w " [%{http_code}]\n" $B/debug/pprof/ | grep -oE "<a h
 
 The check answers three ways: anonymous is 401; the non-admin is the named 403; the admin gets the index, whose links are the runtime's profiles. One profile comes down as a file:
 
+<!-- transcripts: authored -->
 ```bash
-$ curl -s -b jar-ada.txt -o heap.prof -w "%{http_code} %{size_download} bytes\n" $B/debug/pprof/heap
+$ curl -s -b alice.jar -o heap.prof -w "%{http_code} %{size_download} bytes\n" $B/debug/pprof/heap
 200 2286 bytes
 ```
 
@@ -764,12 +768,17 @@ The largest block is the password hashing's 19 MiB working set, left behind by a
 
 ## The export, end to end
 
-The scrape proves the metrics. The export path — the other half of tracing — was proven by the package's own test, and here it is on the wire: a tiny local script stands in for a trace backend, the server starts with `TODO_OTEL_ENDPOINT` pointing at it, and three requests are served:
+The scrape proves the metrics. The export path — the other half of tracing
+— is proven by the package's own test, and that test is the proof you can
+reproduce. The capture below is not part of the app: it came from the
+author's own rig — a small script standing in for a trace backend — with the
+server started against it and three requests served:
 
+<!-- transcripts: authored -->
 ```bash
 $ python3 collector.py otlp.bin &
-$ TODO_OTEL_ENDPOINT=http://127.0.0.1:4318 todo-server --listen 127.0.0.1:18045 &
-$ curl -s $B/healthz ; curl -s -b jar-ada.txt $B/api/v1/tasks ; curl -s -b jar-ada.txt $B/api/v1/tasks/… 
+$ TODO_OTEL_ENDPOINT=http://127.0.0.1:4318 ./todo-server --listen 127.0.0.1:18045 &
+$ curl -s $B/healthz ; curl -s -b alice.jar $B/api/v1/tasks ; curl -s -b alice.jar $B/api/v1/tasks/… 
 ...
 $ cat collector.txt
 POST /v1/traces 795 bytes
@@ -822,8 +831,9 @@ FAIL	todo/internal/telemetry	0.007s
 
 The exporter's own handling of an endpoint it cannot parse is to log it and keep its localhost default, so a typo produced no boot error and one failed export per batch — a log line every five seconds is the worst place to find a configuration mistake. The fix is the check in the constructor: scheme and host, or an error, so the typo is one sentence and exit 1 at boot:
 
+<!-- transcripts: authored -->
 ```bash
-$ TODO_OTEL_ENDPOINT=collector:4318 todo-server --listen 127.0.0.1:18046
+$ TODO_OTEL_ENDPOINT=collector:4318 ./todo-server --listen 127.0.0.1:18046
 telemetry: endpoint "collector:4318": want a URL with scheme and host, like http://collector:4318
 $ echo $?
 1

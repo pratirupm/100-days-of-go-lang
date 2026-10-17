@@ -44,6 +44,11 @@ A few conventions worth knowing now:
 If a chapter ends with a **Going deeper** box, you can skip it. It's extra
 background, not part of the build.
 
+A word on the shape of the journey: the app becomes complete and working well
+before the last page. The final parts go further — a terminal interface, then
+the operator's work of shipping, observing, and tuning a service — and they
+are there when you want them; nothing essential waits at the very end.
+
 ## If you get stuck
 
 - Compare your code with the chapter's blocks — a typo is the usual suspect.

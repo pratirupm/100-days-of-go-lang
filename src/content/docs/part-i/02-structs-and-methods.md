@@ -191,7 +191,7 @@ small: call `String()` on the task and compare the result with `want`.
 
 ## Watch it fail
 
-Run the tests from the project's root — the folder that holds `go.mod`:
+Run the tests from the app's root — the folder that holds `go.mod`:
 
 ```bash
 $ go test ./...
@@ -335,7 +335,7 @@ describes a task in one line.
 
 ## See the task as other code sees it
 
-One more command is worth running from the project root:
+One more command is worth running from the app's root:
 
 ```bash
 $ go doc ./task Task

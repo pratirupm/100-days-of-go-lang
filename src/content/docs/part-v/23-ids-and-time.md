@@ -19,7 +19,7 @@ A **UUID** — short for universally unique identifier — is a 128-bit name wri
 
 There are more possible UUIDs than there are grains of sand on Earth, so two machines making them at the same time will not produce the same one. No server hands them out, and no counter has to be shared. A name like that is called *opaque*: you can hold one and use it, but you cannot guess the next one from it.
 
-Two recipes matter here. Version 4 fills every bit with randomness. Version 7 spends its first 48 bits on a timestamp — milliseconds since the start of 1970 — then a counter and some random bits. That prefix is the whole point: compare two version 7 ids as text and the older one comes first, because the fixed-width, dashed text sorts in the same order as the bytes inside it.
+Two recipes matter here. Version 4 fills almost every bit with randomness. Version 7 spends its first 48 bits on a timestamp — milliseconds since the start of 1970 — then a counter and some random bits. That prefix is the whole point: compare two version 7 ids as text and the older one comes first, because the fixed-width, dashed text sorts in the same order as the bytes inside it.
 
 In Go, `uuid.UUID` is not text. It is an array of sixteen bytes with its own comparison rules; `.String()` writes the dashed form, and `uuid.Parse` reads that form back. The app keeps the value in the domain and the text in the database, because the database sorts text.
 

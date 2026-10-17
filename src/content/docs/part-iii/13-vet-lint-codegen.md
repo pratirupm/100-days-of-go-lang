@@ -280,7 +280,7 @@ Each name in the file is a **recipe**: the command, or several commands, that ru
 
 The store's interface has eight methods, and one test needs a stand-in that fails on demand. `TestCompleteAll` scripts a failure for id 2 while ids 1 and 3 behave normally — and the real store cannot produce that failure, because `Complete` only fails for ids that do not exist.
 
-The fake in the file today was written by hand: a small type that inherits `MemoryStore` and overrides `Complete` with a map of scripted failures. It works, but it has a weakness. It inherited every other method, so it can only fail in the ways its author imagined; and when `Store` grows a ninth method, nothing tells us the fake is now incomplete.
+The fake in the file today was written by hand: a small type that inherits `MemoryStore` and overrides `Complete` with a map of scripted failures. It works, but it has a weakness. It inherited every other method, so it can only fail in the ways its author imagined; and when `Store` grows a ninth method, the fake silently gains it from the embedded store — nothing stops the build, and nothing asks how the fake should answer. The generated mock closes that gap: its `var _ Store = &StoreMock{}` check stops the build until the mock is regenerated.
 
 A **mock** is a fake generated from the interface itself: one scriptable function field per method, filled in only where needed. The generator is a tool called `moq`. As always, the test moves first. Open `internal/store/store_test.go` and find `TestCompleteAll`. Replace the setup that builds the `fakeStore` with this:
 
@@ -493,7 +493,7 @@ What the generator buys is not fewer lines. It is an interface contract the comp
 <details>
 <summary>Going deeper: `go generate` is not a shell</summary>
 
-A directive's arguments are split on spaces and handed straight to the program. There is no shell in between, so pipes, redirection, quoting, and file globs do not work. The only variables that expand are environment variables written `$NAME` or `${NAME}`; `$(...)` is passed through as literal text. Three directives in a scratch module, with `FOO_VERSION=v9.9.9` in the environment, show the difference:
+A directive's arguments are split on spaces and handed straight to the program. There is no shell in between, so pipes, redirection, and file globs do not work. The only variables that expand are environment variables written `$NAME` or `${NAME}`; `$(...)` is passed through as literal text. Three directives in a scratch module, with `FOO_VERSION=v9.9.9` in the environment, show the difference:
 
 ```text
 literal: $(FOO_VERSION)

@@ -186,10 +186,9 @@ func statsTasks(n int) []task.Task {
 }
 ```
 
-1001 is one more than 4 × 250 on purpose: split across four helpers, the last
-chunk is short, and the merged answer must still come out exact. The seed is
-fixed so every run builds the same tasks. The `#nosec G404` note tells the
-linter this random call must be predictable.
+The seed is fixed so every run builds the same tasks — the large set below
+explains the size it picks. The `#nosec G404` note tells the linter this
+random call must be predictable.
 
 ## The tests that pin the answer
 
@@ -434,11 +433,11 @@ pool at four helpers.
 
 `Stats()` snapshots first: `s.List()` hands back a copy, and the helpers only
 read that copy, so a task added mid-count is not part of the answer. The empty
-store returns early with a non-nil map. Then the chunk math:
-`min(statsWorkers, len(tasks))` never asks for more helpers than tasks, and
-`(len(tasks) + workers - 1) / workers` rounds up, so 1001 tasks over four
-helpers split 251, 251, 251, and 248. Last, `partials` is the ledge: a channel
-with room for one partial per helper.
+store returns early with a non-nil map. Then the chunk math: `min` returns the
+smaller of its two arguments, so `min(statsWorkers, len(tasks))` never asks for
+more helpers than tasks, and `(len(tasks) + workers - 1) / workers` rounds up —
+1001 tasks over four helpers split 251, 251, 251, and 248. Last, `partials` is
+the ledge: a channel with room for one partial per helper.
 
 Now the pool itself:
 

@@ -25,7 +25,7 @@ for i := 0; i < b.N; i++ {
 
 `b` is the benchmark's connection to Go's testing tools, like `t` in a test. The testing package chooses `b.N`: it starts at 1 and grows the count until the timed region lasts about a second. Then it reports `ns/op` — nanoseconds per operation. A nanosecond is a billionth of a second, so a smaller number means cheaper work.
 
-Two more columns describe memory, not time. With `-benchmem` — or `b.ReportAllocs()` in the benchmark — Go reports `B/op`, bytes allocated per operation, and `allocs/op`, allocations per operation. Time moves between runs; memory counts repeat exactly.
+Two more columns describe memory, not time. With `-benchmem` — or `b.ReportAllocs()` in the benchmark — Go reports `B/op`, bytes allocated per operation, and `allocs/op`, allocations per operation. Time moves between runs; the allocation count repeats exactly, while `B/op` is usually stable and can shift with the amortized growth of a slice.
 
 ## Write the benchmark suite
 
@@ -45,7 +45,7 @@ import (
 
 // benchSizes are the store sizes the size-scaled benchmarks run at. The
 // sub-benchmark names ("n=100", "n=10000") are stable so benchstat can pair
-...
+// runs across commits.
 var benchSizes = []int{100, 10000}
 
 // benchTags is the fixed tag pool the seeding helper draws from.
@@ -121,6 +121,8 @@ func seedStore(n int) *MemoryStore {
 	return s
 }
 ```
+
+One new shape: `for i := range n` ranges over a whole number, so `i` visits `0` through `n-1` — the same loop as `for i := 0; i < n; i++`.
 
 Every benchmark starts from a store built this way, so two runs compare the same data.
 
@@ -208,7 +210,7 @@ ok  	todo/internal/store	25.431s
 
 Read it in three passes. First the names: seven benchmarks, each at two sizes, each ending in `-16` — the number of processors the run may use, which will differ on your machine.
 
-Second the columns: `ns/op` is time and will move between runs; `B/op` and `allocs/op` are memory and repeat exactly. Third the rows that should make you look: `ByStatus` costs 18 allocations per call at n=10000 against 7 at n=100, and `ByTag` climbs from 6 to 15 — both walk the whole list and grow their result one match at a time. The count map and the word list stay flat. None of this is a bug; it is what the code costs.
+Second the columns: `ns/op` is time and will move between runs; `allocs/op` repeats exactly, and `B/op` is usually stable — it can move with the amortized growth of a slice. Third the rows that should make you look: `ByStatus` costs 18 allocations per call at n=10000 against 7 at n=100, and `ByTag` climbs from 6 to 15 — both walk the whole list and grow their result one match at a time. The count map and the word list stay flat. None of this is a bug; it is what the code costs.
 
 A plain test run does not execute the benchmarks: without `-bench`, the suite pays for them by building them, nothing more.
 
@@ -243,7 +245,7 @@ PASS
 ok  	todo/internal/store	197.034s
 ```
 
-Two things to notice. The `Add` samples disagree by a factor of two, while the `B/op` and `allocs/op` columns repeat exactly — time is the noisy half, memory the exact half. And the file is not a claim about how fast the app is; it records what this machine measured, so future runs can compare against it.
+Two things to notice. The `Add` samples disagree by a factor of two, while the `allocs/op` column repeats exactly — time is the noisy half, the allocation count the exact one. `B/op` is usually stable too, but the store's amortized slice growth can move it, as the two `Add` rows above show. And the file is not a claim about how fast the app is; it records what this machine measured, so future runs can compare against it.
 
 ## Compare two runs with benchstat
 

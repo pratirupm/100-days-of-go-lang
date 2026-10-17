@@ -104,7 +104,11 @@ func testSession(t *testing.T, sessions *scs.SessionManager) *http.Cookie {
 
 Then the page's main case, in subtests — one shape each. The first is the
 whole promise in miniature: the user's tasks render with their fields, and
-another user's task never appears.
+another user's task never appears. Two helpers carry the cases below: `seed`
+writes a task through a store, and `startServer` starts the real binary for
+the process-level case at the end. The finished app's appendix holds
+`internal/web/web_test.go` and `cmd/todo-server/integration_test.go` in full
+— read the parts behind the `...` there as you type them.
 
 <!-- verify: internal/web/web_test.go at=templates -->
 ```go title="internal/web/web_test.go"

@@ -153,10 +153,14 @@ func pageFixture(t *testing.T) (store.Store, task.Task) {
 
 Read the four tasks in order. "buy milk" carries a due date and a label;
 "write the book" gets the highest priority; "ship it" is marked done through
-the store; "water the plants" has a label only. The due date is built with
-`time.Date(2026, 11, 1, ...)` — an exact value, never a reading of the clock.
-That matters: `time.Now()` would put the day of the run into the fixture, and
-the golden with it.
+the store; "water the plants" has a label only.
+
+`seed` writes each task through a store view and hands it back — it is the
+page tests' helper, and the finished app's appendix holds
+`internal/web/web_test.go` in full, so read the parts behind the `...` there
+as you type them. The due date is built with `time.Date(2026, 11, 1, ...)` —
+an exact value, never a reading of the clock. That matters: `time.Now()`
+would put the day of the run into the fixture, and the golden with it.
 
 ## Eight pages, eight cases
 
@@ -692,8 +696,8 @@ template writes it — one unbroken line — a failure would look like this:
             at __snapshots__/snapshots_test.snap:15
 ```
 
-The two lines are the same page with one word changed — 666 characters
-against 670 for the login page — and there is no shared line for the eye to
+The two lines are the same page with one word changed — 686 characters
+against 690 for the login page — and there is no shared line for the eye to
 land on. That is why `normalizePage` ends with `lineBreakTags`: `><` becomes a
 line break before the comparison, so every element sits on its own line and a
 failure is a small, readable diff. What that trades away is in a box at the
@@ -820,7 +824,7 @@ constructor, and the pages become deterministic.
 
 `go-snaps` — https://github.com/gkampitakis/go-snaps — is the library behind
 `MatchSnapshot`, `Raw()`, and the `UPDATE_SNAPS` variable. MDN's page on
-heading elements — https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Heading_Elements
+heading elements — https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/Heading_Elements
 — explains the outline rules the heading check follows, and the W3C's Page
 Structure tutorial — https://www.w3.org/WAI/tutorials/page-structure/headings/
 — shows what a heading list means to a screen reader. Go's `time.Date` —

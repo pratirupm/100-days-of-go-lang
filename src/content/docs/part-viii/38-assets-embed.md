@@ -256,7 +256,13 @@ var (
 )
 ```
 
-`stylesheetLink` is the same pattern as in the first test file. The case itself starts the real binary and follows the page's own link:
+`stylesheetLink` is the same pattern as in the first test file. The two
+helpers the case calls are the file's own: `startServer` starts the binary,
+and `fetchPage` makes a request and hands back the response and the page's
+text. The finished app's appendix holds
+`cmd/todo-server/integration_test.go` in full — read the parts behind the
+`...` there as you type them. The case itself starts the real binary and
+follows the page's own link:
 
 <!-- verify: cmd/todo-server/integration_test.go at=web-assets -->
 ```go title="cmd/todo-server/integration_test.go"

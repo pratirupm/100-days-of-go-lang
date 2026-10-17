@@ -578,7 +578,7 @@ $ go test -count=1 -v ./internal/api
 ok  	todo/internal/api	0.241s
 ```
 
-Nine new cases here. The last leg is the interop proof: a login's cookie is presented back and a handler reads the user id out of the loaded session; a token nothing holds arrives as an empty session, not a forged one; and logout deletes the row the cookie names.
+Eight new cases here. The last leg is the interop proof: a login's cookie is presented back and a handler reads the user id out of the loaded session; a token nothing holds arrives as an empty session, not a forged one; and logout deletes the row the cookie names.
 
 Then the wire. Start the server as before — in a scratch directory with `TODO_DB` and `TODO_LOG` inside it — and make one `curl` per claim. Registration first, then the two refusals:
 
