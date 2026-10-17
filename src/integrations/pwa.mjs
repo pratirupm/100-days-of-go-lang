@@ -92,19 +92,31 @@ self.addEventListener('fetch', (event) => {
 	event.respondWith(
 		(async () => {
 			const cache = await caches.open(CACHE);
+			// Navigations are network-first: a redeployed book must show up
+			// on a normal reload. The cache is the offline fallback.
+			if (request.mode === 'navigate') {
+				try {
+					const response = await fetch(request, { cache: 'no-cache' });
+					if (response.ok) cache.put(request, response.clone());
+					return response;
+				} catch {
+					const cached = await cache.match(request);
+					if (cached) return cached;
+					const offline = await cache.match(OFFLINE);
+					if (offline) return offline;
+					return new Response('', { status: 503, statusText: 'offline' });
+				}
+			}
+			// Hashed assets and everything else: cache-first, filled on use.
 			const cached = await cache.match(request);
 			if (cached) return cached;
 			try {
 				const response = await fetch(request);
-				if (response.ok && (request.mode === 'navigate' || request.destination !== '')) {
+				if (response.ok && request.destination !== '') {
 					cache.put(request, response.clone());
 				}
 				return response;
 			} catch {
-				if (request.mode === 'navigate') {
-					const offline = await cache.match(OFFLINE);
-					if (offline) return offline;
-				}
 				return new Response('', { status: 503, statusText: 'offline' });
 			}
 		})()
