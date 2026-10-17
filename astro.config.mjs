@@ -35,6 +35,8 @@ export default defineConfig({
 			components: {
 				// Dark is the default theme for a reader with no stored choice.
 				ThemeProvider: './src/components/ThemeProvider.astro',
+				// The footer gains a "Report a problem on this page" link.
+				Footer: './src/components/Footer.astro',
 			},
 			// Long code lines wrap instead of clipping — a beginner must
 			// never wonder whether a line continues past the edge. The warm

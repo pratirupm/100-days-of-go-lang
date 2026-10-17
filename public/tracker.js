@@ -62,8 +62,55 @@
 			(next
 				? `<a class="tracker-continue" href="${dayLink(next)}">Continue at Day ${next} →</a>`
 				: '<div class="tracker-finish">All 60 days complete — the next test is yours.</div>') +
-			(count ? '<button type="button" class="tracker-reset">Reset progress</button>' : '') +
+			'<div class="tracker-actions">' +
+			(count ? '<button type="button" class="tracker-action tracker-export">Export progress</button>' : '') +
+			'<button type="button" class="tracker-action tracker-import">Import progress</button>' +
+			(count ? '<button type="button" class="tracker-action tracker-reset">Reset</button>' : '') +
+			'<input class="tracker-import-input" type="file" accept="application/json,.json" hidden />' +
+			'</div>' +
 			'</div>';
+
+		const exportBtn = overview.querySelector('.tracker-export');
+		if (exportBtn) {
+			exportBtn.addEventListener('click', () => {
+				const data = JSON.stringify({ days: [...read()].sort((a, b) => a - b) });
+				const url = URL.createObjectURL(new Blob([data], { type: 'application/json' }));
+				const a = document.createElement('a');
+				a.href = url;
+				a.download = '100-days-of-go-lang-progress.json';
+				a.click();
+				URL.revokeObjectURL(url);
+			});
+		}
+
+		const importInput = overview.querySelector('.tracker-import-input');
+		const importBtn = overview.querySelector('.tracker-import');
+		if (importInput && importBtn) {
+			importBtn.addEventListener('click', () => importInput.click());
+			importInput.addEventListener('change', async () => {
+				const file = importInput.files && importInput.files[0];
+				if (!file) return;
+				try {
+					const data = JSON.parse(await file.text());
+					const days = Array.isArray(data) ? data : data.days;
+					if (!Array.isArray(days)) throw new Error('shape');
+					const set = read();
+					let added = 0;
+					for (const d of days) {
+						if (Number.isInteger(d) && d >= 1 && d <= DAYS && !set.has(d)) {
+							set.add(d);
+							added++;
+						}
+					}
+					write(set);
+					refresh();
+					alert(`Imported ${added} completed day${added === 1 ? '' : 's'}.`);
+				} catch {
+					alert('That file did not look like exported progress.');
+				}
+			});
+		}
+
 		const reset = overview.querySelector('.tracker-reset');
 		if (reset) {
 			reset.addEventListener('click', () => {
@@ -107,8 +154,13 @@
 				'</button><span class="day-note">saved in this browser only</span>';
 			el.querySelector('button').addEventListener('click', () => {
 				const set = read();
-				if (set.has(n)) set.delete(n);
-				else set.add(n);
+				if (set.has(n)) {
+					set.delete(n);
+				} else {
+					set.add(n);
+					// Anonymous engagement signal: which days get finished.
+					if (typeof window.gtag === 'function') window.gtag('event', 'day_complete', { day: n });
+				}
 				write(set);
 				render();
 				refresh();
@@ -125,6 +177,18 @@
 		widget.className = 'tracker-widget';
 		sidebar.prepend(widget);
 	}
+
+	// A subtle chip while the browser is offline: search behaves differently
+	// because only cached pages are available.
+	const chip = document.createElement('div');
+	chip.className = 'offline-chip';
+	chip.setAttribute('role', 'status');
+	chip.textContent = 'Offline — cached pages still work';
+	document.body.append(chip);
+	const setOffline = (offline) => chip.classList.toggle('visible', offline);
+	setOffline(navigator.onLine === false);
+	addEventListener('online', () => setOffline(false));
+	addEventListener('offline', () => setOffline(true));
 
 	refresh();
 })();
