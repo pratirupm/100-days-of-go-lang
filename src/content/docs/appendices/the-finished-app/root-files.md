@@ -627,7 +627,7 @@ cover:
 ````markdown
 # todo — the reference application
 
-The finished todo application from the book **Build a Todo App in Go** — the
+The finished todo application from the book **60 Days of Go Lang** — the
 tree every quote and transcript in the book was captured from.
 
 It is not a starter project: the book carries the finished tree in full in

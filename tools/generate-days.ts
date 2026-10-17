@@ -9,11 +9,12 @@
  *
  * Run: bun run days
  */
-import { mkdir, rm, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const OUT = join(ROOT, 'src/content/docs/days');
+const CHAPTERS = join(ROOT, 'src/chapters');
 
 type Chapter = {
 	n: number;
@@ -156,6 +157,17 @@ const parts: Part[] = [
 
 const hours = (h: number) => (h === Math.floor(h) ? `${h} hours` : `${h} hours`);
 
+// The lesson body for chapter N, read from the source tree (front matter
+// stripped — the day page carries its own).
+async function lessonFor(n: number): Promise<string> {
+	const prefix = String(n).padStart(2, '0') + '-';
+	const files = (await readdir(CHAPTERS)).filter((f) => f.startsWith(prefix));
+	if (files.length !== 1) throw new Error(`chapter ${n}: expected one source, found ${files.length}`);
+	const text = await readFile(join(CHAPTERS, files[0]!), 'utf8');
+	const match = text.match(/^---\n[\s\S]*?\n---\n+/);
+	return (match ? text.slice(match[0].length) : text).trimEnd();
+}
+
 const dayPages: { day: number; text: string }[] = [];
 let day = 1;
 const indexLines: string[] = [];
@@ -163,7 +175,7 @@ const indexLines: string[] = [];
 indexLines.push(`---
 title: The 60 days
 sidebar:
-  label: The 60 days
+  label: Overview
   order: 0
 ---
 
@@ -187,20 +199,26 @@ for (const part of parts) {
 	indexLines.push(`\n### Part ${part.roman} — ${part.name}\n`);
 	for (const c of part.chapters) {
 		const badge = hours(c.hours);
+		const lesson = await lessonFor(c.n);
 		dayPages.push({
 			day,
 			text: `---
 title: "Day ${day} — ${c.title}"
 sidebar:
   order: ${day}
+chapter: ${c.n}
 ---
 
-**Today:** [${c.title}](${c.slug}) · about ${badge} · Part ${part.roman}, day ${part.chapters.indexOf(c) + 1} of ${part.chapters.length}.
+**About ${badge}** · Part ${part.roman}, day ${part.chapters.indexOf(c) + 1} of ${part.chapters.length}.
 
 **You'll be able to:**
 
 ${c.bullets.map((b) => `- ${b}`).join('\n')}
 ${c.split ? `\n:::tip[If you only have two hours]\n${c.split}\n:::\n` : ''}
+---
+
+${lesson}
+
 <div class="day-tracker" data-day="${day}"></div>
 `,
 		});

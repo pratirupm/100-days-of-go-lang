@@ -58,4 +58,4 @@ are there when you want them; nothing essential waits at the very end.
   [The finished app (spoilers)](/appendices/the-finished-app/) — but give it
   an honest try first. Struggling a little is how the learning happens.
 
-Ready? [The first test](/part-i/01-toolchain-first-test/) is next.
+Ready? [Day 1 — The first test](/days/day-01/) is next.

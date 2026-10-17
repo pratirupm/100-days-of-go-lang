@@ -53,16 +53,29 @@ let missing = 0;
 
 for await (const file of walk(NEW_DOCS)) {
 	const rel = relative(NEW_DOCS, file);
-	if (SKIP.has(rel) || rel.startsWith('appendices/') || rel.startsWith('days/')) continue;
+	if (SKIP.has(rel) || rel.startsWith('appendices/')) continue;
 
-	const oldPath = oldSourceFor(rel);
+	const text = await readFile(file, 'utf8');
+	let oldPath: string | null;
+	if (rel.startsWith('days/')) {
+		// A day page embeds a chapter's lesson; `chapter: N` names it.
+		// Review days and the index carry no chapter and no transcripts.
+		const front = text.match(/^---\n([\s\S]*?)\n---/);
+		const m = front ? front[1]!.match(/^chapter:\s*(\d+)\s*$/m) : null;
+		if (!m) continue;
+		const prefix = String(m[1]).padStart(2, '0') + '-';
+		const hit = oldFiles.find((f) => f.startsWith(prefix));
+		oldPath = hit ? join(OLD_LESSONS, hit) : null;
+	} else {
+		oldPath = oldSourceFor(rel);
+	}
 	if (!oldPath) {
 		console.log(`${rel}  [fail] no first-edition source found for this chapter`);
 		missing++;
 		continue;
 	}
 	const oldText = await readFile(oldPath, 'utf8');
-	const lines = (await readFile(file, 'utf8')).split('\n');
+	const lines = text.split('\n');
 
 	let inFence = false;
 	let terminal = false;

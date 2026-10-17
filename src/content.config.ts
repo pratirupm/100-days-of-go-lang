@@ -7,11 +7,11 @@ export const collections = {
 	docs: defineCollection({
 		loader: docsLoader(),
 		schema: docsSchema({
-			// The 60-day plan: which day a chapter is, and how long it takes.
-			// Rendered as a badge under the page title.
+			// Day pages carry the number of the chapter whose lesson they
+			// embed; the transcript checker maps it back to the first
+			// edition's lesson.
 			extend: z.object({
-				day: z.number().optional(),
-				time: z.string().optional(),
+				chapter: z.number().optional(),
 			}),
 		}),
 	}),

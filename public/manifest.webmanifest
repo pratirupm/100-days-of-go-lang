@@ -1,6 +1,6 @@
 {
-	"name": "Build a Todo App in Go",
-	"short_name": "Todo in Go",
+	"name": "60 Days of Go Lang",
+	"short_name": "60 Days of Go",
 	"description": "A 60-day, beginner-friendly course that builds a real Go application from an empty folder.",
 	"start_url": "/days/",
 	"display": "standalone",

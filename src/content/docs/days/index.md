@@ -1,7 +1,7 @@
 ---
 title: The 60 days
 sidebar:
-  label: The 60 days
+  label: Overview
   order: 0
 ---
 

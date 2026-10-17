@@ -3,7 +3,7 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator';
 
-// Build a Todo App in Go — the book site.
+// 60 Days of Go Lang — the book site.
 // Astro + Starlight, run with Bun. `bun run build` emits a static site to dist/.
 import stripVerifyMarkers from './src/integrations/strip-verify-markers.mjs';
 import pwa from './src/integrations/pwa.mjs';
@@ -20,13 +20,11 @@ export default defineConfig({
 		// but are stripped from the pages readers see.
 		stripVerifyMarkers(),
 		starlight({
-			title: 'Build a Todo App in Go',
+			title: '60 Days of Go Lang',
 			description:
-				'A beginner-friendly, step-by-step course that builds a real Go application from an empty folder.',
+				'A 60-day, beginner-friendly course that builds a real Go application from an empty folder.',
 			customCss: ['./src/styles/custom.css'],
 			components: {
-				// The chapter title area gains the day badge (Day N · ≈3 hours).
-				PageTitle: './src/components/PageTitle.astro',
 				// Dark is the default theme for a reader with no stored choice.
 				ThemeProvider: './src/components/ThemeProvider.astro',
 			},
@@ -75,56 +73,6 @@ export default defineConfig({
 					label: 'The 60 days',
 					collapsed: true,
 					items: [{ autogenerate: { directory: 'days' } }],
-				},
-				{
-					label: 'Part I — Getting started',
-					collapsed: true,
-					items: [{ autogenerate: { directory: 'part-i' } }],
-				},
-				{
-					label: 'Part II — Structuring the code',
-					collapsed: true,
-					items: [{ autogenerate: { directory: 'part-ii' } }],
-				},
-				{
-					label: 'Part III — Testing',
-					collapsed: true,
-					items: [{ autogenerate: { directory: 'part-iii' } }],
-				},
-				{
-					label: 'Part IV — Concurrency',
-					collapsed: true,
-					items: [{ autogenerate: { directory: 'part-iv' } }],
-				},
-				{
-					label: 'Part V — The data layer',
-					collapsed: true,
-					items: [{ autogenerate: { directory: 'part-v' } }],
-				},
-				{
-					label: 'Part VI — The command-line app',
-					collapsed: true,
-					items: [{ autogenerate: { directory: 'part-vi' } }],
-				},
-				{
-					label: 'Part VII — The HTTP API',
-					collapsed: true,
-					items: [{ autogenerate: { directory: 'part-vii' } }],
-				},
-				{
-					label: 'Part VIII — The web UI',
-					collapsed: true,
-					items: [{ autogenerate: { directory: 'part-viii' } }],
-				},
-				{
-					label: 'Part IX — The terminal UI',
-					collapsed: true,
-					items: [{ autogenerate: { directory: 'part-ix' } }],
-				},
-				{
-					label: 'Part X — Shipping it',
-					collapsed: true,
-					items: [{ autogenerate: { directory: 'part-x' } }],
 				},
 				{
 					label: 'Appendices',
