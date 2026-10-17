@@ -17,7 +17,7 @@ const ROOT = new URL('..', import.meta.url).pathname;
 const NEW_DOCS = join(ROOT, 'src/content/docs');
 const OLD_LESSONS = join(ROOT, '..', 'go-todo-course', 'book', 'lessons');
 
-const SKIP = new Set(['index.mdx', '404.md', 'start-here.md']);
+const SKIP = new Set(['index.mdx', '404.md', 'start-here.md', 'offline.md']);
 // `<!-- transcripts: authored -->` above a fence exempts it: the block was
 // hand-edited for reader safety (e.g. a neutral scratch path) and its lines
 // are deliberately not verbatim from the first edition.
