@@ -1,5 +1,7 @@
 ---
 title: A command-line tool
+day: 30
+time: "3 hours"
 description: Give the app its real commands — add, list, done, stats, and import — built as a cobra tree that tests can drive.
 sidebar:
   order: 25

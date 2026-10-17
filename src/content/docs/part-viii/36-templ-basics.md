@@ -1,5 +1,7 @@
 ---
 title: The first web page
+day: 43
+time: "3 hours"
 description: Build the app's first web page — the signed-in user's tasks, drawn by a browser, rendered with templ.
 sidebar:
   order: 36

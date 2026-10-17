@@ -1,5 +1,7 @@
 ---
 title: Export and import
+day: 23
+time: "3 hours"
 description: Write every task to a file as JSON, read it back, and replace the file in one step that never leaves half a document.
 sidebar:
   order: 19

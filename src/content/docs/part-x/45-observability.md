@@ -1,5 +1,7 @@
 ---
 title: Tracing and metrics
+day: 54
+time: "3 hours"
 description: Follow every request with a trace, count the traffic on a metrics endpoint, and keep the memory profiles admin-only.
 sidebar:
   order: 45

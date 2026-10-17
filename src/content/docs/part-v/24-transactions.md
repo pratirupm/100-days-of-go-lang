@@ -1,5 +1,7 @@
 ---
 title: Transactions
+day: 28
+time: "4 hours"
 description: Give every task a version so a stale write is refused — and make a whole imported document land together or not at all.
 sidebar:
   order: 24

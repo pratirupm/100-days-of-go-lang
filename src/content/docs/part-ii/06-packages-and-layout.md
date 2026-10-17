@@ -1,5 +1,7 @@
 ---
 title: Organizing the code
+day: 7
+time: "2.5 hours"
 description: Move the app's packages under internal/ and add the first runnable command — written test-first.
 sidebar:
   order: 6

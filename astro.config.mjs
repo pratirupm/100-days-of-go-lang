@@ -19,17 +19,29 @@ export default defineConfig({
 			description:
 				'A beginner-friendly, step-by-step course that builds a real Go application from an empty folder.',
 			customCss: ['./src/styles/custom.css'],
+			components: {
+				// The chapter title area gains the day badge (Day N · ≈3 hours).
+				PageTitle: './src/components/PageTitle.astro',
+			},
 			// Long code lines wrap instead of clipping — a beginner must
 			// never wonder whether a line continues past the edge.
 			expressiveCode: {
 				defaultProps: { wrap: true },
 			},
-			// Arrow-key navigation between chapters, matching the reading
-			// flow (the prev/next cards at the foot of every page).
-			head: [{ tag: 'script', attrs: { src: '/keys.js', defer: true } }],
+			// Arrow-key navigation between chapters, and the client-side
+			// progress tracker (localStorage only).
+			head: [
+				{ tag: 'script', attrs: { src: '/keys.js', defer: true } },
+				{ tag: 'script', attrs: { src: '/tracker.js', defer: true } },
+			],
 			plugins: [starlightLinksValidator()],
 			sidebar: [
 				{ label: 'Start here', slug: 'start-here' },
+				{
+					label: 'The 60 days',
+					collapsed: true,
+					items: [{ autogenerate: { directory: 'days' } }],
+				},
 				{
 					label: 'Part I — Getting started',
 					collapsed: true,

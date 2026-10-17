@@ -1,5 +1,7 @@
 ---
 title: Logging
+day: 34
+time: "3 hours"
 description: Give the app a diary — records of what it did, on stderr for the moment and in a JSON log file that outlives the run.
 sidebar:
   order: 29

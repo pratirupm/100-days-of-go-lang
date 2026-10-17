@@ -1,5 +1,7 @@
 ---
 title: CSS and static files
+day: 45
+time: "3 hours"
 description: Give the pages a face — a hand-written stylesheet, baked into the executable and served with a version the browser can check.
 sidebar:
   order: 38

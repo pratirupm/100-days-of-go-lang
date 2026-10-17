@@ -1,5 +1,7 @@
 ---
 title: Coverage, races, and fuzzing
+day: 13
+time: "3 hours"
 description: Three tools that check what tests can't — which lines ran, which inputs break a promise, and which memory accesses race.
 sidebar:
   order: 11

@@ -1,5 +1,7 @@
 ---
 title: Users and sessions
+day: 39
+time: "3 hours"
 description: Teach the API who is asking — users with scrambled passwords, a login that hands out a session cookie, and a logout that takes it away.
 sidebar:
   order: 33

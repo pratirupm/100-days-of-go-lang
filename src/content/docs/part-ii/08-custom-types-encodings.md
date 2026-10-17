@@ -1,5 +1,7 @@
 ---
 title: Custom types
+day: 9
+time: "2.5 hours"
 description: Give Status and Priority types of their own — with rules the compiler checks and a text form the JSON decoder respects.
 sidebar:
   order: 8

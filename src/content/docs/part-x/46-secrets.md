@@ -1,5 +1,7 @@
 ---
 title: Secrets
+day: 55
+time: "3 hours"
 description: Hand the server an admin key at boot, through a type that refuses to print it and a loader that checks who can read the file.
 sidebar:
   order: 46

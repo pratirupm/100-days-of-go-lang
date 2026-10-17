@@ -1,5 +1,7 @@
 ---
 title: Authorization
+day: 40
+time: "3 hours"
 description: Give every task an owner, scope each request to the signed-in user, and keep a trail of who did what.
 sidebar:
   order: 34

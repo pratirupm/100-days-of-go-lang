@@ -1,5 +1,7 @@
 ---
 title: API documentation
+day: 41
+time: "3 hours"
 description: Generate a written description of the API from the handlers themselves, and serve it as a page anyone can read and try.
 sidebar:
   order: 35

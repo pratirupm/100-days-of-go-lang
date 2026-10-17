@@ -1,5 +1,7 @@
 ---
 title: Benchmarks
+day: 14
+time: "3 hours"
 description: Measure how fast the store's operations are, and compare two runs without being fooled by the machine.
 sidebar:
   order: 12

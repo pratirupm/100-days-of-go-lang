@@ -1,5 +1,7 @@
 ---
 title: The first API endpoint
+day: 36
+time: "3 hours"
 description: Turn the todo app into a web server that answers two health questions over HTTP and stops politely when asked.
 sidebar:
   order: 30

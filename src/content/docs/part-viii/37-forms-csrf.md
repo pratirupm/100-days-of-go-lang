@@ -1,5 +1,7 @@
 ---
 title: Forms
+day: 44
+time: "3 hours"
 description: Give the pages hands — forms that create, edit, complete, and delete tasks, each carrying a stamp that proves it came from your own page.
 sidebar:
   order: 37

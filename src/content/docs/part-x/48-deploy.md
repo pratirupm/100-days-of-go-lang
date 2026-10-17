@@ -1,5 +1,7 @@
 ---
 title: Deploying
+day: 57
+time: "3 hours"
 description: Put the server on a real machine — a unit that keeps it running, a proxy that faces the internet, and a backup that runs itself.
 sidebar:
   order: 48

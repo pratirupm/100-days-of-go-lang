@@ -1,5 +1,7 @@
 ---
 title: Adding a database
+day: 24
+time: "4 hours"
 description: Move the tasks out of memory and into a real database behind the same store interface, and run one suite of tests against both.
 sidebar:
   order: 20

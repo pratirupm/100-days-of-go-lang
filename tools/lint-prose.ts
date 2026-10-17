@@ -90,6 +90,8 @@ for await (const file of walk(DOCS)) {
 			}
 		}
 		for (const { re, why } of WARN) {
+			// The day pages are navigation: referencing a part is their job.
+			if (rel.startsWith('days/') && why.includes('part cross-reference')) continue;
 			if (re.test(scrubbed)) {
 				console.log(`${rel}:${n}  [warn] ${why} — ${line.trim().slice(0, 90)}`);
 				warnings++;

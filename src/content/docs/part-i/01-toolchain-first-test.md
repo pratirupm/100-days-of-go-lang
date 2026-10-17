@@ -1,5 +1,7 @@
 ---
 title: The first test
+day: 1
+time: "1.5 hours"
 description: Set up the project and write your first test — before the code it tests exists.
 sidebar:
   order: 1

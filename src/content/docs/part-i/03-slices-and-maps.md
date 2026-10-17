@@ -1,5 +1,7 @@
 ---
 title: A list of tasks
+day: 3
+time: "3 hours"
 description: Give tasks an ID and labels, then build a store that adds, lists, filters, counts, and sorts them in memory.
 sidebar:
   order: 3

@@ -1,5 +1,7 @@
 ---
 title: Tasks over HTTP
+day: 37
+time: "3 hours"
 description: Five routes that read, create, change, and remove tasks — with validation, one error shape, and a version that refuses stale writes.
 sidebar:
   order: 31

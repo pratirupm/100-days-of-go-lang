@@ -1,5 +1,7 @@
 ---
 title: Web security
+day: 46
+time: "3 hours"
 description: Make the app's safety promises enforceable — a policy on every response, a stronger cookie, a fresh session at login, and a budget on password guesses.
 sidebar:
   order: 39

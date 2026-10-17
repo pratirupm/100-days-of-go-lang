@@ -1,5 +1,7 @@
 ---
 title: Running work in parallel
+day: 21
+time: "3 hours"
 description: Run a job over every task with a fixed crew of helpers — stop at the first error, and stop when the caller cancels.
 sidebar:
   order: 18

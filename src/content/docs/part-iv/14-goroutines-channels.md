@@ -1,5 +1,7 @@
 ---
 title: Goroutines and channels
+day: 17
+time: "3 hours"
 description: Compute the store's task summary across four helpers running at once — and prove the answer matches a plain one-at-a-time count.
 sidebar:
   order: 14

@@ -1,5 +1,7 @@
 ---
 title: Integration tests
+day: 33
+time: "3 hours"
 description: Run the real program from tests and check what it prints, how it exits, and which lines it ran.
 sidebar:
   order: 28

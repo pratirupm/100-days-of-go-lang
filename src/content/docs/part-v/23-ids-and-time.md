@@ -1,5 +1,7 @@
 ---
 title: IDs and time
+day: 27
+time: "3 hours"
 description: Give every task an id the app makes itself — one that sorts by creation time — and carry the existing rows across to it.
 sidebar:
   order: 23

@@ -1,5 +1,7 @@
 ---
 title: The security audit
+day: 56
+time: "3 hours"
 description: Walk through the app asking how it could be abused, then write the checks that keep the answers honest.
 sidebar:
   order: 47

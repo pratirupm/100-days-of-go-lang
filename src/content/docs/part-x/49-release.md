@@ -1,5 +1,7 @@
 ---
 title: Releases
+day: 58
+time: "3 hours"
 description: Stamp a version name into every build, then turn the app into downloadable archives with one command.
 sidebar:
   order: 49

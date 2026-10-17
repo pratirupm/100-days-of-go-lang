@@ -1,5 +1,7 @@
 ---
 title: Styling the terminal UI
+day: 50
+time: "3 hours"
 description: Give the terminal interface a face — color, a text input, and the keys that add and complete tasks.
 sidebar:
   order: 42

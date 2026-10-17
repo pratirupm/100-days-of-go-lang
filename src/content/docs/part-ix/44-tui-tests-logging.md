@@ -1,5 +1,7 @@
 ---
 title: Testing the terminal UI
+day: 52
+time: "3 hours"
 description: Give the full-screen interface a memory — records in a log file that outlives the session, and whole frames recorded in files its tests compare against.
 sidebar:
   order: 44

@@ -1,5 +1,7 @@
 ---
 title: Snapshot tests
+day: 12
+time: "2.5 hours"
 description: Record the expected output in files the test tool writes, read them once, and let the suite compare against them from then on.
 sidebar:
   order: 10

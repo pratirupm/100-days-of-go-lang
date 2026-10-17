@@ -1,5 +1,7 @@
 ---
 title: Making it faster
+day: 59
+time: "3 hours"
 description: Measure where the app spends its time at a hundred thousand tasks, then make the changes the numbers point at.
 sidebar:
   order: 50

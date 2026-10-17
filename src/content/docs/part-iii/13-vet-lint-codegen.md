@@ -1,5 +1,7 @@
 ---
 title: Linters and code generation
+day: 15
+time: "3 hours"
 description: Point Go's own checker and a stricter linter at the code, then let a generator write a test fake that keeps up with the store's interface.
 sidebar:
   order: 13

@@ -1,5 +1,7 @@
 ---
 title: Talking to the API
+day: 51
+time: "3 hours"
 description: Point the terminal interface at the HTTP API, so it signs in and asks the server for everything it shows.
 sidebar:
   order: 43

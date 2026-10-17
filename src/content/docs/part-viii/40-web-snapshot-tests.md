@@ -1,5 +1,7 @@
 ---
 title: Testing the pages
+day: 47
+time: "3 hours"
 description: Save every page as a reviewed snapshot and pin its heading structure — with a clock the tests can set.
 sidebar:
   order: 40

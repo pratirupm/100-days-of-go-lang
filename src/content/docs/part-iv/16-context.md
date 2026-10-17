@@ -1,5 +1,7 @@
 ---
 title: Context and cancellation
+day: 19
+time: "3 hours"
 description: Pass a context into every store call so canceled work stops — and delete the hand-rolled timer and cancel channel.
 sidebar:
   order: 16

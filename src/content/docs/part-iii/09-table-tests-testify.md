@@ -1,5 +1,7 @@
 ---
 title: Table-driven tests
+day: 11
+time: "3 hours"
 description: Give the suite one standard shape — named cases, subtests, parallel runs, and testify — and add the 200-character title limit.
 sidebar:
   order: 9

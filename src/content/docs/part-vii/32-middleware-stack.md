@@ -1,5 +1,7 @@
 ---
 title: Middleware
+day: 38
+time: "3 hours"
 description: Wrap every request in one ordered stack — an id, a log record, a panic catcher, a time limit, a size limit, compression, and security headers.
 sidebar:
   order: 32

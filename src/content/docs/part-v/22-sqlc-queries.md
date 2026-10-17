@@ -1,5 +1,7 @@
 ---
 title: Queries with sqlc
+day: 26
+time: "3 hours"
 description: Turn the store's hand-written SQL into named queries that a tool checks against the schema and turns into typed Go.
 sidebar:
   order: 22

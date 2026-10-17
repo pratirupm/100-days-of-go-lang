@@ -1,5 +1,7 @@
 ---
 title: When things go wrong
+day: 4
+time: "2.5 hours"
 description: Give failures identity — an error that carries the field that failed, and one shared "not found" error the store wraps with context.
 sidebar:
   order: 4

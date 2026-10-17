@@ -1,5 +1,7 @@
 ---
 title: Mutexes and atomics
+day: 20
+time: "3 hours"
 description: Make the store safe to share — one read-write lock around its tasks, and a counter that survives calls from many goroutines at once.
 sidebar:
   order: 17

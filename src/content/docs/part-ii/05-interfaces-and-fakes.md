@@ -1,5 +1,7 @@
 ---
 title: Interfaces and fakes
+day: 6
+time: "2.5 hours"
 description: Give the store a name for what it must do, then build a stand-in that can fail on command.
 sidebar:
   order: 5

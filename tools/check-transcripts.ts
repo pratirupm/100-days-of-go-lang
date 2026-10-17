@@ -53,7 +53,7 @@ let missing = 0;
 
 for await (const file of walk(NEW_DOCS)) {
 	const rel = relative(NEW_DOCS, file);
-	if (SKIP.has(rel) || rel.startsWith('appendices/')) continue;
+	if (SKIP.has(rel) || rel.startsWith('appendices/') || rel.startsWith('days/')) continue;
 
 	const oldPath = oldSourceFor(rel);
 	if (!oldPath) {

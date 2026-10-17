@@ -1,5 +1,7 @@
 ---
 title: A terminal interface
+day: 49
+time: "3 hours"
 description: Build a full-screen terminal interface for the task list — a program that waits for a key, redraws, and waits again.
 sidebar:
   order: 41

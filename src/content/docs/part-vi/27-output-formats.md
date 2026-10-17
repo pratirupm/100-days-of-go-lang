@@ -1,5 +1,7 @@
 ---
 title: Output formats
+day: 32
+time: "3 hours"
 description: Give the tool two voices — an aligned table for people and a stable JSON shape for programs — behind one flag.
 sidebar:
   order: 27

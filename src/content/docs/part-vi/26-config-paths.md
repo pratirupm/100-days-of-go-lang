@@ -1,5 +1,7 @@
 ---
 title: Configuration
+day: 31
+time: "3 hours"
 description: Let the database path come from a flag, an environment variable, or a sensible default instead of living in the code.
 sidebar:
   order: 26

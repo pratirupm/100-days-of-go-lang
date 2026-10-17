@@ -1,5 +1,7 @@
 ---
 title: select and timeouts
+day: 18
+time: "2.5 hours"
 description: Teach the counting pool to give up early — wait on several channels at once, and stop a call when its deadline passes.
 sidebar:
   order: 15

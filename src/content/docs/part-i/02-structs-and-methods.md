@@ -1,5 +1,7 @@
 ---
 title: Structs and methods
+day: 2
+time: "2.5 hours"
 description: Grow the task with a status, a priority, and an optional due date, and teach it to describe itself in one line.
 sidebar:
   order: 2
