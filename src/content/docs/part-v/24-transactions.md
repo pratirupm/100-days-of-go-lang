@@ -603,7 +603,7 @@ The document's own version moves to 3, the shape that carries the task's version
 const exportVersion = 3
 ```
 
-Create `internal/store/importer.go` for the reading side — the import moves out of `export.go` into a file of its own — and two names there carry the design. `taskStream` is what the store pulls from: a function that returns one task per call and reports `io.EOF` when the document is spent. `bulkInserter` is the store-side half: the single method that takes a stream and writes it as one batch.
+Create `internal/store/importer.go` for the reading side — the import moves out of `export.go` into a file of its own — and a few names there carry the design. `taskStream` is what the store pulls from: a function that returns one task per call and reports `io.EOF` when the document is spent. `bulkInserter` is the store-side half: the single method that takes a stream and writes it as one batch. The factory that builds a stream from the document is `taskStreamFor`, and `importTaskV1` is the older document shape that version-1 files are read into. The finished app's appendix holds `importer.go` in full — read the parts behind the `...` there as you type them.
 
 <!-- verify: internal/store/importer.go at=transactions -->
 ```go title="internal/store/importer.go"
@@ -676,7 +676,7 @@ Older documents are the importer's business, so it reads versions 1 through 3 an
 
 The mapping's smallest half is the v2 rule: a v2 document predates the version column, so every task in it was at version 1 by definition, and the importer writes that value instead of the zero the absent field decodes to. The strictest half is the last check: a v3 task at version 0 is a task no store could have written, because `Add` assigns 1 and every write moves it — so the importer refuses it rather than admitting a row that no version check could ever match.
 
-Five tests written for the old importer now describe behavior that no longer exists, so they change with it.
+Five tests written for the old importer now describe behavior that no longer exists, so they change with it. The finished app's appendix holds `export_test.go` in full — read the changed cases there as you type them.
 
 `TestImportJSON_RejectsUnknownVersion` fed versions 1 and 3, because those were the versions the old importer refused. The importer reads both now, so the refusal case moves to version 0 and the first version past the current one, and the message it checks is the importer's own:
 
