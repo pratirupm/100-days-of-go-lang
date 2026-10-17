@@ -35,6 +35,11 @@ with your own run, trust your run — and the official documentation.
 - **Analytics.** The hosted site counts visits with Google Analytics. Your
   reading progress is different: it lives in your browser's own storage and
   is never sent anywhere.
+- **License.** The site's code and the code samples in the lessons are
+  MIT-licensed; the book's prose is licensed
+  [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) —
+  share and adapt it freely for non-commercial purposes, with credit and the
+  same license.
 - **Trademarks and links.** Product names, logos, and trademarks are the
   property of their respective owners and are used for identification only.
   External links are provided for convenience; they are not endorsements,

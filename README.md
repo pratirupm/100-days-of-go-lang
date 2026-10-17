@@ -47,3 +47,10 @@ assistant; every command and every transcript in the book was executed and
 verified for real. The
 [disclaimer](https://pratirupm.github.io/100-days-of-go-lang/disclaimer/)
 explains exactly what that means.
+
+## License
+
+- **Code** (the site, tools, configuration, and the code samples inside the
+  lessons): [MIT](LICENSE).
+- **Prose** (the lessons and every written page):
+  [CC BY-NC-SA 4.0](LICENSE-CONTENT.md).
