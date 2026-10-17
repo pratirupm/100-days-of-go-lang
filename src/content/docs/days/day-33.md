@@ -1,6 +1,6 @@
 ---
 title: "Day 33 — Integration tests"
-description: "Run the real program from tests and check what it prints, how it exits, and which lines it ran."
+description: "Run the real program from tests and check what it prints, how it exits, and which lines it ran. — Day 33 of 100 Days of Go Lang."
 sidebar:
   order: 33
 chapter: 28

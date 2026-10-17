@@ -15,7 +15,7 @@ The hard part is not reading the key. It is making sure nothing else ever writes
 
 ## The tests come first
 
-True to the habit, the behavior comes before the code. This chapter's tests live in three new files — `internal/secret/secret_test.go`, `internal/secret/load_test.go`, and `internal/auth/bootstrap_test.go` — plus two cases in `cmd/todo-server/integration_test.go` and one row in `internal/config/config_test.go`.
+True to the habit, the behavior comes before the code. This lesson's tests live in three new files — `internal/secret/secret_test.go`, `internal/secret/load_test.go`, and `internal/auth/bootstrap_test.go` — plus two cases in `cmd/todo-server/integration_test.go` and one row in `internal/config/config_test.go`.
 
 The first file pins the type's one promise: the key's bytes never reach a printed string. Its core is a table of the four formatting verbs, and every one of them must show the redaction instead of the value.
 
@@ -108,7 +108,7 @@ FAIL	todo/cmd/todo-server	11.963s
 FAIL
 ```
 
-Three failures in one run, and each names something this chapter adds. `todo/internal/secret: no non-test Go files` means the folder holds tests but no code — Go cannot build a package out of tests alone. The config package does not compile because the `AdminEmail` field does not exist yet. And the server's new case expects the login of the seeded account to answer 200; it gets 401, because nothing seeds it. Nothing is broken; the tests describe an app that does not exist yet.
+Three failures in one run, and each names something this lesson adds. `todo/internal/secret: no non-test Go files` means the folder holds tests but no code — Go cannot build a package out of tests alone. The config package does not compile because the `AdminEmail` field does not exist yet. And the server's new case expects the login of the seeded account to answer 200; it gets 401, because nothing seeds it. Nothing is broken; the tests describe an app that does not exist yet.
 
 ## A string that refuses to print
 
@@ -270,7 +270,7 @@ Walk the file checks in order, because each one can refuse. `os.Stat` comes firs
 
 Every message names the variable, the path, or the mode, and none names the value. The failure path follows the same rule as the log.
 
-Run the tests again. The secret package's cases pass now, and the failures that remain name exactly what the chapter still owes.
+Run the tests again. The secret package's cases pass now, and the failures that remain name exactly what the lesson still owes.
 
 ```bash
 $ go test -count=1 ./...
@@ -337,7 +337,7 @@ $ go generate ./...
 
 ## The boot that seeds the admin
 
-`internal/auth/bootstrap.go` is the chapter's core. The boot calls one function, `BootstrapAdmin`, and it decides three things inside one transaction — a group of writes that either all happen or none do.
+`internal/auth/bootstrap.go` is the lesson's core. The boot calls one function, `BootstrapAdmin`, and it decides three things inside one transaction — a group of writes that either all happen or none do.
 
 <!-- verify: internal/auth/bootstrap.go at=secrets -->
 ```go title="internal/auth/bootstrap.go"
@@ -623,7 +623,7 @@ Every package passes — the whole module, the new cases included.
 
 ## Try it on a real server
 
-Tests are one thing; a running server is another. Start it from a scratch folder with `TODO_DB` and `TODO_LOG` inside it, the base URL in `$B`, exactly as the last chapters showed. The captures write the binary as `todo-server`; from your scratch folder that is `./todo-server`. First boot: name the account, hand over the key.
+Tests are one thing; a running server is another. Start it from a scratch folder with `TODO_DB` and `TODO_LOG` inside it, the base URL in `$B`, exactly as the last lessons showed. The captures write the binary as `todo-server`; from your scratch folder that is `./todo-server`. First boot: name the account, hand over the key.
 
 ```bash
 $ TODO_ADMIN_EMAIL=admin@example.com TODO_ADMIN_KEY=demo-admin-key-3b7f1c9e \
@@ -806,7 +806,7 @@ The check asks one question: does this file have any group or other bits? Owner-
 <details>
 <summary>Going deeper: why a changed key rotates the credential instead of failing the boot</summary>
 
-Nothing else in this app writes a password, so "leave an existing account untouched" would mean the key could never change: an operator who rotated the secret in their configuration would get a boot that silently did nothing. The chapter chooses rotation, and makes it visible — a `rotate` row in the trail, `rotated:true` in the boot record. The price is named rather than hidden: while the key is configured, it is the authority over this one account, so a key that changed without the operator meaning to is a rotation rather than an error. What keeps that acceptable is that the authority is a secret only someone who can already write the process's environment — or its credential file — holds. A stale key from a rollback rotates back, and the trail shows both moves. To stop the environment owning the credential, unset the key and keep the account: the stored hash stays what it is, and nothing rewrites it any more.
+Nothing else in this app writes a password, so "leave an existing account untouched" would mean the key could never change: an operator who rotated the secret in their configuration would get a boot that silently did nothing. The lesson chooses rotation, and makes it visible — a `rotate` row in the trail, `rotated:true` in the boot record. The price is named rather than hidden: while the key is configured, it is the authority over this one account, so a key that changed without the operator meaning to is a rotation rather than an error. What keeps that acceptable is that the authority is a secret only someone who can already write the process's environment — or its credential file — holds. A stale key from a rollback rotates back, and the trail shows both moves. To stop the environment owning the credential, unset the key and keep the account: the stored hash stays what it is, and nothing rewrites it any more.
 
 </details>
 

@@ -589,7 +589,7 @@ Under its name, `errgroup` is a `WaitGroup`, a shared error slot, and a cancella
 <details>
 <summary>Going deeper: why these tests never sleep</summary>
 
-Every test in this chapter orders its events with channels, and none reads a clock. A test that sleeps would guess how long "long enough" is: too short and it fails on a busy machine, too long and the suite crawls. The limit test's check is sound because a third start is *impossible* while the first two calls are parked, not merely late — there is nothing to wait for. The fail-fast test needs no signal at all: a crew of one is its ordering. The pre-canceled test checks a state that is already fixed before any helper exists. Where a clock cannot answer the question, the tests arrange for the question to have one answer.
+Every test in this lesson orders its events with channels, and none reads a clock. A test that sleeps would guess how long "long enough" is: too short and it fails on a busy machine, too long and the suite crawls. The limit test's check is sound because a third start is *impossible* while the first two calls are parked, not merely late — there is nothing to wait for. The fail-fast test needs no signal at all: a crew of one is its ordering. The pre-canceled test checks a state that is already fixed before any helper exists. Where a clock cannot answer the question, the tests arrange for the question to have one answer.
 
 </details>
 

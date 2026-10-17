@@ -1,6 +1,6 @@
 ---
 title: "Day 7 — Organizing the code"
-description: "Move the app's packages under internal/ and add the first runnable command — written test-first."
+description: "Move the app's packages under internal/ and add the first runnable command — written test-first. — Day 7 of 100 Days of Go Lang."
 sidebar:
   order: 7
 chapter: 6

@@ -1,6 +1,6 @@
 ---
 title: "Day 52 — Testing the terminal UI"
-description: "Give the full-screen interface a memory — records in a log file that outlives the session, and whole frames recorded in files its tests compare against."
+description: "Give the full-screen interface a memory — records in a log file that outlives the session, and whole frames recorded in files its tests compare against. — Day 52 of 100 Days of Go Lang."
 sidebar:
   order: 52
 chapter: 44
@@ -1207,7 +1207,7 @@ There is one boundary worth knowing. A session drives itself by waiting for
 the frames it expects, so a change to a frame the session waits for fails
 the session first, seconds before the golden is ever compared. The sessions
 pin the states they reach; the goldens pin the whole frame. That split is
-why the mismatch in this chapter changes the help line — a line the sessions
+why the mismatch in this lesson changes the help line — a line the sessions
 never wait for.
 
 </details>

@@ -1,6 +1,6 @@
 ---
 title: "Day 44 — Forms"
-description: "Give the pages hands — forms that create, edit, complete, and delete tasks, each carrying a stamp that proves it came from your own page."
+description: "Give the pages hands — forms that create, edit, complete, and delete tasks, each carrying a stamp that proves it came from your own page. — Day 44 of 100 Days of Go Lang."
 sidebar:
   order: 44
 chapter: 37
@@ -649,7 +649,7 @@ back; no session is established; and no event is recorded.
 
 ## The task routes
 
-`internal/web/tasks.go` is the chapter's biggest file, and its spine is the
+`internal/web/tasks.go` is the lesson's biggest file, and its spine is the
 parsing layer: the browser sends flat strings, and the form edge turns them
 into a domain task through the same rules the API and the command line use:
 

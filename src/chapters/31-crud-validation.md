@@ -7,7 +7,7 @@ sidebar:
   order: 31
 ---
 
-The server from the last chapter answers two questions: is the process up, and can it reach the store. It cannot yet do the app's real job — hold tasks. Today it learns.
+The server from the last lesson answers two questions: is the process up, and can it reach the store. It cannot yet do the app's real job — hold tasks. Today it learns.
 
 Five routes join the `/api/v1` group. They list the tasks, create one, read one, change one, and remove one. HTTP has a word for each move: `GET` reads, `POST` creates, `PATCH` changes, `DELETE` removes. Together the four moves are called **CRUD** — create, read, update, delete — and nearly every web API is shaped like this.
 
@@ -21,7 +21,7 @@ The five routes are the same moves the command-line app already makes, in HTTP's
 
 Every answer opens with a **status code** — a number that says how the request went. A 2xx means it worked, a 4xx means the request was the problem, and a 5xx means the server was. The routes use 200 for a read, 201 with a `Location` header for a create, and 204 for a delete.
 
-The codes also keep two kinds of failure apart: a request that did not parse is a 400, and one that parsed but broke a rule is a 422. A box at the end of the chapter walks the whole table.
+The codes also keep two kinds of failure apart: a request that did not parse is a 400, and one that parsed but broke a rule is a 422. A box at the end of the lesson walks the whole table.
 
 The bodies have one shape of their own: a task on the wire is the same object the CLI's `--json` output already writes — id, title, status, priority, due, labels, and version — in a type of its own, so the app can change inside without changing what clients see.
 
@@ -165,7 +165,7 @@ FAIL	todo/internal/store/storetest [build failed]
 FAIL
 ```
 
-The first is the compiler: the suite names `Get`, `Update`, and `Delete` on the store, and the store has none of them yet. The second is the better one: the API tests compile — they name routes and bodies, never handler names — and fail on what the server does. Every task route answers 404, with echo's own `{"message":"Not Found"}` — exactly the shape this chapter replaces.
+The first is the compiler: the suite names `Get`, `Update`, and `Delete` on the store, and the store has none of them yet. The second is the better one: the API tests compile — they name routes and bodies, never handler names — and fail on what the server does. Every task route answers 404, with echo's own `{"message":"Not Found"}` — exactly the shape this lesson replaces.
 
 ## The store learns three moves
 
@@ -599,7 +599,7 @@ The wiring in `internal/api/api.go` sets the two hooks and registers the five ro
 	g.DELETE("/tasks/:id", s.deleteTask)
 ```
 
-`e.Validator` is the checker every request goes through, and `e.HTTPErrorHandler` is the one place a failure becomes a response — both in a moment. The five routes hang off the group the last chapter created, and each route names a **handler**: the function that answers it.
+`e.Validator` is the checker every request goes through, and `e.HTTPErrorHandler` is the one place a failure becomes a response — both in a moment. The five routes hang off the group the last lesson created, and each route names a **handler**: the function that answers it.
 
 The create handler binds, validates, then builds:
 
@@ -1003,7 +1003,7 @@ PASS
 ok  	todo/internal/api	0.006s
 ```
 
-Then start the server the way the last chapter showed — the binary in a scratch directory, `TODO_DB` and `TODO_LOG` inside it — on port `18081`:
+Then start the server the way the last lesson showed — the binary in a scratch directory, `TODO_DB` and `TODO_LOG` inside it — on port `18081`:
 
 <!-- transcripts: authored -->
 ```bash

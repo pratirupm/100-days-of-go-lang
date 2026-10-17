@@ -641,7 +641,7 @@ back; no session is established; and no event is recorded.
 
 ## The task routes
 
-`internal/web/tasks.go` is the chapter's biggest file, and its spine is the
+`internal/web/tasks.go` is the lesson's biggest file, and its spine is the
 parsing layer: the browser sends flat strings, and the form edge turns them
 into a domain task through the same rules the API and the command line use:
 

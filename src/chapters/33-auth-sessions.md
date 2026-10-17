@@ -70,9 +70,9 @@ The stored string is called a **PHC string**, and it carries everything the chec
 
 ## The tests come first
 
-The chapter's contract lives in test files: three in `internal/auth` — `password_test.go`, `service_test.go`, and `session_store_test.go` — one in `internal/api` called `auth_test.go`, and the black-box flow in the server's integration test. They name everything before any of it exists.
+The lesson's contract lives in test files: three in `internal/auth` — `password_test.go`, `service_test.go`, and `session_store_test.go` — one in `internal/api` called `auth_test.go`, and the black-box flow in the server's integration test. They name everything before any of it exists.
 
-The tests also import the two libraries the chapter adds, so the project gains them now: `go get github.com/alexedwards/scs/v2@v2.9.0` for sessions, and `go get golang.org/x/crypto@v0.58.0` for the argon2id recipe. Both land in the module's list:
+The tests also import the two libraries the lesson adds, so the project gains them now: `go get github.com/alexedwards/scs/v2@v2.9.0` for sessions, and `go get golang.org/x/crypto@v0.58.0` for the argon2id recipe. Both land in the module's list:
 
 <!-- verify: go.mod at=sessions -->
 ```text title="go.mod"
@@ -86,7 +86,7 @@ require (
 
 The session library is new; `x/crypto` was already present as an indirect dependency and moves up because the app now calls it itself.
 
-Two cases carry the chapter's promises. The first pins the cookie a successful login sets, flag by flag:
+Two cases carry the lesson's promises. The first pins the cookie a successful login sets, flag by flag:
 
 <!-- verify: internal/api/auth_test.go at=sessions -->
 ```go title="internal/api/auth_test.go"
@@ -135,7 +135,7 @@ FAIL	todo/internal/db	0.045s
 FAIL
 ```
 
-Three failures, one per layer the chapter touches. `internal/auth` holds only tests — there is no package for them to test yet. The API package compiles and runs, and its new cases fail on 404s: the auth routes don't exist. And the database tests already expect the new schema, which the code doesn't provide yet.
+Three failures, one per layer the lesson touches. `internal/auth` holds only tests — there is no package for them to test yet. The API package compiles and runs, and its new cases fail on 404s: the auth routes don't exist. And the database tests already expect the new schema, which the code doesn't provide yet.
 
 ## Two tables, and the queries over them
 

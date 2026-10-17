@@ -1,6 +1,6 @@
 ---
 title: "Day 6 — Interfaces and fakes"
-description: "Give the store a name for what it must do, then build a stand-in that can fail on command."
+description: "Give the store a name for what it must do, then build a stand-in that can fail on command. — Day 6 of 100 Days of Go Lang."
 sidebar:
   order: 6
 chapter: 5

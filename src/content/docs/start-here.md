@@ -1,6 +1,6 @@
 ---
 title: Start here
-description: What you need and how this book works.
+description: How 100 Days of Go Lang works — what you need, the day-by-day rhythm, and how you'll learn Go by building a todo web app from an empty folder.
 ---
 
 This book is a programming course that builds one real application, from an
@@ -22,7 +22,7 @@ command, and edit a file, you're ready.
 
 ## How this book works
 
-Each chapter adds one small piece to the app, and every piece follows the
+Each lesson adds one small piece to the app, and every piece follows the
 same three steps:
 
 1. **Write a test that describes what the piece should do** — and run it, so
@@ -41,7 +41,7 @@ A few conventions worth knowing now:
 - A block that quotes a file carries the file's name above it, like
   `task/task.go`.
 
-If a chapter ends with a **Going deeper** box, you can skip it. It's extra
+If a lesson ends with a **Going deeper** box, you can skip it. It's extra
 background, not part of the build.
 
 A word on the shape of the journey: the app becomes complete and working well
@@ -58,8 +58,8 @@ exactly what that means.
 
 ## If you get stuck
 
-- Compare your code with the chapter's blocks — a typo is the usual suspect.
-- Chapters list the errors they can produce, with the fix, under
+- Compare your code with the lesson's blocks — a typo is the usual suspect.
+- Lessons list the errors they can produce, with the fix, under
   "If something went wrong".
 - As a last resort, the finished app appears in full in
   [The finished app (spoilers)](/100-days-of-go-lang/appendices/the-finished-app/) — but give it

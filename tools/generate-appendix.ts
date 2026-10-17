@@ -82,9 +82,9 @@ function groupFor(path: string): { slug: string; label: string } {
 	return { slug: dir.replace(/^\./, ''), label: dir };
 }
 
-const INTRO = `> **Spoilers.** The finished application, file by file — the state every
-> chapter builds toward, and the tree every quote and transcript in this
-> book was captured from. Use it to compare and to unstick; don't copy
+const INTRO = `> **Spoilers.** The finished application, file by file — the state the course
+> builds toward, and the tree every quote and transcript in this book was
+> captured from. Use it to compare and to unstick; don't copy
 > files wholesale. Generated code and artifacts (the \`sqlc\` output, the
 > \`moq\` mocks, the \`templ\` output, the SBOM) are not reproduced here —
 > \`make generate\` and \`make sbom\` produce them — and \`go.sum\` is what

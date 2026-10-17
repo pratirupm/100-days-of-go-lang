@@ -367,7 +367,7 @@ the chain to the target, and answers yes when one of them matches.
 A wrapped error is an error with one extra method: `Unwrap() error`, which
 hands back the error inside. `fmt.Errorf` with `%w` builds a value that has it,
 and `errors.Is` and `errors.As` follow those links one error at a time. One
-`%w` per `Errorf` wraps exactly one cause, which is all this chapter needs;
+`%w` per `Errorf` wraps exactly one cause, which is all this lesson needs;
 wrapping several errors at once arrives later in the book.
 
 </details>

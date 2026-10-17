@@ -1,6 +1,6 @@
 ---
 title: "Day 24 — Adding a database"
-description: "Move the tasks out of memory and into a real database behind the same store interface, and run one suite of tests against both."
+description: "Move the tasks out of memory and into a real database behind the same store interface, and run one suite of tests against both. — Day 24 of 100 Days of Go Lang."
 sidebar:
   order: 24
 chapter: 20

@@ -108,7 +108,7 @@ something callers pass in. The error message is built with `%d` and the
 constant, so the number in the message can never drift from the number in the
 check. And `len` counts bytes — every character in these tests is one byte, so
 bytes and characters are the same number here. If titles ever allow accented
-letters, the cap has to pick a side, and a box at the end of the chapter
+letters, the cap has to pick a side, and a box at the end of the lesson
 shows why.
 
 Run the tests:

@@ -1,6 +1,6 @@
 ---
 title: "Day 3 — A list of tasks"
-description: "Give tasks an ID and labels, then build a store that adds, lists, filters, counts, and sorts them in memory."
+description: "Give tasks an ID and labels, then build a store that adds, lists, filters, counts, and sorts them in memory. — Day 3 of 100 Days of Go Lang."
 sidebar:
   order: 3
 chapter: 3
@@ -138,7 +138,7 @@ The file continues with the `List` checks:
 Same tasks, same order, same IDs. `t.Fatalf` stops the test on a wrong
 length instead of crashing later.
 
-The last paragraph gives this chapter its teeth: the test takes the list
+The last paragraph gives this lesson its teeth: the test takes the list
 `List` handed back, swaps two elements, overwrites one, and asks the store
 again. The store must be unchanged — `List` promises a copy.
 

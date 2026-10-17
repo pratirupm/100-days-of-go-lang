@@ -1,6 +1,6 @@
 ---
 title: "Day 58 — Releases"
-description: "Stamp a version name into every build, then turn the app into downloadable archives with one command."
+description: "Stamp a version name into every build, then turn the app into downloadable archives with one command. — Day 58 of 100 Days of Go Lang."
 sidebar:
   order: 58
 chapter: 49

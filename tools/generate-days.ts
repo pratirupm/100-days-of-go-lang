@@ -183,7 +183,7 @@ const indexLines: string[] = [];
 
 indexLines.push(`---
 title: The 60 days
-description: "The course plan, day by day: fifty build days and ten review days, with your progress saved in this browser only."
+description: "The 100 Days of Go Lang course plan: 50 build days and 10 review days that take you from an empty folder to a working Go web app — your progress is saved in this browser only."
 sidebar:
   label: Overview
   order: 0
@@ -220,7 +220,11 @@ for (const part of parts) {
 			day,
 			text: `---
 title: "Day ${day} — ${c.title}"
-description: ${JSON.stringify(lesson.description || `Day ${day} of 100 Days of Go Lang: ${c.title}.`)}
+description: ${JSON.stringify(
+				lesson.description
+					? `${lesson.description} — Day ${day} of 100 Days of Go Lang.`
+					: `Day ${day} of 100 Days of Go Lang: ${c.title}.`,
+			)}
 sidebar:
   order: ${day}
 chapter: ${c.n}
@@ -246,11 +250,12 @@ ${lesson.body}
 		day,
 		text: `---
 title: "Day ${day} — Review: Part ${part.roman}"
+description: "Review day ${day} of 100 Days of Go Lang: catch up, re-run the suite, and compare your tree with the finished app."
 sidebar:
   order: ${day}
 ---
 
-**No new chapter today** — about an hour and a half.
+**About 1.5 hours** · Part ${part.roman}, review.
 
 - Re-run the whole suite: \`go test ./...\`.
 - Read any **Going deeper** boxes you skipped on days ${day - part.chapters.length}–${day - 1}.

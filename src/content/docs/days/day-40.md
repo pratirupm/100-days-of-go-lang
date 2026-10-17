@@ -1,6 +1,6 @@
 ---
 title: "Day 40 — Authorization"
-description: "Give every task an owner, scope each request to the signed-in user, and keep a trail of who did what."
+description: "Give every task an owner, scope each request to the signed-in user, and keep a trail of who did what. — Day 40 of 100 Days of Go Lang."
 sidebar:
   order: 40
 chapter: 34
@@ -15,7 +15,7 @@ chapter: 34
 
 ---
 
-The server knows who is asking. The last chapter gave it users, passwords, and sessions, so a request can arrive with a name attached. It still has no idea what that name may touch — any signed-in caller can read, change, and delete everyone's tasks.
+The server knows who is asking. The last lesson gave it users, passwords, and sessions, so a request can arrive with a name attached. It still has no idea what that name may touch — any signed-in caller can read, change, and delete everyone's tasks.
 
 **Authentication** answers "who is asking". **Authorization** answers "what may they touch". The rule for this app fits in one sentence: a task belongs to the person who made it.
 
@@ -35,7 +35,7 @@ The build moves in small steps, and the tests come first — starting with the o
 
 ## The tests come first
 
-The chapter's first test registers two real users, logs them in through the routes, has Bob create a task, and probes that task four ways as Alice. Every probe must answer 404 with the same body a nonexistent id gets:
+The lesson's first test registers two real users, logs them in through the routes, has Bob create a task, and probes that task four ways as Alice. Every probe must answer 404 with the same body a nonexistent id gets:
 
 <!-- verify: internal/api/ownership_test.go at=authorization -->
 ```go title="internal/api/ownership_test.go"
@@ -141,7 +141,7 @@ The compiler error names a piece that does not exist yet: the suite calls `Scope
 
 ## The schema gains three things
 
-Migration 00005 is the chapter in SQL. The audit trail's table comes first, so the foreign keys it needs exist when it is created:
+Migration 00005 is the lesson in SQL. The audit trail's table comes first, so the foreign keys it needs exist when it is created:
 
 <!-- verify: internal/db/migrations/00005_ownership.sql at=authorization -->
 ```sql title="internal/db/migrations/00005_ownership.sql"
@@ -829,7 +829,7 @@ Then the API's tests — `go test -count=1 -v ./internal/api` — every case pas
 ok  	todo/internal/api	0.578s
 ```
 
-Then a real server. Start it the way the last chapter showed, in a scratch folder with `TODO_DB` and `TODO_LOG` inside it — and with both binaries built earlier copied in: `todo-server` for the server and `todo` for the operator's command. Start it on the port the commands below use, and keep the base URL in a shell variable — `$B` — so each command stays short; every API route lives under `/api/v1`:
+Then a real server. Start it the way the last lesson showed, in a scratch folder with `TODO_DB` and `TODO_LOG` inside it — and with both binaries built earlier copied in: `todo-server` for the server and `todo` for the operator's command. Start it on the port the commands below use, and keep the base URL in a shell variable — `$B` — so each command stays short; every API route lives under `/api/v1`:
 
 <!-- transcripts: authored -->
 ```bash
@@ -848,7 +848,7 @@ $ curl -s -c bob.jar -X POST -H "Content-Type: application/json" --data '{"email
 {"id":"01a13e98-d086-71fe-8339-56bdd2f49a3a","email":"bob@example.com","created_at":"2026-10-15T08:06:04Z","is_admin":false}
 ```
 
-Both users log in — the login route is the one the last chapter built — and `-c` writes each session cookie into that account's jar; from here on, `-b` presents it:
+Both users log in — the login route is the one the last lesson built — and `-c` writes each session cookie into that account's jar; from here on, `-b` presents it:
 
 <!-- transcripts: authored -->
 ```bash

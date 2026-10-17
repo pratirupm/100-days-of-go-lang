@@ -1,6 +1,6 @@
 ---
 title: "Day 28 — Transactions"
-description: "Give every task a version so a stale write is refused — and make a whole imported document land together or not at all."
+description: "Give every task a version so a stale write is refused — and make a whole imported document land together or not at all. — Day 28 of 100 Days of Go Lang."
 sidebar:
   order: 28
 chapter: 24

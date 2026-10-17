@@ -1,6 +1,6 @@
 ---
 title: "Day 36 — The first API endpoint"
-description: "Turn the todo app into a web server that answers two health questions over HTTP and stops politely when asked."
+description: "Turn the todo app into a web server that answers two health questions over HTTP and stops politely when asked. — Day 36 of 100 Days of Go Lang."
 sidebar:
   order: 36
 chapter: 30

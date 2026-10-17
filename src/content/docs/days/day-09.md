@@ -1,6 +1,6 @@
 ---
 title: "Day 9 — Custom types"
-description: "Give Status and Priority types of their own — with rules the compiler checks and a text form the JSON decoder respects."
+description: "Give Status and Priority types of their own — with rules the compiler checks and a text form the JSON decoder respects. — Day 9 of 100 Days of Go Lang."
 sidebar:
   order: 9
 chapter: 8

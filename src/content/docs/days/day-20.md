@@ -1,6 +1,6 @@
 ---
 title: "Day 20 — Mutexes and atomics"
-description: "Make the store safe to share — one read-write lock around its tasks, and a counter that survives calls from many goroutines at once."
+description: "Make the store safe to share — one read-write lock around its tasks, and a counter that survives calls from many goroutines at once. — Day 20 of 100 Days of Go Lang."
 sidebar:
   order: 20
 chapter: 17

@@ -1,6 +1,6 @@
 ---
 title: "Day 8 — Generics"
-description: "Write one small helper that works for any element type, then let the standard library's generic tools do the rest."
+description: "Write one small helper that works for any element type, then let the standard library's generic tools do the rest. — Day 8 of 100 Days of Go Lang."
 sidebar:
   order: 8
 chapter: 7
@@ -334,7 +334,7 @@ FAIL
 Read the complaints in pairs. The two method calls on the store are reported
 as "has no field or method". `filter` is a plain name, reported as
 `undefined` — the test calls the helper directly, so the helper is part of
-what this chapter must build. `[build failed]` means no assertion ran: the
+what this lesson must build. `[build failed]` means no assertion ran: the
 test binary never existed. The `ok` lines are packages this change didn't
 touch.
 

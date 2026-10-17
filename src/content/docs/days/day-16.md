@@ -1,10 +1,11 @@
 ---
 title: "Day 16 — Review: Part III"
+description: "Review day 16 of 100 Days of Go Lang: catch up, re-run the suite, and compare your tree with the finished app."
 sidebar:
   order: 16
 ---
 
-**No new chapter today** — about an hour and a half.
+**About 1.5 hours** · Part III, review.
 
 - Re-run the whole suite: `go test ./...`.
 - Read any **Going deeper** boxes you skipped on days 11–15.

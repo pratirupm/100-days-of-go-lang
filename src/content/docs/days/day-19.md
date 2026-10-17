@@ -1,6 +1,6 @@
 ---
 title: "Day 19 — Context and cancellation"
-description: "Pass a context into every store call so canceled work stops — and delete the hand-rolled timer and cancel channel."
+description: "Pass a context into every store call so canceled work stops — and delete the hand-rolled timer and cancel channel. — Day 19 of 100 Days of Go Lang."
 sidebar:
   order: 19
 chapter: 16

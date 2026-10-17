@@ -1,6 +1,6 @@
 ---
 title: "Day 43 — The first web page"
-description: "Build the app's first web page — the signed-in user's tasks, drawn by a browser, rendered with templ."
+description: "Build the app's first web page — the signed-in user's tasks, drawn by a browser, rendered with templ. — Day 43 of 100 Days of Go Lang."
 sidebar:
   order: 43
 chapter: 36
@@ -223,7 +223,7 @@ func TestServer_IndexPage(t *testing.T) {
 ```
 
 The finished app's appendix holds the complete file — it has grown since
-this chapter, so read the cases that match what's shown here and skip what
+this lesson, so read the cases that match what's shown here and skip what
 hasn't been built yet. Now run everything and watch it fail:
 
 ```bash

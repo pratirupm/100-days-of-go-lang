@@ -1,6 +1,6 @@
 ---
 title: "Day 50 — Styling the terminal UI"
-description: "Give the terminal interface a face — color, a text input, and the keys that add and complete tasks."
+description: "Give the terminal interface a face — color, a text input, and the keys that add and complete tasks. — Day 50 of 100 Days of Go Lang."
 sidebar:
   order: 50
 chapter: 42
@@ -201,7 +201,7 @@ Two libraries join the project. **lipgloss** draws styled text — colors,
 weight, decorations — and **bubbles** is a set of ready-made interface
 components; we take two of them, a text input and the help line.
 
-Fetch the exact versions this chapter was built with, one command per
+Fetch the exact versions this lesson was built with, one command per
 library: `go get github.com/charmbracelet/lipgloss@v1.1.0` and `go get
 github.com/charmbracelet/bubbles@v1.0.0`. Two modules the project already
 had indirectly move up as well: `x/ansi`, for the width-aware cut, and
@@ -297,7 +297,7 @@ reads to color text).
 
 The old help line was a hand-written string, and the keys were a switch of
 their own. The two can drift apart — change a key, forget the line — so this
-chapter gives both the same source: a **key map**. A `key.Binding` is one
+lesson gives both the same source: a **key map**. A `key.Binding` is one
 key (or a few) with a name and a description; a key map is a struct of
 bindings.
 
@@ -1273,7 +1273,7 @@ The bubbles library ships a full list component, and we looked at it and
 said no. It is an entire sub-model — its own items, cursor, filtering, and
 pagination — so adopting it would move the tasks into the component and put
 the store's versions out of the model's reach; the compare-and-swap needs
-the version the model *read*. The chapter takes what the component's own
+the version the model *read*. The lesson takes what the component's own
 docs teach — a cursor row, a per-item rendering, width awareness — and
 writes the thirty lines itself, where the tests can see every frame.
 

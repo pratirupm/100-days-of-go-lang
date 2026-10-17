@@ -1,6 +1,6 @@
 ---
 title: The 60 days
-description: "The course plan, day by day: fifty build days and ten review days, with your progress saved in this browser only."
+description: "The 100 Days of Go Lang course plan: 50 build days and 10 review days that take you from an empty folder to a working Go web app — your progress is saved in this browser only."
 sidebar:
   label: Overview
   order: 0

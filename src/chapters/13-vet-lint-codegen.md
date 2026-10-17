@@ -9,7 +9,7 @@ sidebar:
 
 Our tests check the cases we thought to write down. Some mistakes never reach them: a write error nobody looks at, a value assigned and never read, a function nothing calls anymore. The tests keep passing, because the program still answers the inputs they know. These mistakes live in the code itself, waiting for a strange input on a bad day.
 
-This chapter points checkers at the code. Go ships with one, `go vet`, and there is a popular, stricter one called golangci-lint. Both read the source and report suspicious shapes. The stricter one will find a real mistake in code we wrote earlier in the book — while every test keeps passing.
+This lesson points checkers at the code. Go ships with one, `go vet`, and there is a popular, stricter one called golangci-lint. Both read the source and report suspicious shapes. The stricter one will find a real mistake in code we wrote earlier in the book — while every test keeps passing.
 
 Then we hand part of the work to a generator. The store's tests use a hand-written fake to script a failure the real store cannot produce. A **fake** is a stand-in that behaves like the real thing in the ways a test needs. Hand-written fakes drift: when the interface they imitate grows a method, they quietly fall behind. A generator writes the fake from the interface itself, so the two cannot disagree.
 
@@ -355,7 +355,7 @@ $ go generate -x ./...
 go run github.com/matryer/moq@v0.8.0 -pkg store -out store_moq_test.go . Store
 ```
 
-One line — the directive, expanded into the command it ran. `go generate` is not a shell, and a box at the end of the chapter explains what that means.
+One line — the directive, expanded into the command it ran. `go generate` is not a shell, and a box at the end of the lesson explains what that means.
 
 Now open the file that appeared. `internal/store/store_moq_test.go` was written entirely by the tool, and its first lines say so:
 

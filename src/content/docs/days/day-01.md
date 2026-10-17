@@ -1,6 +1,6 @@
 ---
 title: "Day 1 — The first test"
-description: "Set up the project and write your first test — before the code it tests exists."
+description: "Set up the project and write your first test — before the code it tests exists. — Day 1 of 100 Days of Go Lang."
 sidebar:
   order: 1
 chapter: 1

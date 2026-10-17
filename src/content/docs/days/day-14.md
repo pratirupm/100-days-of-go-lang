@@ -1,6 +1,6 @@
 ---
 title: "Day 14 — Benchmarks"
-description: "Measure how fast the store's operations are, and compare two runs without being fooled by the machine."
+description: "Measure how fast the store's operations are, and compare two runs without being fooled by the machine. — Day 14 of 100 Days of Go Lang."
 sidebar:
   order: 14
 chapter: 12
@@ -19,7 +19,7 @@ The tests tell us whether the store is right. They say nothing about whether it 
 
 A **benchmark** is a test that measures time instead of checking an answer. It runs one piece of code many times and reports what a single run cost. Benchmarks never pass or fail; they produce numbers.
 
-This chapter writes benchmarks for seven of the store's operations, runs them, and saves the results in a file. Then we compare the store with two proposed speed-ups — and both are refused. One is faster but breaks a promise; the other is slower than the code it was meant to beat.
+This lesson writes benchmarks for seven of the store's operations, runs them, and saves the results in a file. Then we compare the store with two proposed speed-ups — and both are refused. One is faster but breaks a promise; the other is slower than the code it was meant to beat.
 
 ## What a benchmark measures
 
@@ -384,7 +384,7 @@ SortByDue/n=10000-16    1.000 ± 0%     2.000 ± 0%  +100.00% (p=0.000 n=10)
 
 The first line is from the bytes table, the second from the allocations table: 42% more bytes, one extra allocation per call. Every other row is flat, same as before. The rewrite is slower on the very benchmark it was written for, and it moves more memory to get there. Rejected.
 
-Two plausible changes, two measured refusals. The store's code is byte-for-byte what it was, and that is the chapter's result: we can say why, and the numbers are on file for the next time the idea comes back.
+Two plausible changes, two measured refusals. The store's code is byte-for-byte what it was, and that is the lesson's result: we can say why, and the numbers are on file for the next time the idea comes back.
 
 ## If something went wrong
 

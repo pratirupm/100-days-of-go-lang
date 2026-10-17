@@ -1,10 +1,11 @@
 ---
 title: "Day 29 — Review: Part V"
+description: "Review day 29 of 100 Days of Go Lang: catch up, re-run the suite, and compare your tree with the finished app."
 sidebar:
   order: 29
 ---
 
-**No new chapter today** — about an hour and a half.
+**About 1.5 hours** · Part V, review.
 
 - Re-run the whole suite: `go test ./...`.
 - Read any **Going deeper** boxes you skipped on days 23–28.

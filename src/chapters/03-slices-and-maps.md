@@ -130,7 +130,7 @@ The file continues with the `List` checks:
 Same tasks, same order, same IDs. `t.Fatalf` stops the test on a wrong
 length instead of crashing later.
 
-The last paragraph gives this chapter its teeth: the test takes the list
+The last paragraph gives this lesson its teeth: the test takes the list
 `List` handed back, swaps two elements, overwrites one, and asks the store
 again. The store must be unchanged — `List` promises a copy.
 

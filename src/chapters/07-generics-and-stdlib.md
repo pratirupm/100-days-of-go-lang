@@ -326,7 +326,7 @@ FAIL
 Read the complaints in pairs. The two method calls on the store are reported
 as "has no field or method". `filter` is a plain name, reported as
 `undefined` — the test calls the helper directly, so the helper is part of
-what this chapter must build. `[build failed]` means no assertion ran: the
+what this lesson must build. `[build failed]` means no assertion ran: the
 test binary never existed. The `ok` lines are packages this change didn't
 touch.
 

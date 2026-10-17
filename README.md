@@ -1,7 +1,8 @@
 # 100 Days of Go Lang — the book site
 
-The reader-facing book: the first 60 days of a 100-day course that builds a
-real Go application from an empty folder. Astro + Starlight, run with Bun.
+The reader-facing book: a 100-day course that teaches Go Lang by building a
+real todo web app from an empty folder — a CLI, an API, a browser UI, and a
+TUI, with tests the whole way. Astro + Starlight, run with Bun.
 `bun run build` emits a fully static site (with an offline service worker
 and search index) to `dist/`.
 

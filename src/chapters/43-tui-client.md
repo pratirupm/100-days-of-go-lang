@@ -1025,7 +1025,7 @@ type Client interface {
 }
 ```
 
-This is the chapter's central trick: the consumer defines the interface. The
+This is the lesson's central trick: the consumer defines the interface. The
 model lists the calls it makes and nothing else — no update, no delete, no
 register, because the list never uses them. `internal/client` is one
 implementation; the tests' fake is another.

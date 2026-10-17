@@ -1,6 +1,6 @@
 ---
 title: "Day 56 — The security audit"
-description: "Walk through the app asking how it could be abused, then write the checks that keep the answers honest."
+description: "Walk through the app asking how it could be abused, then write the checks that keep the answers honest. — Day 56 of 100 Days of Go Lang."
 sidebar:
   order: 56
 chapter: 47
@@ -138,7 +138,7 @@ ok  	todo/internal/auth	1.129s
 FAIL
 ```
 
-Read the first and the middle lines together: the folder holds tests but no code a build can use, so the package fails to build. Every other package stays as it was — this chapter adds checks, it does not move the app.
+Read the first and the middle lines together: the folder holds tests but no code a build can use, so the package fails to build. Every other package stays as it was — this lesson adds checks, it does not move the app.
 
 :::note
 The red here is a build failure, not a failed assertion: a folder with tests and no regular Go files is not a package yet. It is still the right first step — the tests are the contract the code must satisfy.
@@ -735,7 +735,7 @@ The last one is the real find: the comment on `NewSessionManager` in `internal/a
 // policy in one place.
 ```
 
-The two `Close` findings were in a version of the SBOM test that opened the document and deferred the close; the shape this chapter writes reads the file whole, so there is no open resource to close. "If something went wrong" shows that message for the day you write a reader of your own. Run the linter again.
+The two `Close` findings were in a version of the SBOM test that opened the document and deferred the close; the shape this lesson writes reads the file whole, so there is no open resource to close. "If something went wrong" shows that message for the day you write a reader of your own. Run the linter again.
 
 ```bash
 $ go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.14.0 run

@@ -1,6 +1,6 @@
 ---
 title: "Day 12 — Snapshot tests"
-description: "Record the expected output in files the test tool writes, read them once, and let the suite compare against them from then on."
+description: "Record the expected output in files the test tool writes, read them once, and let the suite compare against them from then on. — Day 12 of 100 Days of Go Lang."
 sidebar:
   order: 12
 chapter: 10

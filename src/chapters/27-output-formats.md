@@ -13,11 +13,11 @@ A program has a worse time. To find the tasks due this week, a script would have
 
 Today the output splits by audience. People get an aligned table: one task per row, one value per column. Programs get JSON — a text format for data, where every value carries a name, its **key** — behind a single `--json` flag that every command accepts.
 
-The JSON shape becomes a promise in this chapter, pinned by a test. The table is for reading; the JSON is for depending.
+The JSON shape becomes a promise in this lesson, pinned by a test. The table is for reading; the JSON is for depending.
 
 ## The tests come first
 
-The test file moves before the code, as always. Three things change in `internal/cli/cli_test.go`: the list fixture grows a fourth task, `TestList` expects the table instead of the old sentence, and five new tests pin the machine forms. Two more tests arrive at the end of the chapter, where the formats get recorded — a recorded file needs the real output to record, so those come after the code prints it.
+The test file moves before the code, as always. Three things change in `internal/cli/cli_test.go`: the list fixture grows a fourth task, `TestList` expects the table instead of the old sentence, and five new tests pin the machine forms. Two more tests arrive at the end of the lesson, where the formats get recorded — a recorded file needs the real output to record, so those come after the code prints it.
 
 The new fixture task is the table's hardest case: a task with a label but no due date. Every row still carries a cell for the due date — empty where there is none — and that is what keeps the labels lined up across the whole listing.
 
@@ -88,7 +88,7 @@ The import list grows by four, because the tests that follow decode JSON, sort k
 
 ## The JSON tests pin a shape
 
-The heart of the chapter is a test that treats the JSON shape as a promise. It owns its own copy of the shape — a separate type from the one the code will encode — so a renamed key on either side fails here instead of matching silently.
+The heart of the lesson is a test that treats the JSON shape as a promise. It owns its own copy of the shape — a separate type from the one the code will encode — so a renamed key on either side fails here instead of matching silently.
 
 <!-- verify: internal/cli/cli_test.go at=output-formats -->
 ```go title="internal/cli/cli_test.go"
@@ -407,7 +407,7 @@ The help text now promises the table and describes `--json` in the same breath.
 			return writeTaskTable(cmd.OutOrStdout(), tasks)
 ```
 
-The human path is the fall-through: `--json` takes the branch that writes one object per line, and everything else goes to `writeTaskTable`. The machine branch is the chapter's second promise made concrete — one object per line, not one array around all of them, so a pipe can read whole tasks as they are written.
+The human path is the fall-through: `--json` takes the branch that writes one object per line, and everything else goes to `writeTaskTable`. The machine branch is the lesson's second promise made concrete — one object per line, not one array around all of them, so a pipe can read whole tasks as they are written.
 
 ## A shape for programs
 
@@ -966,7 +966,7 @@ Keeping the copy in step is the cost. `newJSONTask` is the only conversion, so t
 <details>
 <summary>Going deeper: the tools and the argument</summary>
 
-Three references are worth keeping. `text/tabwriter` — https://pkg.go.dev/text/tabwriter — explains the column-block rule the five-cell design is built around. https://jsonlines.org/ is the one-page spec behind `list --json`. And the Command Line Interface Guidelines, at https://clig.dev/#output, make the argument this chapter followed: human-readable by default, machine-readable on request, output as a contract. The `encoding/json` reference at https://pkg.go.dev/encoding/json covers the encoder and the decoder the tests use.
+Three references are worth keeping. `text/tabwriter` — https://pkg.go.dev/text/tabwriter — explains the column-block rule the five-cell design is built around. https://jsonlines.org/ is the one-page spec behind `list --json`. And the Command Line Interface Guidelines, at https://clig.dev/#output, make the argument this lesson followed: human-readable by default, machine-readable on request, output as a contract. The `encoding/json` reference at https://pkg.go.dev/encoding/json covers the encoder and the decoder the tests use.
 
 </details>
 

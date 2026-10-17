@@ -1,6 +1,6 @@
 ---
 title: "Day 31 — Configuration"
-description: "Let the database path come from a flag, an environment variable, or a sensible default instead of living in the code."
+description: "Let the database path come from a flag, an environment variable, or a sensible default instead of living in the code. — Day 31 of 100 Days of Go Lang."
 sidebar:
   order: 31
 chapter: 26
@@ -21,7 +21,7 @@ command run from two folders can find two different databases — or none at all
 
 Configuration is the settings an app needs to run: the values that change from
 one machine, or one run, to the next. Ours has two — where the database lives,
-and where logs will someday live — and this chapter turns both from a constant
+and where logs will someday live — and this lesson turns both from a constant
 into a decision.
 
 The decision gets three sources and one order: a `--db` flag beats an

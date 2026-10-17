@@ -1,10 +1,11 @@
 ---
 title: "Day 10 — Review: Part II"
+description: "Review day 10 of 100 Days of Go Lang: catch up, re-run the suite, and compare your tree with the finished app."
 sidebar:
   order: 10
 ---
 
-**No new chapter today** — about an hour and a half.
+**About 1.5 hours** · Part II, review.
 
 - Re-run the whole suite: `go test ./...`.
 - Read any **Going deeper** boxes you skipped on days 6–9.

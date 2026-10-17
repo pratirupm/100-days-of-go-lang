@@ -722,7 +722,7 @@ ok  	todo/internal/store	0.099s
 ?   	todo/internal/store/storetest	[no test files]
 ```
 
-Your run prints one line more than this capture: `ok todo/internal/task`, the package this chapter did not touch.
+Your run prints one line more than this capture: `ok todo/internal/task`, the package this lesson did not touch.
 
 Every package passes — the fan-out, the threshold, the file, and both renderings among them. The script scenarios pass too, because the binary now writes the record `add_list` asks for.
 
@@ -858,7 +858,7 @@ $ echo "exit: $?"
 exit: 1
 ```
 
-The default nests `todo/logs` under `$XDG_STATE_HOME`, which a fresh account does not have, and opening a file does not create the folders around it. The fix is `os.MkdirAll(filepath.Dir(logPath), 0o700)` before the open — configuration decides where, the writer makes it real. A log file that cannot be created fails the run on purpose: quietly logging nowhere would hide exactly the misconfiguration this chapter makes visible.
+The default nests `todo/logs` under `$XDG_STATE_HOME`, which a fresh account does not have, and opening a file does not create the folders around it. The fix is `os.MkdirAll(filepath.Dir(logPath), 0o700)` before the open — configuration decides where, the writer makes it real. A log file that cannot be created fails the run on purpose: quietly logging nowhere would hide exactly the misconfiguration this lesson makes visible.
 
 <details>
 <summary>Going deeper: what is a TTY?</summary>

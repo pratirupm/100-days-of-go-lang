@@ -1,6 +1,6 @@
 ---
 title: "Day 46 — Web security"
-description: "Make the app's safety promises enforceable — a policy on every response, a stronger cookie, a fresh session at login, and a budget on password guesses."
+description: "Make the app's safety promises enforceable — a policy on every response, a stronger cookie, a fresh session at login, and a budget on password guesses. — Day 46 of 100 Days of Go Lang."
 sidebar:
   order: 46
 chapter: 39

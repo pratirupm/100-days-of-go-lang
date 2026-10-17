@@ -1,6 +1,6 @@
 ---
 title: "Day 59 — Making it faster"
-description: "Measure where the app spends its time at a hundred thousand tasks, then make the changes the numbers point at."
+description: "Measure where the app spends its time at a hundred thousand tasks, then make the changes the numbers point at. — Day 59 of 100 Days of Go Lang."
 sidebar:
   order: 59
 chapter: 50
@@ -273,7 +273,7 @@ TursoComplete-16                0.062 ms     0.00 MB        129 allocs
 ...
 ```
 
-Read the shapes before the numbers. A full list costs 1.6 to 1.8 seconds and moves 383 MB. A single read of one known task costs 135 microseconds — reading one row is about eleven thousand times less work than reading all of them. And the needle costs 35 milliseconds, hundreds of times the single read, even though it matches exactly one row. The engine has no way to find that row except by looking at every label row in the database. That last line is the clue the rest of the chapter follows.
+Read the shapes before the numbers. A full list costs 1.6 to 1.8 seconds and moves 383 MB. A single read of one known task costs 135 microseconds — reading one row is about eleven thousand times less work than reading all of them. And the needle costs 35 milliseconds, hundreds of times the single read, even though it matches exactly one row. The engine has no way to find that row except by looking at every label row in the database. That last line is the clue the rest of the lesson follows.
 
 ## Watch where the time goes
 
@@ -319,7 +319,7 @@ $ go tool pprof -sample_index=alloc_objects -top mem.prof
 
 `reflect.unsafe_New` alone is 36% of every object the run built: each call through the native-code layer bundles its arguments up with reflection and pays for the bundle. And the app's own rows are here: `attachTags` — the function that gives each task its labels — has half the objects allocated beneath it (`cum` 51.11%), with the label query just below.
 
-Two facts follow, and they decide the rest of the chapter. First: the cost is proportional to the number of rows read times the number of values read out of each row, because every value crosses that boundary. Second: the objects come from materializing data — building maps and lists to hold rows we are about to walk anyway.
+Two facts follow, and they decide the rest of the lesson. First: the cost is proportional to the number of rows read times the number of values read out of each row, because every value crosses that boundary. Second: the objects come from materializing data — building maps and lists to hold rows we are about to walk anyway.
 
 So there are exactly two reachable levers: touch fewer rows, and build fewer objects on the way through. No cleverer algorithm can move this profile, because the algorithm is not what is on it.
 
@@ -726,9 +726,9 @@ Environment=GOMEMLIMIT=192MiB
 ~ TursoByTagRare/n=100000-16    0.0002s -> 0.0401s   +0.00%  p=0.100 n=3
 ```
 
-Fix: give each side at least four samples. The captures in this chapter use five, and the count is the point — a comparison that cannot see a change is not a quiet pass. The number of samples is part of the experiment's design, and three is too few to ask a small question.
+Fix: give each side at least four samples. The captures in this lesson use five, and the count is the point — a comparison that cannot see a change is not a quiet pass. The number of samples is part of the experiment's design, and three is too few to ask a small question.
 
-**A row moves that your change does not touch.** Five samples on a busy machine will occasionally separate two identical sets of numbers; a p-value of 0.032 is exactly the 3% chance the 0.05 line admits. In the chapter's own capture, the stats read moved 19% while nothing in the chapter touched it:
+**A row moves that your change does not touch.** Five samples on a busy machine will occasionally separate two identical sets of numbers; a p-value of 0.032 is exactly the 3% chance the 0.05 line admits. In the lesson's own capture, the stats read moved 19% while nothing in the lesson touched it:
 
 ```text
 TursoStats/n=100000-16                                0.4094s -> 0.4876s          +19.11%  p=0.032 n=5
@@ -738,7 +738,7 @@ Fix: re-run the comparison focused on that one benchmark before concluding anyth
 
 ## Run it all one last time
 
-Nothing in this chapter changed what the app does — every test that passed before still passes, with no test loosened to make a number look better. Run the whole module five times:
+Nothing in this lesson changed what the app does — every test that passed before still passes, with no test loosened to make a number look better. Run the whole module five times:
 
 ```bash
 $ go test -count=5 ./...
@@ -762,14 +762,14 @@ The habit is the part worth keeping. Write the test first. Make the claim, run t
 <details>
 <summary>Going deeper: what a profiler actually records</summary>
 
-A profiler does not watch every instruction. It interrupts the program about a hundred times a second and writes down which function was running when the bell rang; the table is a tally of those interruptions. That is why the shares are percentages of samples and not exact bills, and why `flat` and `cum` differ: `flat` counts the times the function itself was caught, and `cum` counts it and everything it called. Ten thousand samples is plenty to rank the work and not precise enough to decide a small question — which is why every change in this chapter was confirmed with benchmarks, where the counts are exact. `pprof` can also show one function line by line (`go tool pprof -list`), its callers and callees (`-peek`), or the whole profile as a picture, if you ever need to go deeper.
+A profiler does not watch every instruction. It interrupts the program about a hundred times a second and writes down which function was running when the bell rang; the table is a tally of those interruptions. That is why the shares are percentages of samples and not exact bills, and why `flat` and `cum` differ: `flat` counts the times the function itself was caught, and `cum` counts it and everything it called. Ten thousand samples is plenty to rank the work and not precise enough to decide a small question — which is why every change in this lesson was confirmed with benchmarks, where the counts are exact. `pprof` can also show one function line by line (`go tool pprof -list`), its callers and callees (`-peek`), or the whole profile as a picture, if you ever need to go deeper.
 
 </details>
 
 <details>
 <summary>Going deeper: the collector's two knobs</summary>
 
-Go's garbage collector frees memory the program can no longer reach. `GOGC` decides how often it runs: the default, 100, lets the heap double before the next collection — raise it and the collector runs less, at the cost of a bigger heap. `GOMEMLIMIT` is a soft ceiling: as the heap approaches it, the collector runs more, trading processor time for memory. The two settings are two directions of one trade, and this chapter measured both directions on the app's own read path. The numbers chose: cap the memory, leave the collection rate alone.
+Go's garbage collector frees memory the program can no longer reach. `GOGC` decides how often it runs: the default, 100, lets the heap double before the next collection — raise it and the collector runs less, at the cost of a bigger heap. `GOMEMLIMIT` is a soft ceiling: as the heap approaches it, the collector runs more, trading processor time for memory. The two settings are two directions of one trade, and this lesson measured both directions on the app's own read path. The numbers chose: cap the memory, leave the collection rate alone.
 
 </details>
 

@@ -1,6 +1,6 @@
 ---
 title: "Day 51 — Talking to the API"
-description: "Point the terminal interface at the HTTP API, so it signs in and asks the server for everything it shows."
+description: "Point the terminal interface at the HTTP API, so it signs in and asks the server for everything it shows. — Day 51 of 100 Days of Go Lang."
 sidebar:
   order: 51
 chapter: 43
@@ -1033,7 +1033,7 @@ type Client interface {
 }
 ```
 
-This is the chapter's central trick: the consumer defines the interface. The
+This is the lesson's central trick: the consumer defines the interface. The
 model lists the calls it makes and nothing else — no update, no delete, no
 register, because the list never uses them. `internal/client` is one
 implementation; the tests' fake is another.

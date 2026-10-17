@@ -384,7 +384,7 @@ stops loudly.
 
 ## A deadline for the call
 
-Now the piece the chapter is for. `StatsWithin` takes how long the caller
+Now the piece the lesson is for. `StatsWithin` takes how long the caller
 will wait, and returns the aggregate or `ErrStatsTimeout`. Add it after
 `StatsCancelable`:
 
@@ -684,7 +684,7 @@ directly:
 
 So the old dance would now block forever. The same release notes say the
 garbage collector can now recover unreferenced timers, so `Stop` is no longer
-needed for memory either — but it is still what this chapter needs it for:
+needed for memory either — but it is still what this lesson needs it for:
 the guarantee that a timer whose deadline the call outlived never fires.
 
 </details>

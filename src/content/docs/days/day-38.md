@@ -1,6 +1,6 @@
 ---
 title: "Day 38 — Middleware"
-description: "Wrap every request in one ordered stack — an id, a log record, a panic catcher, a time limit, a size limit, compression, and security headers."
+description: "Wrap every request in one ordered stack — an id, a log record, a panic catcher, a time limit, a size limit, compression, and security headers. — Day 38 of 100 Days of Go Lang."
 sidebar:
   order: 38
 chapter: 32

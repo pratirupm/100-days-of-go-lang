@@ -48,13 +48,6 @@
 		}
 	};
 
-	const updateBadges = () => {
-		for (const badge of document.querySelectorAll('.day-badge[data-day]')) {
-			const n = Number(badge.dataset.day);
-			badge.classList.toggle('done', read().has(n));
-		}
-	};
-
 	// The full card: the days index and the home page carry its placeholder.
 	const overview = document.getElementById('tracker-overview');
 	const renderOverview = () => {
@@ -98,7 +91,6 @@
 	};
 
 	const refresh = () => {
-		updateBadges();
 		updateDayLinks();
 		renderOverview();
 		renderWidget();

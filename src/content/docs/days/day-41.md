@@ -1,6 +1,6 @@
 ---
 title: "Day 41 — API documentation"
-description: "Generate a written description of the API from the handlers themselves, and serve it as a page anyone can read and try."
+description: "Generate a written description of the API from the handlers themselves, and serve it as a page anyone can read and try. — Day 41 of 100 Days of Go Lang."
 sidebar:
   order: 41
 chapter: 35

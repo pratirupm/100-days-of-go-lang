@@ -1,6 +1,6 @@
 ---
 title: "Day 27 — IDs and time"
-description: "Give every task an id the app makes itself — one that sorts by creation time — and carry the existing rows across to it."
+description: "Give every task an id the app makes itself — one that sorts by creation time — and carry the existing rows across to it. — Day 27 of 100 Days of Go Lang."
 sidebar:
   order: 27
 chapter: 23

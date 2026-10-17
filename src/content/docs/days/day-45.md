@@ -1,6 +1,6 @@
 ---
 title: "Day 45 — CSS and static files"
-description: "Give the pages a face — a hand-written stylesheet, baked into the executable and served with a version the browser can check."
+description: "Give the pages a face — a hand-written stylesheet, baked into the executable and served with a version the browser can check. — Day 45 of 100 Days of Go Lang."
 sidebar:
   order: 45
 chapter: 38

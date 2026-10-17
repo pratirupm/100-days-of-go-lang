@@ -1,10 +1,11 @@
 ---
 title: "Day 48 — Review: Part VIII"
+description: "Review day 48 of 100 Days of Go Lang: catch up, re-run the suite, and compare your tree with the finished app."
 sidebar:
   order: 48
 ---
 
-**No new chapter today** — about an hour and a half.
+**About 1.5 hours** · Part VIII, review.
 
 - Re-run the whole suite: `go test ./...`.
 - Read any **Going deeper** boxes you skipped on days 43–47.

@@ -11,7 +11,7 @@ Every test so far checks a case we thought of: a blank title, a missing task, a
 date on one particular day. A suite is only as strong as the person who
 imagined those cases — and people don't imagine `"tomorrow0"`.
 
-This chapter builds `ParseDue`, the function that turns typed text into a due
+This lesson builds `ParseDue`, the function that turns typed text into a due
 date, and then points three tools at it. Coverage records which lines ran
 during the tests. Fuzzing invents thousands of inputs and hunts for one that
 breaks a promise the code makes. The race detector watches for trouble that
@@ -231,11 +231,11 @@ error type the title and status checks use.
 
 The two relative words come next, then `time.Parse("2006-01-02", s)` for
 everything else — that odd string is Go's date-shape layout, explained in a box
-at the end of the chapter. Anything `time.Parse` can't read becomes a
+at the end of the lesson. Anything `time.Parse` can't read becomes a
 `ValidationError` too. The helper at the bottom, `midnightUTC`, cuts a moment
 to the start of its day in UTC, so a due date never carries a time of day.
 
-Look slowly at the two relative-word checks — this chapter's turning point.
+Look slowly at the two relative-word checks — this lesson's turning point.
 They accept any input that *starts with* the word; the doc comment above says
 exactly `"today"` and exactly `"tomorrow"`. The two disagree, and no row in the
 table covers the difference. Nobody writes a test for `"tomorrow0"`.

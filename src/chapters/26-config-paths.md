@@ -13,7 +13,7 @@ command run from two folders can find two different databases — or none at all
 
 Configuration is the settings an app needs to run: the values that change from
 one machine, or one run, to the next. Ours has two — where the database lives,
-and where logs will someday live — and this chapter turns both from a constant
+and where logs will someday live — and this lesson turns both from a constant
 into a decision.
 
 The decision gets three sources and one order: a `--db` flag beats an

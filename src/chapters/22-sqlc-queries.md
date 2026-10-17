@@ -11,7 +11,7 @@ The store works. Tasks survive a restart, and one suite of tests holds both stor
 
 Today a tool takes over that bookkeeping. **sqlc** reads the queries we write as SQL — the database's own language — and the schema the migrations describe, and it writes Go functions for them. The tool is a **generator**: a program that writes code from a source of truth. We write the queries once, in one file; the tool writes the boring Go around them.
 
-The app's behavior does not change. That means no new tests appear in this chapter — the suite that already holds both stores to one contract is the judge. If the rewrite is faithful, every case passes, and the store has less to hide behind.
+The app's behavior does not change. That means no new tests appear in this lesson — the suite that already holds both stores to one contract is the judge. If the rewrite is faithful, every case passes, and the store has less to hide behind.
 
 ## Where the SQL lives now
 
@@ -19,7 +19,7 @@ Open `internal/store/turso.go` and read the methods. Each one carries its SQL as
 
 None of this is checked until the app runs. A typo in a column name is just text in a string until a test calls that method, and a forgotten column breaks when someone lists tasks. Adding a query means writing three things by hand: the SQL, the arguments, and the scanning code.
 
-The schema already has a better home — the migration files from the last chapter. The SQL deserves one too. Both are things the database understands; neither needs to hide inside Go.
+The schema already has a better home — the migration files from the last lesson. The SQL deserves one too. Both are things the database understands; neither needs to hide inside Go.
 
 ## A tool that writes the Go
 
@@ -57,7 +57,7 @@ sql:
         out: "internal/db"
 ```
 
-Three inputs, one output. `schema` points at the migration directory the last chapter created; `queries` names a directory we are about to create; and `out` says where the generated Go goes — `internal/db`, the package the migrations already live in. The comment records two facts worth keeping: sqlc reads only the forward half of each migration, and every path is relative to this file.
+Three inputs, one output. `schema` points at the migration directory the last lesson created; `queries` names a directory we are about to create; and `out` says where the generated Go goes — `internal/db`, the package the migrations already live in. The comment records two facts worth keeping: sqlc reads only the forward half of each migration, and every path is relative to this file.
 
 ## Write the queries
 
@@ -184,7 +184,7 @@ ORDER BY task_id, tag;
 -- ...
 ```
 
-`sqlc.slice('task_ids')` is a marker: at run time the generated code replaces it with one placeholder per id, so the list can be any length. The comment at the end asks for plain ASCII in this file — the box at the end of the chapter explains why.
+`sqlc.slice('task_ids')` is a marker: at run time the generated code replaces it with one placeholder per id, so the list can be any length. The comment at the end asks for plain ASCII in this file — the box at the end of the lesson explains why.
 
 ## Run the generator
 
@@ -353,7 +353,7 @@ The comment above a query became the method's doc comment, and the placeholder l
 
 ## The tests are already written
 
-This chapter changes how the store is written, not what it does. So it writes no new tests — and that is not a shortcut. The suite from the database work already pins the contract: nil-when-empty lists, a map that is never nil, `ErrNotFound` for a missing task, label order, zero due dates last, a canceled context. It runs against both stores, and it knows nothing about SQL strings or generated code.
+This lesson changes how the store is written, not what it does. So it writes no new tests — and that is not a shortcut. The suite from the database work already pins the contract: nil-when-empty lists, a map that is never nil, `ErrNotFound` for a missing task, label order, zero due dates last, a canceled context. It runs against both stores, and it knows nothing about SQL strings or generated code.
 
 The rewrite is done when that suite passes unchanged. If a case fails, the mapping is wrong, and the failing case says where.
 

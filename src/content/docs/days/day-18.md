@@ -1,6 +1,6 @@
 ---
 title: "Day 18 — select and timeouts"
-description: "Teach the counting pool to give up early — wait on several channels at once, and stop a call when its deadline passes."
+description: "Teach the counting pool to give up early — wait on several channels at once, and stop a call when its deadline passes. — Day 18 of 100 Days of Go Lang."
 sidebar:
   order: 18
 chapter: 15
@@ -392,7 +392,7 @@ stops loudly.
 
 ## A deadline for the call
 
-Now the piece the chapter is for. `StatsWithin` takes how long the caller
+Now the piece the lesson is for. `StatsWithin` takes how long the caller
 will wait, and returns the aggregate or `ErrStatsTimeout`. Add it after
 `StatsCancelable`:
 
@@ -692,7 +692,7 @@ directly:
 
 So the old dance would now block forever. The same release notes say the
 garbage collector can now recover unreferenced timers, so `Stop` is no longer
-needed for memory either — but it is still what this chapter needs it for:
+needed for memory either — but it is still what this lesson needs it for:
 the guarantee that a timer whose deadline the call outlived never fires.
 
 </details>

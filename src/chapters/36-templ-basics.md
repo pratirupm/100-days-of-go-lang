@@ -215,7 +215,7 @@ func TestServer_IndexPage(t *testing.T) {
 ```
 
 The finished app's appendix holds the complete file — it has grown since
-this chapter, so read the cases that match what's shown here and skip what
+this lesson, so read the cases that match what's shown here and skip what
 hasn't been built yet. Now run everything and watch it fail:
 
 ```bash

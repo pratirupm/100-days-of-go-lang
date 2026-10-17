@@ -1,6 +1,6 @@
 ---
 title: "Day 57 — Deploying"
-description: "Put the server on a real machine — a unit that keeps it running, a proxy that faces the internet, and a backup that runs itself."
+description: "Put the server on a real machine — a unit that keeps it running, a proxy that faces the internet, and a backup that runs itself. — Day 57 of 100 Days of Go Lang."
 sidebar:
   order: 57
 chapter: 48
@@ -25,7 +25,7 @@ Today the app gets all three — a unit, a proxy, and a backup that runs on a sc
 
 ## The tests come first
 
-The changes this chapter makes are small — a budget, a signal, an address — and the tests come before them, as always. Three files hold the contract: `cmd/todo-server/drain_test.go` for the stop signal, `internal/api/security_test.go` for the address the login limiter keys on, and `cmd/todo-server/backup_test.go` for the backup job's copy.
+The changes this lesson makes are small — a budget, a signal, an address — and the tests come before them, as always. Three files hold the contract: `cmd/todo-server/drain_test.go` for the stop signal, `internal/api/security_test.go` for the address the login limiter keys on, and `cmd/todo-server/backup_test.go` for the backup job's copy.
 
 The drain's last case is one comparison: the budget must outlast the deadline the stack puts on every request.
 
@@ -113,7 +113,7 @@ Nothing is broken. The tests describe an app that does not exist yet.
 
 A supervisor stops a program by sending it a **signal** — a short message the program can hear. The first one systemd sends is **SIGTERM**, and it means "please stop": stop accepting new requests, finish the ones already in flight, then exit.
 
-The server already does that; what this chapter fixes is how long it is willing to wait. The old budget was five seconds. But the stack puts a ten-second deadline on every request, so a request can still have its whole deadline left to run when the signal arrives — and a five-second drain would cut it. A cut request makes the process exit non-zero, which the supervisor reads as a failed stop.
+The server already does that; what this lesson fixes is how long it is willing to wait. The old budget was five seconds. But the stack puts a ten-second deadline on every request, so a request can still have its whole deadline left to run when the signal arrives — and a five-second drain would cut it. A cut request makes the process exit non-zero, which the supervisor reads as a failed stop.
 
 The new budget is derived from that deadline, with a margin:
 
@@ -309,7 +309,7 @@ func peerAddress(c echo.Context) (string, error) {
 }
 ```
 
-The limiter now asks the extractor for the client's address and falls back to the socket when there is none. The trust case from the top of the chapter passes, and the cases beside it keep the door from widening: `X-Real-IP` is still never consulted, and a private-network peer's forwarded address still moves nothing.
+The limiter now asks the extractor for the client's address and falls back to the socket when there is none. The trust case from the top of the lesson passes, and the cases beside it keep the door from widening: `X-Real-IP` is still never consulted, and a private-network peer's forwarded address still moves nothing.
 
 ```bash
 --- PASS: TestLoginLimiter_OtherRoutesUnaffected (0.15s)
@@ -478,7 +478,7 @@ client ──TLS──> Caddy :443 ──http──> 127.0.0.1:8080 (todo-server
                               /usr/local/lib/todo/todo-backup ── todo-backup.timer (daily)
 ```
 
-The picture is the whole chapter: a client reaches Caddy over TLS, Caddy reaches the server on loopback, the server owns the database in `/var/lib/todo`, and the backup job touches the same directory on a timer.
+The picture is the whole lesson: a client reaches Caddy over TLS, Caddy reaches the server on loopback, the server owns the database in `/var/lib/todo`, and the backup job touches the same directory on a timer.
 
 The install starts with the two programs:
 
@@ -656,7 +656,7 @@ A copy taken main-file-first is either current — the log was read after a fold
 
 The check proves three things: the copy opens, it is not torn — every page is readable — and its schema is current. That is worth having on every run, and it is not everything.
 
-It cannot prove the copy is *current*. The live database is locked by the server, so nothing can compare the two; the check would have to open the original, and it cannot. It also does not read the rows: the CLI's list has no user attached, so an empty database passes the same check — the `.db`-alone trap is the proof, and it exits 0 with zero tasks. The rows are the drill's job, because the drill logs in and looks at them. That is why the chapter keeps both: the automatic check on every run, and the quarterly drill that reads a real task list back.
+It cannot prove the copy is *current*. The live database is locked by the server, so nothing can compare the two; the check would have to open the original, and it cannot. It also does not read the rows: the CLI's list has no user attached, so an empty database passes the same check — the `.db`-alone trap is the proof, and it exits 0 with zero tasks. The rows are the drill's job, because the drill logs in and looks at them. That is why the lesson keeps both: the automatic check on every run, and the quarterly drill that reads a real task list back.
 
 </details>
 

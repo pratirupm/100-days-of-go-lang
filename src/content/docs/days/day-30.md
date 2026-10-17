@@ -1,6 +1,6 @@
 ---
 title: "Day 30 — A command-line tool"
-description: "Give the app its real commands — add, list, done, stats, and import — built as a cobra tree that tests can drive."
+description: "Give the app its real commands — add, list, done, stats, and import — built as a cobra tree that tests can drive. — Day 30 of 100 Days of Go Lang."
 sidebar:
   order: 30
 chapter: 25

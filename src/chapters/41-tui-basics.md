@@ -25,7 +25,7 @@ Bubble Tea runs the loop. Our share is three pieces:
 - **Update** — a function that takes one message and returns the next model;
 - **View** — a function that turns the model into the text of the screen.
 
-The pattern has a name — the **Elm architecture**, after the language it comes from — but the shape is just those three pieces. And it buys the property this chapter leans on: **View is a pure function**, so the same model always draws the same frame, with no database call and no terminal involved. A frame is a string, and a string can be checked without a terminal.
+The pattern has a name — the **Elm architecture**, after the language it comes from — but the shape is just those three pieces. And it buys the property this lesson leans on: **View is a pure function**, so the same model always draws the same frame, with no database call and no terminal involved. A frame is a string, and a string can be checked without a terminal.
 
 Two more words complete the vocabulary. A **message** is anything that arrives at `Update`: a key press, a window resize, or an answer to a question the program asked. A **command** is a piece of work the loop must not wait for — like reading the database. `Update` can return a command with the next model; the program runs it in the background and delivers its answer back as another message.
 
@@ -89,7 +89,7 @@ func complete(t *testing.T, s store.Store, tk task.Task) {
 
 `seed` adds one task per title and returns what the store stored; `complete` marks one done through the store. The tests speak in titles, because the frames never show ids.
 
-The next two helpers are the testing trick of this whole chapter:
+The next two helpers are the testing trick of this whole lesson:
 
 <!-- verify: internal/tui/tui_test.go at=tui-event-loop -->
 ```go title="internal/tui/tui_test.go"
@@ -663,7 +663,7 @@ FAIL	todo/internal/tui [setup failed]
 FAIL
 ```
 
-The module is missing the library the tests import, and Go stops before it can say anything about the code. Fetch the two libraries at the exact versions this chapter was built with — `go get github.com/charmbracelet/bubbletea@v1.3.10` and `go get github.com/charmbracelet/x/exp/teatest@v0.0.0-20261012121918-43427fdbad12` — and `go.mod` gains two lines:
+The module is missing the library the tests import, and Go stops before it can say anything about the code. Fetch the two libraries at the exact versions this lesson was built with — `go get github.com/charmbracelet/bubbletea@v1.3.10` and `go get github.com/charmbracelet/x/exp/teatest@v0.0.0-20261012121918-43427fdbad12` — and `go.mod` gains two lines:
 
 <!-- verify: go.mod at=tui-event-loop -->
 ```text title="go.mod"
