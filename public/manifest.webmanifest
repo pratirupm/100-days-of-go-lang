@@ -1,0 +1,14 @@
+{
+	"name": "Build a Todo App in Go",
+	"short_name": "Todo in Go",
+	"description": "A 60-day, beginner-friendly course that builds a real Go application from an empty folder.",
+	"start_url": "/days/",
+	"display": "standalone",
+	"background_color": "#1e1915",
+	"theme_color": "#1e1915",
+	"icons": [
+		{ "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+		{ "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+		{ "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+	]
+}

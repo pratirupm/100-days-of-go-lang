@@ -6,6 +6,11 @@ import starlightLinksValidator from 'starlight-links-validator';
 // Build a Todo App in Go — the book site.
 // Astro + Starlight, run with Bun. `bun run build` emits a static site to dist/.
 import stripVerifyMarkers from './src/integrations/strip-verify-markers.mjs';
+import pwa from './src/integrations/pwa.mjs';
+
+// Register the service worker only in production builds; the dev server
+// must never cache itself.
+const isBuild = process.env.NODE_ENV === 'production';
 
 export default defineConfig({
 	// Placeholder until the book has a real home; keeps the sitemap happy.
@@ -46,6 +51,22 @@ export default defineConfig({
 				},
 				{ tag: 'script', attrs: { src: '/keys.js', defer: true } },
 				{ tag: 'script', attrs: { src: '/tracker.js', defer: true } },
+				// Installable, offline-first: manifest, theme chrome, and the
+				// service-worker registration (production builds only).
+				{ tag: 'link', attrs: { rel: 'manifest', href: '/manifest.webmanifest' } },
+				{ tag: 'meta', attrs: { name: 'theme-color', content: '#1e1915' } },
+				{ tag: 'meta', attrs: { name: 'apple-mobile-web-app-capable', content: 'yes' } },
+				{ tag: 'meta', attrs: { name: 'apple-mobile-web-app-title', content: 'Todo in Go' } },
+				{ tag: 'link', attrs: { rel: 'apple-touch-icon', href: '/icons/apple-touch-icon.png' } },
+				...(isBuild
+					? [
+							{
+								tag: 'script',
+								content:
+									"if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));",
+							},
+						]
+					: []),
 			],
 			plugins: [starlightLinksValidator()],
 			sidebar: [
@@ -112,5 +133,9 @@ export default defineConfig({
 				},
 			],
 		}),
+		// The offline-first service worker + precache manifest, written into
+		// dist at the end of every build. Last, so Starlight's Pagefind
+		// index exists by the time the manifest is collected.
+		pwa(),
 	],
 });
