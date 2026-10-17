@@ -45,9 +45,16 @@ If a chapter ends with a **Going deeper** box, you can skip it. It's extra
 background, not part of the build.
 
 A word on the shape of the journey: the app becomes complete and working well
-before the last page. The final parts go further — a terminal interface, then
-the operator's work of shipping, observing, and tuning a service — and they
-are there when you want them; nothing essential waits at the very end.
+before the last page, and the first sixty days stand on their own. Beyond
+them, the course keeps going: [the next thirty days](/next-30/whats-coming/)
+go past the app into production ground, and
+[ten more](/dsa-10/whats-coming/) cover data structures and algorithms. Those
+forty are on the way — the sixty are yours now.
+
+One more thing before you start: **this book was written by an AI**. Every
+command and transcript in it was executed and verified for real, but the
+prose is machine-written — [the full disclaimer](/disclaimer/) explains
+exactly what that means.
 
 ## If you get stuck
 

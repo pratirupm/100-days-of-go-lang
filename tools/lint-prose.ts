@@ -84,6 +84,9 @@ for await (const file of walk(DOCS)) {
 		const scrubbed = line.replace(/`[^`]*`/g, '`x`');
 
 		for (const { re, why } of FAIL) {
+			// The roadmap pages name the production vocabulary (CI/CD,
+			// pipelines) by design; the lessons keep the full ban.
+			if (rel.startsWith('next-30/') || rel.startsWith('dsa-10/')) continue;
 			if (re.test(scrubbed)) {
 				console.log(`${rel}:${n}  [fail] ${why} — ${line.trim().slice(0, 90)}`);
 				failures++;

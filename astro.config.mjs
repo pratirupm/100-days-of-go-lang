@@ -3,7 +3,7 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator';
 
-// 60 Days of Go Lang — the book site.
+// 100 Days of Go Lang — the book site.
 // Astro + Starlight, run with Bun. `bun run build` emits a static site to dist/.
 import stripVerifyMarkers from './src/integrations/strip-verify-markers.mjs';
 import pwa from './src/integrations/pwa.mjs';
@@ -20,9 +20,9 @@ export default defineConfig({
 		// but are stripped from the pages readers see.
 		stripVerifyMarkers(),
 		starlight({
-			title: '60 Days of Go Lang',
+			title: '100 Days of Go Lang',
 			description:
-				'A 60-day, beginner-friendly course that builds a real Go application from an empty folder.',
+				'A 100-day Go course: the first 60 days build a real application from an empty folder; the next 40 are on the way.',
 			customCss: ['./src/styles/custom.css'],
 			components: {
 				// Dark is the default theme for a reader with no stored choice.
@@ -75,10 +75,22 @@ export default defineConfig({
 					items: [{ autogenerate: { directory: 'days' } }],
 				},
 				{
+					label: 'The next 30 days',
+					collapsed: true,
+					items: [{ autogenerate: { directory: 'next-30' } }],
+				},
+				{
+					label: 'The 10 days of DSA',
+					collapsed: true,
+					items: [{ autogenerate: { directory: 'dsa-10' } }],
+				},
+				{
 					label: 'Appendices',
 					collapsed: true,
 					items: [{ autogenerate: { directory: 'appendices' } }],
 				},
+				{ label: 'Credits', slug: 'credits' },
+				{ label: 'Disclaimer', slug: 'disclaimer' },
 			],
 		}),
 		// The offline-first service worker + precache manifest, written into

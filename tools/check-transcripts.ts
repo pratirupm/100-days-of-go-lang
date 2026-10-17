@@ -17,7 +17,7 @@ const ROOT = new URL('..', import.meta.url).pathname;
 const NEW_DOCS = join(ROOT, 'src/content/docs');
 const OLD_LESSONS = join(ROOT, '..', 'go-todo-course', 'book', 'lessons');
 
-const SKIP = new Set(['index.mdx', '404.md', 'start-here.md', 'offline.md']);
+const SKIP = new Set(['index.mdx', '404.md', 'start-here.md', 'offline.md', 'credits.md', 'disclaimer.md']);
 // `<!-- transcripts: authored -->` above a fence exempts it: the block was
 // hand-edited for reader safety (e.g. a neutral scratch path) and its lines
 // are deliberately not verbatim from the first edition.
@@ -53,7 +53,7 @@ let missing = 0;
 
 for await (const file of walk(NEW_DOCS)) {
 	const rel = relative(NEW_DOCS, file);
-	if (SKIP.has(rel) || rel.startsWith('appendices/')) continue;
+	if (SKIP.has(rel) || rel.startsWith('appendices/') || rel.startsWith('next-30/') || rel.startsWith('dsa-10/')) continue;
 
 	const text = await readFile(file, 'utf8');
 	let oldPath: string | null;

@@ -5,13 +5,19 @@ sidebar:
   order: 0
 ---
 
-This book is a **60-day course**: fifty build days — one chapter each — and
-ten review days, one at the end of every part. A build day takes about two
-and a half to three hours; a review day about one and a half. The days don't
-have to be consecutive: the plan is a pace, not a deadline.
+This book is a **100-day course**, and the first sixty are written: fifty
+build days — one lesson each — and ten review days, one at the end of every
+part. A build day takes about two and a half to three hours; a review day
+about one and a half. The days don't have to be consecutive: the plan is a
+pace, not a deadline.
+
+The next thirty days go past the app into production ground — containers,
+clouds, queues, and the rest — and [ten more](/dsa-10/whats-coming/) cover
+data structures and algorithms. Both are on the way;
+[what's coming](/next-30/whats-coming/) holds the working list.
 
 The app is complete and working by Day 47 (the web interface, tested); the
-last parts ship it and tune it, and Day 60 closes the course.
+last days ship it and tune it, and Day 60 closes the first stretch.
 
 Your progress is saved **in this browser only** — nothing about it leaves
 your device.

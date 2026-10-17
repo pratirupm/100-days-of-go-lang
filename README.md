@@ -1,6 +1,6 @@
-# 60 Days of Go Lang — the book site
+# 100 Days of Go Lang — the book site
 
-The reader-facing book: a 60-day, beginner-friendly course that builds a
+The reader-facing book: the first 60 days of a 100-day course that builds a
 real Go application from an empty folder. Astro + Starlight, run with Bun.
 `bun run build` emits a fully static site (with an offline service worker
 and search index) to `dist/`.
