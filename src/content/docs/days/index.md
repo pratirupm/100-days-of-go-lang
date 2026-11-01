@@ -123,7 +123,7 @@ your device.
 - [Day 68 — Storage that outlives the machine](/100-days-of-go-lang/days/day-68/) · about 3 hours
 - [Day 69 — Keys and permissions](/100-days-of-go-lang/days/day-69/) · about 3 hours
 - [Day 70 — Checks on every change](/100-days-of-go-lang/days/day-70/) · about 3 hours
-- [Day 71 — Deploy on every change](/100-days-of-go-lang/days/day-71/) · about 3 hours
+- [Day 71 — Deploying a change](/100-days-of-go-lang/days/day-71/) · about 3 hours
 - [Day 72 — Review: Part XII](/100-days-of-go-lang/days/day-72/) · about 1.5 hours
 
 ### Part XIII — Data at scale

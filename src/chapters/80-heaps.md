@@ -59,6 +59,13 @@ func (h *MinHeap[T]) Push(v T) {
 The walk is O(log n): each swap moves up one level. The append is amortized
 O(1). The heap property is restored before the method returns.
 
+The length is the slice length:
+
+<!-- verify: internal/dsa/heap.go at=dsa-heaps -->
+```go title="internal/dsa/heap.go"
+func (h *MinHeap[T]) Len() int { return len(h.items) }
+```
+
 ## Pop
 
 Pop removes the root, moves the last value to the root, and walks it down:

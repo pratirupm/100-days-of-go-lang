@@ -151,6 +151,30 @@ The `cur.dist != dist[cur.vertex]` check skips a stale queue entry: a vertex
 can be pushed more than once when a shorter path is found. Without it, the
 algorithm still works but does extra work.
 
+The queue is the standard library's `container/heap`, wrapped in a small
+type:
+
+<!-- verify: internal/dsa/graph.go at=dsa-graphs -->
+```go title="internal/dsa/graph.go"
+type item struct {
+	vertex string
+	dist   int
+}
+
+type priorityQueue []item
+
+func (p priorityQueue) Len() int           { return len(p) }
+func (p priorityQueue) Less(i, j int) bool { return p[i].dist < p[j].dist }
+func (p priorityQueue) Swap(i, j int)      { p[i], p[j] = p[j], p[i] }
+func (p *priorityQueue) Push(x any)        { *p = append(*p, x.(item)) }
+func (p *priorityQueue) Pop() any {
+	old := *p
+	last := old[len(old)-1]
+	*p = old[:len(old)-1]
+	return last
+}
+```
+
 Dijkstra requires non-negative weights. A negative edge breaks the greedy
 choice: the smallest known distance may not be final. Bellman-Ford handles
 negative edges at a higher cost; a negative cycle has no shortest path at all.

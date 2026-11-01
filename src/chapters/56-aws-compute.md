@@ -35,16 +35,16 @@ Parameters:
   Image:
     Type: String
     Description: The published server image, including its digest.
-  AdminKey:
+  ExecutionRoleArn:
     Type: String
-    NoEcho: true
-    Description: The bootstrap admin key.
+    Description: ARN of the task execution role from the secrets day.
 ```
 
 The two parameters are the values that change between environments: the
-image and the bootstrap key. `NoEcho` keeps the key out of CloudFormation's
-event output. The image parameter is a name plus a digest, not a mutable name;
-that is what makes a deployment reproducible.
+image and the task execution role. The image parameter is a name plus a
+digest, not a mutable name; that is what makes a deployment reproducible. The
+role is the one created in the secrets lesson; the bootstrap key itself lives
+in SSM, not in this template.
 
 The task definition is the container:
 
@@ -54,6 +54,7 @@ The task definition is the container:
     Type: AWS::ECS::TaskDefinition
     Properties:
       Family: todo-server
+      ExecutionRoleArn: !Ref ExecutionRoleArn
       Cpu: "256"
       Memory: "512"
       NetworkMode: awsvpc

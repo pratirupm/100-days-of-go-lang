@@ -1,7 +1,7 @@
 {
 	"name": "100 Days of Go Lang",
 	"short_name": "100 Days",
-	"description": "A 100-day Go course: the first 60 days build a real application from an empty folder; the next 40 are on the way.",
+	"description": "A 100-day Go course: build a real Go application from an empty folder, take it onto production ground, and go underneath it with data structures and algorithms.",
 	"start_url": "./",
 	"display": "standalone",
 	"background_color": "#1e1915",

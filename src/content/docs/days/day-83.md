@@ -12,7 +12,7 @@ style: production
 **You'll be able to:**
 
 - cache a hot read and invalidate it when an event arrives;
-- put a rate limit in Redis and test the boundary.
+- use Redis counters for a rate-limit window and name its boundary.
 
 ---
 

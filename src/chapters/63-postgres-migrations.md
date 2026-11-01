@@ -59,6 +59,19 @@ lets a development database and a fresh one take the same path. A production
 migration can be stricter; the rule here is that the first migration must be
 runnable against the shape it replaced.
 
+The indexes and the down direction close the file:
+
+<!-- verify: internal/store/postgres/migrations/00001_init.sql at=postgres-migrations -->
+```sql title="internal/store/postgres/migrations/00001_init.sql"
+CREATE INDEX IF NOT EXISTS tasks_owner_id ON tasks(owner_id);
+CREATE INDEX IF NOT EXISTS task_tags_tag ON task_tags(tag);
+
+-- +goose Down
+DROP TABLE IF EXISTS task_tags;
+DROP TABLE IF EXISTS tasks;
+DROP TABLE IF EXISTS users;
+```
+
 The second migration adds the status index from the query lesson:
 
 <!-- verify: internal/store/postgres/migrations/00002_status_index.sql at=postgres-migrations -->
@@ -104,6 +117,10 @@ dialect is explicit; goose supports several engines, and the PostgreSQL
 dialect is what makes its version table and locking behave correctly.
 `UpContext` takes the boot context, so a canceled boot does not leave a
 migration half-started.
+
+The rest of the lesson uses a scratch database named `todo_migrate`; create
+it once with `createdb -U todo todo_migrate` (or the equivalent in your
+client) if you are following along.
 
 The version table is the record:
 

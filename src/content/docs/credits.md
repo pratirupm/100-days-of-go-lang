@@ -32,9 +32,9 @@ description: "Who and what made 100 Days of Go Lang: the AI assistant, the site 
 ## The application built with
 
 Go, of course — and a stack the book introduces one piece at a time: Turso,
-echo, templ, sqlc, goose, cobra, scs, argon2id, uuid, testify, go-cmp,
-go-snaps, moq, Bubble Tea, Lip Gloss, OpenTelemetry, Prometheus, and
-GoReleaser. [Beyond this book](/100-days-of-go-lang/appendices/beyond-this-book/) has the fuller
+PostgreSQL and pgx, echo, templ, sqlc, goose, cobra, scs, argon2id, uuid,
+testify, go-cmp, go-snaps, moq, Bubble Tea, Lip Gloss, Kafka, Redis, gRPC and
+protobuf, WebSockets, OpenTelemetry, Prometheus, and GoReleaser. [Beyond this book](/100-days-of-go-lang/appendices/beyond-this-book/) has the fuller
 list, with the alternatives each one had.
 
 ## Thanks

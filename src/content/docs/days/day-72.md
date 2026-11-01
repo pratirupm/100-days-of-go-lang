@@ -9,8 +9,8 @@ style: production
 **About 1.5 hours** · Part XII, review.
 
 - Run the checks on a clean checkout, including the container build.
-- Deploy the current revision to the cloud and smoke-test `/ready`.
-- Restore a backup from S3 into a scratch database and read one task.
+- Deploy the current revision locally and smoke-test `/ready`.
+- Restore a backup from S3 and compare it with the original.
 - Rotate the admin key through the secret store without a rebuild.
 
 The cloud is not a different app; it is the same app with different failure modes. The drill is to prove the runbook still works from a cold terminal.

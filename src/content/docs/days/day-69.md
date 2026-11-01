@@ -59,6 +59,10 @@ There is no `s3:ListBucket`, no `s3:DeleteObject`, and no wildcard parameter
 ARN. The task can do its two jobs and nothing else. If the bucket name
 changes, the policy changes; that is the point of naming the resource.
 
+The resource ARN names the local emulator account. In a real account, replace
+the account id in the policy document (or generate the document from it); the
+script's role ARN already uses the account the CLI is pointed at.
+
 The trust policy names ECS tasks as the principal:
 
 <!-- verify: deploy/aws/trust.json at=aws-secrets -->

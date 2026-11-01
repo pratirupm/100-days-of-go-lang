@@ -20,6 +20,14 @@ command, and edit a file, you're ready.
 - **An editor.** VS Code with the Go extension is a good default; any editor
   works.
 
+## For the production ground
+
+The first sixty days need only Go, a terminal, and an editor. Days 61–90 add
+containers and services, and each lesson names the tool it uses: Podman (or
+Docker), `kind` and `kubectl`, the AWS CLI with a local AWS-compatible endpoint
+(or an account), and containers for PostgreSQL, Kafka, Redis, and Prometheus.
+The DSA days need only Go.
+
 ## How this book works
 
 Each lesson adds one small piece to the app, and every piece follows the

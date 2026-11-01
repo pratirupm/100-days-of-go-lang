@@ -127,6 +127,12 @@ The old pod is terminating, not gone instantly. It keeps serving until the
 new pod is ready, then receives its stop signal. The app's graceful shutdown
 gives in-flight requests time to finish.
 
+:::caution
+This lab uses `emptyDir`, so the new pod starts with an empty `/data`. The
+rollout moves traffic, not data. A production deployment uses a
+`PersistentVolumeClaim` or a database outside the pod.
+:::
+
 Check the new pod and its version:
 
 ```bash

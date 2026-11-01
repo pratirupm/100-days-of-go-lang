@@ -65,8 +65,9 @@ A random balancer would spread the same task's events across partitions and
 lose that order.
 
 `RequireAll` waits for every in-sync replica before acknowledging. It is slower
-than `RequireOne` and safer: a write that returns success has reached more than
-one copy.
+than `RequireOne` and safer on a replicated topic. In this single-broker lab
+the in-sync set is just the leader, so the setting is a rehearsal for a
+replicated deployment, not a second copy on this machine.
 
 `AllowAutoTopicCreation` is convenient in development and dangerous in
 production: a typo in the topic name creates a new topic instead of failing.
@@ -104,8 +105,10 @@ todo.events
 ```
 
 `__consumer_offsets` is Kafka's own bookkeeping topic; `todo.events` is ours.
-The three partitions are the unit of parallelism: a consumer group can have at
-most one consumer per partition, so three partitions allow three readers.
+The lab topic has one partition. A partition is the unit of parallelism: a
+consumer group can have at most one consumer per partition, so a topic with
+three partitions would allow three readers. One partition is enough for the
+single consumer here.
 
 The broker is a container with two listeners: one for clients on the host, one
 for clients inside the Docker network. The host publishes on `19092`; the

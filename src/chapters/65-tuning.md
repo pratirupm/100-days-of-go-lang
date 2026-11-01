@@ -2,7 +2,7 @@
 title: Tuning under load
 day: 77
 time: "3 hours"
-description: Profile the same load, replace the N+1 tag reads with one query, and keep only the changes the numbers support.
+description: Replace the N+1 label read with one query, rerun the same load, and keep only the changes the numbers support.
 sidebar:
   order: 65
 ---

@@ -44,9 +44,10 @@ trying one is a good exercise.
 
 A few directions, each with a first step:
 
-- **Another database.** `pgx` is the common Postgres driver, and both sqlc
-  and goose speak Postgres. The store interface is the seam; start with a
-  scratch module against a database in a container.
+- **Wire the PostgreSQL store.** `pgx` is the common Postgres driver, and both
+  sqlc and goose speak Postgres. The production ground has the driver and the
+  conformance suite; the server still opens Turso, so the constructor swap is
+  the next step.
 - **Another interface.** `htmx` adds interactivity without a full JavaScript
   app; `Wails` wraps a desktop window around your Go backend; `Gio` is the
   immediate-mode toolkit closest to the terminal interface's loop; WebAssembly

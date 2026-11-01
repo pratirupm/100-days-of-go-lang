@@ -1,6 +1,6 @@
 ---
 title: "Day 68 — Storage that outlives the machine"
-description: "Write database backups to S3 with a role, then restore one into a scratch path and compare it with the original. — Day 68 of 100 Days of Go Lang."
+description: "Write database backups to S3 with a role, then restore one and compare it with the original. — Day 68 of 100 Days of Go Lang."
 sidebar:
   order: 68
 chapter: 57
@@ -12,7 +12,7 @@ style: production
 **You'll be able to:**
 
 - write backups to S3 with a role, not a password;
-- restore one into a scratch database and read a task back.
+- restore one and compare it with the original.
 
 ---
 
@@ -112,9 +112,9 @@ identical
 ```
 
 `cmp` is intentionally strict. It proves the object is not truncated and not
-silently changed by the transfer. It does not prove the database opens; that
-is the next check. For this small exercise the file is a complete SQLite
-database, so a byte-for-byte comparison is meaningful.
+silently changed by the transfer. It does not prove the database opens; a
+restore drill that opens it is the next step. For this small exercise the file
+is a complete SQLite database, so a byte-for-byte comparison is meaningful.
 
 Ask S3 for the object's size and checksum:
 

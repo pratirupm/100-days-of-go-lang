@@ -1,5 +1,5 @@
 ---
-title: "Day 71 — Deploy on every change"
+title: "Day 71 — Deploying a change"
 description: "Ship the artifact the checks passed, smoke-test the new revision, and keep the rollback a deliberate decision. — Day 71 of 100 Days of Go Lang."
 sidebar:
   order: 71
@@ -75,10 +75,11 @@ The last step checks readiness through the app's own endpoint:
             'curl -fsS http://127.0.0.1:8080/ready'
 ```
 
-A failed check fails the job after the new binary is installed. The previous
-binary is still on the host as the release archive or the last package; the
-runbook's rollback step installs it. The pipeline does not silently leave a
-broken revision in place.
+The install step copies the current binary to `todo-server.prev` before it
+overwrites it. A failed check still leaves the previous binary on the host, and
+the runbook's rollback step installs it. The pipeline does not silently leave a
+broken revision in place; a rollback is a new dispatch with the previous
+revision, not a hidden undo.
 
 ## The local shape
 

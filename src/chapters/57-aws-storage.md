@@ -2,7 +2,7 @@
 title: Storage that outlives the machine
 day: 68
 time: "3 hours"
-description: Write database backups to S3 with a role, then restore one into a scratch path and compare it with the original.
+description: Write database backups to S3 with a role, then restore one and compare it with the original.
 sidebar:
   order: 57
 ---
@@ -103,9 +103,9 @@ identical
 ```
 
 `cmp` is intentionally strict. It proves the object is not truncated and not
-silently changed by the transfer. It does not prove the database opens; that
-is the next check. For this small exercise the file is a complete SQLite
-database, so a byte-for-byte comparison is meaningful.
+silently changed by the transfer. It does not prove the database opens; a
+restore drill that opens it is the next step. For this small exercise the file
+is a complete SQLite database, so a byte-for-byte comparison is meaningful.
 
 Ask S3 for the object's size and checksum:
 

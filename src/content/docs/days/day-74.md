@@ -11,8 +11,8 @@ style: production
 
 **You'll be able to:**
 
-- generate typed queries for PostgreSQL with sqlc;
-- read `EXPLAIN (ANALYZE, BUFFERS)` and add the index the plan asks for.
+- read the query plan for the status filter;
+- add the index the plan asks for and keep only what the numbers support.
 
 ---
 

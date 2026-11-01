@@ -47,6 +47,24 @@ func (a *DynamicArray[T]) Append(v T) {
 }
 ```
 
+The read side and the size accessors are small:
+
+<!-- verify: internal/dsa/array.go at=dsa-array -->
+```go title="internal/dsa/array.go"
+func (a *DynamicArray[T]) Get(i int) (T, bool) {
+	if i < 0 || i >= len(a.items) {
+		var zero T
+		return zero, false
+	}
+	return a.items[i], true
+}
+
+...
+func (a *DynamicArray[T]) Len() int { return len(a.items) }
+...
+func (a *DynamicArray[T]) Cap() int { return cap(a.items) }
+```
+
 `make([]T, 0, capacity)` allocates the block but sets the length to zero. The
 array can append up to `capacity` values without another allocation. When it
 outgrows the block, `append` allocates roughly twice the capacity, copies the

@@ -2,7 +2,7 @@
 title: Observability at scale
 day: 87
 time: "3 hours"
-description: Turn the activity service's counters into a Prometheus scrape, a dashboard query, and an alert that pages only when it should.
+description: Expose the activity counters, scrape them with Prometheus, and write the queries a dashboard and alert would use.
 sidebar:
   order: 73
 ---

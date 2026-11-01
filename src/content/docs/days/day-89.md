@@ -1,6 +1,6 @@
 ---
 title: "Day 89 — Security at scale"
-description: "Redraw the threat model with the service boundaries, scan the supply chain, and rotate a secret without a rebuild. — Day 89 of 100 Days of Go Lang."
+description: "Redraw the threat model, scan the supply chain, and plan the rotation. — Day 89 of 100 Days of Go Lang."
 sidebar:
   order: 89
 chapter: 75
@@ -12,7 +12,7 @@ style: production
 **You'll be able to:**
 
 - redraw the threat model with the new trust boundaries;
-- scan the supply chain and rotate a secret without downtime.
+- scan the supply chain and plan the rotation.
 
 ---
 
@@ -69,10 +69,10 @@ answers:
 ```markdown title="docs/threat-model-production.md"
 | Asset | Boundary | Control | Status |
 |---|---|---|---|
-| Task rows | API → PostgreSQL | owner-scoped queries, TLS, least-privilege role | partial — TLS not enabled in the local lab |
+| Task rows | API → PostgreSQL (reference) | owner-scoped queries, TLS, least-privilege role | gap — the store is tested; the server still uses Turso |
 | Session cookie | edge → API | `__Host-`, Secure, HttpOnly, SameSite | met |
 | Admin key | cloud → task | SSM SecureString, execution role, rotation | met in the local emulator; KMS policy not exercised |
-| Event stream | API → Kafka | task-id key, at-least-once, idempotent consumer | met |
+| Event stream | producer → Kafka | task-id key, at-least-once, idempotent consumer | met; the API task handlers are not wired yet |
 | Feed cache | activity → Redis | TTL, delete-on-write, private network | partial — Redis has no auth in the lab |
 | WebSocket | browser → activity | origin allowlist, session check | gap — the local lesson disables the origin check |
 ```

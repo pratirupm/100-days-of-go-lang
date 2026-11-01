@@ -35,16 +35,17 @@ remove the local endpoint, to deploy for real.
   services, config, and rollouts that don't drop requests.
 - **Docker** — containers for the app and its proxy, built and run by hand
   before anything orchestrates them.
-- **AWS** — the same app on real cloud infrastructure: compute, storage, and
-  the managed services actually worth using.
-- **CI/CD** — checks that build, test, and ship on every change, running the
-  same commands the book runs locally.
+- **AWS** — the same app on AWS-shaped infrastructure: compute, storage, and
+  the managed services actually worth using. The local lab validates the API
+  calls against an emulator.
+- **CI/CD** — checks that build and test on every change, and a deploy that a
+  human dispatches; the same commands the book runs locally.
 - **Microservices** — splitting one read model along its seam, and paying the
   bill honestly.
 - **Distributed systems** — retries, idempotency, ordering, and what
   "exactly once" really means.
-- **PostgreSQL** — the production database: migrations, queries, and indexes
-  at scale. The store interface was built so this swap stays real.
+- **PostgreSQL** — the production database path: migrations, queries, and
+  indexes at scale. The store interface was built so this swap stays real.
 - **Kafka** — event streams: producers, consumers, and replay.
 - **Redis** — caching, ephemeral state, and rate limiting.
 - **gRPC** — typed service-to-service calls, beside the REST API.

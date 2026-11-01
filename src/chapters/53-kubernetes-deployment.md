@@ -72,6 +72,15 @@ service because it describes the same container: the image, the port, the
 environment, and the volume. `imagePullPolicy: IfNotPresent` tells the node
 to use the image already loaded into the cluster instead of trying a registry.
 
+The container also names the port the Service targets:
+
+<!-- verify: deploy/k8s/deployment.yaml at=k8s-deploy -->
+```yaml title="deploy/k8s/deployment.yaml"
+          ports:
+            - name: http
+              containerPort: 8080
+```
+
 The environment and volume are below the part shown here:
 
 <!-- verify: deploy/k8s/deployment.yaml at=k8s-deploy -->
@@ -92,8 +101,10 @@ The environment and volume are below the part shown here:
 ```
 
 `emptyDir` is a directory that lives as long as the pod. It is enough for this
-lesson because one pod owns the database. A later lesson gives the data a
-life independent of the pod.
+lesson because one pod owns the database. A production deployment needs a
+`PersistentVolumeClaim` (or a database outside the cluster) before a pod is
+replaced; this lab keeps the single-pod `emptyDir` so the image and Service
+are the focus.
 
 ## The stable name
 

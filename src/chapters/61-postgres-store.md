@@ -177,11 +177,12 @@ a package behind the contract, and the rest of the app does not know which
 one is installed.
 
 The server still opens the Turso store in this lesson. That is deliberate:
-the PostgreSQL package is a tested alternative, not the default. The auth and
-session tables also live behind the same handle, so a real swap moves them
-together; a half-swap would leave tasks in one database and sessions in
-another. This lesson proves the store contract. Wiring the constructor is the
-next change, and it is a deployment decision, not a line in a chapter.
+the PostgreSQL package is a tested alternative, not the default. The package
+currently covers tasks and users; the session and audit tables would move in
+the same change, because a half-swap would leave tasks in one database and
+sessions in another. This lesson proves the store contract. Wiring the
+constructor is the next change, and it is a deployment decision, not a line in
+a chapter.
 
 ## If something went wrong
 

@@ -1,6 +1,6 @@
 ---
 title: "Day 77 — Tuning under load"
-description: "Profile the same load, replace the N+1 tag reads with one query, and keep only the changes the numbers support. — Day 77 of 100 Days of Go Lang."
+description: "Replace the N+1 label read with one query, rerun the same load, and keep only the changes the numbers support. — Day 77 of 100 Days of Go Lang."
 sidebar:
   order: 77
 chapter: 65
@@ -11,7 +11,7 @@ style: production
 
 **You'll be able to:**
 
-- profile the server and the database under the same load;
+- replace the N+1 label read with one query;
 - keep only the changes the numbers support.
 
 ---

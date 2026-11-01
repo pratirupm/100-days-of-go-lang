@@ -12,7 +12,7 @@ All ten are written; start at
 [Day 91 — Cost, measured](/100-days-of-go-lang/days/day-91/).
 
 The first ninety days already laid the groundwork: slices and maps (Day 3),
-generics (Day 7), and benchmarks (Day 14). These ten go underneath them.
+generics (Day 8), and benchmarks (Day 14). These ten go underneath them.
 
 ## The working shape
 

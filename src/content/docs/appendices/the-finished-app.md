@@ -1,6 +1,6 @@
 ---
 title: The finished app (spoilers)
-description: The finished application, file by file — the state every chapter builds toward, with spoilers.
+description: The finished application, file by file — the state the first sixty days build toward, with spoilers.
 sidebar:
   order: 1
 tableOfContents: false
@@ -8,8 +8,8 @@ pagefind: false
 ---
 
 > **Spoilers.** The finished application, file by file — the state the
-> first sixty days build toward, and the tree every quote and transcript in
-> this book was captured from. Use it to compare and to unstick; don't copy
+> first sixty days build toward, and the tree the first sixty days' quotes and
+> transcripts were captured from. Use it to compare and to unstick; don't copy
 > files wholesale. Generated code and artifacts (the `sqlc` output, the
 > `moq` mocks, the `templ` output, the SBOM) are not reproduced here —
 > `make generate` and `make sbom` produce them — and `go.sum` is what

@@ -26,9 +26,9 @@ entrypoint: the server binary, the libraries it needs, and the folders it
 writes. A **container** is that image running. The machine still provides the
 kernel and the network; everything above them comes from the image.
 
-Today we build the image from source, run it, and make `/ready` answer. The
-first run will fail — the base image is missing a library the database engine
-loads — and that failure is the lesson.
+Today we build the image from source, run it, and make `/ready` answer. A
+first version of the runtime stage will fail — the base image is missing a
+library the database engine loads — and that failure is the lesson.
 
 ## The recipe
 

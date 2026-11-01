@@ -129,11 +129,11 @@ Start with the operations:
 
 | Operation | Structure | Cost |
 |---|---|---|
-| Append and iterate | slice | O(1) amortized, contiguous |
+| Append | slice | O(1) amortized; iteration is O(n) |
 | Lookup by key | map | O(1) average |
 | Last in, first out | stack | O(1) |
 | First in, first out | queue | O(1) amortized |
-| Ordered traversal | tree or sorted slice | O(log n) or O(n) |
+| Ordered traversal | tree or sorted slice | O(n) for the walk; lookup is O(log n) or O(n) |
 | Next smallest | heap | O(log n) |
 | Shortest path | graph + heap | O((V+E) log V) |
 
@@ -146,7 +146,7 @@ matters.
 
 The app's own choices follow the same table: the store's tasks are a slice in
 memory and rows in a database; the labels are a map/set; the queue is a channel
-or a Kafka topic; the shortest path is the dependency graph of packages. The
+or a Kafka topic; the build order is the topological order of the package graph. The
 data structure is rarely named, but it is always there.
 
 ## The cost of a wrong choice

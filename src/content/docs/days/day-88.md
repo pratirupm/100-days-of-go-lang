@@ -1,6 +1,6 @@
 ---
 title: "Day 88 — Testing the system"
-description: "Pin the contracts at the service boundaries, run the race detector, and use failure drills where a unit test cannot reach. — Day 88 of 100 Days of Go Lang."
+description: "Pin the read-model contract, run it under the race detector, and name the failure drills a release needs. — Day 88 of 100 Days of Go Lang."
 sidebar:
   order: 88
 chapter: 74
@@ -11,8 +11,8 @@ style: production
 
 **You'll be able to:**
 
-- write contract tests at the service boundaries;
-- run the load and failure suites against the split system.
+- pin the read-model contract with tests and the race detector;
+- name the load and failure drills a release would run.
 
 ---
 
@@ -118,7 +118,7 @@ disappears:
 - Stop Kafka while the consumer is running. Does the service stay up? Does it
   reconnect? Does the feed show a gap?
 - Stop Redis. Does the feed fall back to the store, or return 500?
-- Stop PostgreSQL. Does `/ready` fail, and does the API stop taking writes?
+- Stop PostgreSQL. Does the store conformance suite fail loudly?
 - Kill the service mid-batch. Does it redeliver, and does the idempotency check
   hold?
 

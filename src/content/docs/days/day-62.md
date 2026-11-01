@@ -170,9 +170,9 @@ to it. The service name is the DNS name; `app` resolves to the app container's
 address. A service that is not on the network cannot reach the app by name, and
 a host process cannot reach it by name at all.
 
-The isolation is useful: the database port is not published, so only the
-services on the network can connect. The proxy is the one service with a host
-port. That is the same shape as the production deployment, where the database
+The isolation is useful: the app is not published on the host, so only the
+proxy on the Compose network can reach it. The proxy is the one service with a
+host port. That is the same shape as the production deployment, where the app
 has a private address and the proxy has the public one.
 
 ## Bind mounts and named volumes

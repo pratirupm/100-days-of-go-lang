@@ -39,7 +39,9 @@ func quick(a []int, lo, hi int) {
 
 The partition is the interesting part. The median-of-three pivot avoids the
 worst case on already-sorted input, which is the case a naive first-element
-pivot handles badly:
+pivot handles badly. It does not fix duplicate-heavy input: the two-way
+partition sends every equal key to one side, so an all-equal slice still
+degenerates into O(n²) work.
 
 <!-- verify: internal/dsa/sort.go at=dsa-sorting -->
 ```go title="internal/dsa/sort.go"
@@ -136,9 +138,9 @@ func BinarySearch(sorted []int, target int) (int, bool) {
 overflow; Go's int is large enough for a slice, but the habit is portable. The
 cost is O(log n): each comparison halves the range.
 
-`sort.SearchInts` in the standard library uses the same shape with a predicate.
-The book's version returns the index and a bool; `sort.Search` returns the
-first index where the predicate is true, which is the more general tool.
+`sort.SearchInts` in the standard library is the value-specific wrapper.
+`sort.Search` takes a predicate and returns the first index where it is true;
+that is the more general tool. The book's version returns the index and a bool.
 
 ## Run the test
 
@@ -190,8 +192,8 @@ small wrapper. The loop is the same halving; the predicate is the difference.
 
 ## If something went wrong
 
-- **Quicksort is O(n^2) on sorted input** — the pivot choice is poor. Use
-  median-of-three or a random pivot.
+- **Quicksort is O(n^2) on sorted or duplicate-heavy input** — the pivot choice
+  is poor. Use median-of-three plus a three-way partition, or a random pivot.
 - **Merge sort is slower than expected** — the allocations dominate. Reuse a
   buffer or use `slices.SortStableFunc`.
 - **Binary search misses a value that is present** — the range is off by one.

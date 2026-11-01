@@ -2,7 +2,7 @@
 title: Testing the system
 day: 88
 time: "3 hours"
-description: Pin the contracts at the service boundaries, run the race detector, and use failure drills where a unit test cannot reach.
+description: Pin the read-model contract, run it under the race detector, and name the failure drills a release needs.
 sidebar:
   order: 74
 ---
@@ -109,7 +109,7 @@ disappears:
 - Stop Kafka while the consumer is running. Does the service stay up? Does it
   reconnect? Does the feed show a gap?
 - Stop Redis. Does the feed fall back to the store, or return 500?
-- Stop PostgreSQL. Does `/ready` fail, and does the API stop taking writes?
+- Stop PostgreSQL. Does the store conformance suite fail loudly?
 - Kill the service mid-batch. Does it redeliver, and does the idempotency check
   hold?
 

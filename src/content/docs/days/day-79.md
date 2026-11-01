@@ -1,6 +1,6 @@
 ---
 title: "Day 79 — Splitting the app"
-description: "Find the seam where a read model can leave the monolith, run it beside the API, and route one feature to it. — Day 79 of 100 Days of Go Lang."
+description: "Find the seam where a read model can leave the monolith, run it beside the API, and give it one feature. — Day 79 of 100 Days of Go Lang."
 sidebar:
   order: 79
 chapter: 66
@@ -12,7 +12,7 @@ style: production
 **You'll be able to:**
 
 - find the seam where a read model can leave the monolith;
-- run the new service beside the API and route one feature to it.
+- run the new service beside the API and give it one feature.
 
 ---
 
@@ -114,8 +114,9 @@ $ curl -sS http://127.0.0.1:18087/activity
 [{"id":"evt-2","task_id":"t-2","kind":"completed","title":"ship the service","at":"2026-10-31T09:42:22.235146235Z"},{"id":"evt-1","task_id":"t-1","kind":"created","title":"write the activity service","at":"2026-10-31T09:42:13.517592466Z"}]
 ```
 
-The newest event is first. The JSON is the boundary's public shape: the API
-does not send its internal task struct, and the service does not return one.
+The newest event is first. `evt-1` was posted earlier in the session, so it is
+still in the feed. The JSON is the boundary's public shape: the API does not
+send its internal task struct, and the service does not return one.
 A change to the task's columns does not change the feed's contract.
 
 ## What is still missing
@@ -149,9 +150,9 @@ one.
 
 ## Deploy independently
 
-The service has its own binary and its own container. It can be deployed while
-the API stays on the previous version, as long as the event contract is
-compatible. That is the release advantage of the boundary: a feed change does
+The service has its own binary; a real deployment would give it its own
+container. It can be deployed while the API stays on the previous version, as
+long as the event contract is compatible. That is the release advantage of the boundary: a feed change does
 not require a task API deploy.
 
 The compatibility rule is the same as a database migration: add fields, do not
@@ -161,9 +162,10 @@ both are owned by one team.
 
 ## The edge is still one API
 
-The browser talks to the API, not to the activity service. The API can call the
-service over gRPC and shape the response for the page; the service does not
-need a public route. That keeps the public surface small and the internal
+The browser talks to the API for task data. The activity service has its own
+live socket in this lab; a production edge would proxy that route through the
+same public door. The API can call the service over gRPC and shape the
+response for the page. That keeps the public surface small and the internal
 contract free to change.
 
 If the service is exposed directly, it needs its own authentication,

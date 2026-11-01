@@ -8,7 +8,7 @@ style: production
 
 **About 1.5 hours** · Part XIV, review.
 
-- Start the service, the worker, Kafka, and Redis; publish one event.
+- Start the activity service, Kafka, and Redis; publish one event.
 - Watch the consumer index the event; reset the group and replay it.
 - Call the gRPC endpoint through the API and check the deadline path.
 - Open the WebSocket, change a task, and see the push arrive.

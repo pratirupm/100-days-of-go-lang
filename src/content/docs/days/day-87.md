@@ -1,6 +1,6 @@
 ---
 title: "Day 87 — Observability at scale"
-description: "Turn the activity service's counters into a Prometheus scrape, a dashboard query, and an alert that pages only when it should. — Day 87 of 100 Days of Go Lang."
+description: "Expose the activity counters, scrape them with Prometheus, and write the queries a dashboard and alert would use. — Day 87 of 100 Days of Go Lang."
 sidebar:
   order: 87
 chapter: 73
@@ -11,8 +11,8 @@ style: production
 
 **You'll be able to:**
 
-- turn the metrics into dashboards and alerts that page only when they should;
-- follow one request across the API, the service, and the stream.
+- expose a counter and scrape it with Prometheus;
+- write the dashboard and alert queries the metrics support.
 
 ---
 
