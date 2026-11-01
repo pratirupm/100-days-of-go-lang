@@ -127,11 +127,14 @@ Your progress is saved **in this browser only** — nothing about it leaves
 your device.
 
 <div id="tracker-overview"></div>
-
-## The days
 `);
 
+let currentSection = '';
 for (const part of parts) {
+	if (part.section !== currentSection) {
+		currentSection = part.section;
+		indexLines.push(`\n## ${part.section}\n`);
+	}
 	indexLines.push(`\n### Part ${part.roman} — ${part.name}\n`);
 	const partComplete = part.chapters.every((chapter) => chapter.status !== 'planned');
 

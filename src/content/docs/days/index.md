@@ -26,7 +26,7 @@ your device.
 
 <div id="tracker-overview"></div>
 
-## The days
+## Days 1–60 — The app
 
 ### Part I — Getting started
 - [Day 1 — The first test](/100-days-of-go-lang/days/day-01/) · about 1.5 hours
@@ -108,6 +108,8 @@ your device.
 - [Day 59 — Making it faster](/100-days-of-go-lang/days/day-59/) · about 3 hours
 - [Day 60 — Review: Part X](/100-days-of-go-lang/days/day-60/) · about 1.5 hours
 
+## Days 61–90 — Production ground
+
 ### Part XI — Containers and clusters
 - [Day 61 — The app in a box](/100-days-of-go-lang/days/day-61/) · about 3 hours
 - [Day 62 — Two containers, one command](/100-days-of-go-lang/days/day-62/) · about 3 hours
@@ -147,6 +149,8 @@ your device.
 - [Day 88 — Testing the system](/100-days-of-go-lang/days/day-88/) · about 3 hours
 - [Day 89 — Security at scale](/100-days-of-go-lang/days/day-89/) · about 3 hours
 - [Day 90 — Review: Part XV](/100-days-of-go-lang/days/day-90/) · about 1.5 hours
+
+## Days 91–100 — Data structures and algorithms
 
 ### Part XVI — Data structures and algorithms
 - [Day 91 — Cost, measured](/100-days-of-go-lang/days/day-91/) · about 3 hours

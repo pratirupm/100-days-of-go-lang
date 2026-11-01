@@ -1,5 +1,5 @@
 // @ts-check
-import { existsSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator';
@@ -23,12 +23,24 @@ const base = '/100-days-of-go-lang';
 // production-ground chapters land without a second constant to update.
 const dayDir = new URL('./src/content/docs/days/', import.meta.url);
 const dayFiles = existsSync(dayDir) ? readdirSync(dayDir) : [];
-const lastDay = Math.max(
-	60,
-	...dayFiles
-		.map((file) => Number(file.match(/^day-(\d+)\.md$/)?.[1] ?? 0))
-		.filter((n) => Number.isFinite(n)),
-);
+const dayPages = dayFiles
+	.flatMap((file) => {
+		const match = file.match(/^day-(\d+)\.md$/);
+		if (!match) return [];
+		const n = Number(match[1]);
+		const text = readFileSync(new URL(file, dayDir), 'utf8');
+		const raw = text.match(/^title:\s*(.+)$/m)?.[1] ?? `"Day ${n}"`;
+		const title = raw.trim().replace(/^"|"$/g, '');
+		return [{ n, title, slug: `days/day-${String(n).padStart(2, '0')}` }];
+	})
+	.sort((a, b) => a.n - b.n);
+const lastDay = Math.max(60, ...dayPages.map((page) => page.n));
+const dayGroup = (label, from, to) => {
+	const items = dayPages
+		.filter((page) => page.n >= from && page.n <= to)
+		.map((page) => ({ label: page.title, slug: page.slug }));
+	return items.length > 0 ? { label, collapsed: true, items } : null;
+};
 
 export default defineConfig({
 	site,
@@ -139,7 +151,12 @@ export default defineConfig({
 				{
 					label: 'The days',
 					collapsed: true,
-					items: [{ autogenerate: { directory: 'days' } }],
+					items: [
+						{ label: 'Overview', slug: 'days' },
+						dayGroup('Days 1–60', 1, 60),
+						dayGroup('Days 61–90', 61, 90),
+						dayGroup('Days 91–100', 91, 100),
+					].filter((item) => item !== null),
 				},
 				{
 					label: 'Production ground',

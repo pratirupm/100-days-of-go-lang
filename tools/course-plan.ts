@@ -22,6 +22,8 @@ export type Chapter = {
 export type Part = {
 	roman: string;
 	name: string;
+	/** The reader-facing stretch this part belongs to. */
+	section: string;
 	chapters: Chapter[];
 	review: string;
 	/** Production reviews replace the generic checklist with real drills. */
@@ -33,6 +35,7 @@ export const parts: Part[] = [
 	{
 		roman: 'I',
 		name: 'Getting started',
+		section: 'Days 1–60 — The app',
 		chapters: [
 			{ n: 1, title: 'The first test', slug: '/part-i/01-toolchain-first-test/', hours: 1.5, bullets: ['have the `todo` module and a test that passes — written before the code it tests;', 'know the loop every chapter runs: write the test, watch it fail, make it pass.'] },
 			{ n: 2, title: 'Structs and methods', slug: '/part-i/02-structs-and-methods/', hours: 2.5, bullets: ['give a task a status, a priority, and an optional due date — with a constructor that refuses a blank title;', 'teach a type to describe itself in one line with `String()`.'] },
@@ -44,6 +47,7 @@ export const parts: Part[] = [
 	{
 		roman: 'II',
 		name: 'Structuring the code',
+		section: 'Days 1–60 — The app',
 		chapters: [
 			{ n: 5, title: 'Interfaces and fakes', slug: '/part-ii/05-interfaces-and-fakes/', hours: 2.5, bullets: ['describe what the store must do with an interface, and write a fake that fails on command;', 'recognize interface satisfaction and the embedding trick.'] },
 			{ n: 6, title: 'Organizing the code', slug: '/part-ii/06-packages-and-layout/', hours: 2.5, bullets: ['move the packages under `internal/` and write the first runnable command;', 'explain why `internal/` keeps code private.'] },
@@ -55,6 +59,7 @@ export const parts: Part[] = [
 	{
 		roman: 'III',
 		name: 'Testing',
+		section: 'Days 1–60 — The app',
 		chapters: [
 			{ n: 9, title: 'Table-driven tests', slug: '/part-iii/09-table-tests-testify/', hours: 3, bullets: ['turn every test into a table with named subtests, using testify;', 'run cases in parallel safely.'] },
 			{ n: 10, title: 'Snapshot tests', slug: '/part-iii/10-golden-snapshots/', hours: 2.5, bullets: ['record golden snapshots and read the diff when the output changes;', 'explain why a snapshot is only as good as its last review.'] },
@@ -67,6 +72,7 @@ export const parts: Part[] = [
 	{
 		roman: 'IV',
 		name: 'Concurrency',
+		section: 'Days 1–60 — The app',
 		chapters: [
 			{ n: 14, title: 'Goroutines and channels', slug: '/part-iv/14-goroutines-channels/', hours: 3, bullets: ['run work in goroutines and pass results over channels;', 'wait for a group, and recognize the races the detector finds.'] },
 			{ n: 15, title: 'select and timeouts', slug: '/part-iv/15-select-timeouts/', hours: 2.5, bullets: ['wait on several channels at once with `select`, and put timeouts on the waits;', 'build a worker pool that can stop early.'] },
@@ -79,6 +85,7 @@ export const parts: Part[] = [
 	{
 		roman: 'V',
 		name: 'The data layer',
+		section: 'Days 1–60 — The app',
 		chapters: [
 			{ n: 19, title: 'Export and import', slug: '/part-v/19-export-import/', hours: 3, bullets: ['define a versioned JSON document and export and import the store through it;', 'write files atomically and refuse documents the app didn’t write.'] },
 			{ n: 20, title: 'Adding a database', slug: '/part-v/20-turso/', hours: 4, bullets: ['open a real database — Turso, with no C compiler in sight;', 'run one conformance suite against both the memory and database stores.'], split: 'stop after “Watch it fail” passes, and pick up at “The schema and the handle” tomorrow.' },
@@ -92,6 +99,7 @@ export const parts: Part[] = [
 	{
 		roman: 'VI',
 		name: 'The command-line app',
+		section: 'Days 1–60 — The app',
 		chapters: [
 			{ n: 25, title: 'A command-line tool', slug: '/part-vi/25-cobra-commands/', hours: 3, bullets: ['build a command tree with cobra: add, list, done, and friends;', 'test the commands and read the help they print.'] },
 			{ n: 26, title: 'Configuration', slug: '/part-vi/26-config-paths/', hours: 3, bullets: ['resolve settings from flag → environment → sensible defaults;', 'test the whole ladder as a table.'] },
@@ -104,6 +112,7 @@ export const parts: Part[] = [
 	{
 		roman: 'VII',
 		name: 'The HTTP API',
+		section: 'Days 1–60 — The app',
 		chapters: [
 			{ n: 30, title: 'The first API endpoint', slug: '/part-vii/30-echo-first-handler/', hours: 3, bullets: ['serve the first HTTP endpoints with echo: liveness and readiness;', 'shut the server down gracefully, and test it black-box.'] },
 			{ n: 31, title: 'Tasks over HTTP', slug: '/part-vii/31-crud-validation/', hours: 3, bullets: ['build the task CRUD endpoints, with validation that answers 422;', 'keep every failure in one error shape.'] },
@@ -117,6 +126,7 @@ export const parts: Part[] = [
 	{
 		roman: 'VIII',
 		name: 'The web UI',
+		section: 'Days 1–60 — The app',
 		chapters: [
 			{ n: 36, title: 'The first web page', slug: '/part-viii/36-templ-basics/', hours: 3, bullets: ['render the first server-side page with templ components;', 'lay out a page, and let escaping keep it safe.'] },
 			{ n: 37, title: 'Forms', slug: '/part-viii/37-forms-csrf/', hours: 3, bullets: ['build the login and task forms with CSRF protection;', 'use submit-then-redirect so refreshes don’t repeat actions.'] },
@@ -129,6 +139,7 @@ export const parts: Part[] = [
 	{
 		roman: 'IX',
 		name: 'The terminal UI',
+		section: 'Days 1–60 — The app',
 		chapters: [
 			{ n: 41, title: 'A terminal interface', slug: '/part-ix/41-tui-basics/', hours: 3, bullets: ['run a full-screen terminal interface with Bubble Tea’s event loop;', 'drive it with keys and a model.'] },
 			{ n: 42, title: 'Styling the terminal UI', slug: '/part-ix/42-tui-styling/', hours: 3, bullets: ['style the interface with lipgloss;', 'make a frame that fits the terminal it runs in.'] },
@@ -140,6 +151,7 @@ export const parts: Part[] = [
 	{
 		roman: 'X',
 		name: 'Shipping it',
+		section: 'Days 1–60 — The app',
 		chapters: [
 			{ n: 45, title: 'Tracing and metrics', slug: '/part-x/45-observability/', hours: 3, bullets: ['trace requests and expose Prometheus metrics;', 'profile the server with pprof when the numbers look wrong.'] },
 			{ n: 46, title: 'Secrets', slug: '/part-x/46-secrets/', hours: 3, bullets: ['load secrets from the environment or a mode-checked file;', 'rotate the admin key without leaving it in any log.'] },
@@ -153,6 +165,7 @@ export const parts: Part[] = [
 	{
 		roman: 'XI',
 		name: 'Containers and clusters',
+		section: 'Days 61–90 — Production ground',
 		production: true,
 		chapters: [
 			{ n: 51, title: 'The app in a box', slug: '/part-xi/51-docker-image/', hours: 3, status: 'written', tag: 'docker-runtime', bullets: ['build the server image from source and explain what each layer adds;', 'run it with a volume, read its logs, and prove `/ready` answers.'] },
@@ -172,6 +185,7 @@ export const parts: Part[] = [
 	{
 		roman: 'XII',
 		name: 'Cloud and delivery',
+		section: 'Days 61–90 — Production ground',
 		production: true,
 		chapters: [
 			{ n: 56, title: 'Onto the cloud', slug: '/part-xii/56-aws-compute/', hours: 3, status: 'written', tag: 'aws-compute', bullets: ['run the container on a managed AWS service;', 'compare the cloud shape with the single box from the deployment days.'] },
@@ -191,6 +205,7 @@ export const parts: Part[] = [
 	{
 		roman: 'XIII',
 		name: 'Data at scale',
+		section: 'Days 61–90 — Production ground',
 		production: true,
 		chapters: [
 			{ n: 61, title: 'The production database', slug: '/part-xiii/61-postgres-store/', hours: 3, status: 'written', tag: 'postgres-store', bullets: ['run the store conformance suite against PostgreSQL;', 'see what a full swap requires once the auth tables move too.'] },
@@ -210,6 +225,7 @@ export const parts: Part[] = [
 	{
 		roman: 'XIV',
 		name: 'Services and streams',
+		section: 'Days 61–90 — Production ground',
 		production: true,
 		chapters: [
 			{ n: 66, title: 'Splitting the app', slug: '/part-xiv/66-microservices/', hours: 3, status: 'written', tag: 'microservices', bullets: ['find the seam where a read model can leave the monolith;', 'run the new service beside the API and route one feature to it.'] },
@@ -230,6 +246,7 @@ export const parts: Part[] = [
 	{
 		roman: 'XV',
 		name: 'Reliability',
+		section: 'Days 61–90 — Production ground',
 		production: true,
 		chapters: [
 			{ n: 72, title: 'Retries, idempotency, ordering', slug: '/part-xv/72-distributed-systems/', hours: 3, status: 'written', tag: 'distributed', bullets: ['make every write safe to retry and every event safe to replay;', 'explain what “exactly once” really costs.'] },
@@ -248,6 +265,7 @@ export const parts: Part[] = [
 	{
 		roman: 'XVI',
 		name: 'Data structures and algorithms',
+		section: 'Days 91–100 — Data structures and algorithms',
 		chapters: [
 			{ n: 76, title: 'Cost, measured', slug: '/part-xvi/76-cost-measured/', hours: 3, status: 'written', tag: 'dsa-growth', bullets: ['read Big-O as a shape, not a stopwatch;', 'measure two implementations with a benchmark and explain the gap.'] },
 			{ n: 77, title: 'Slices and maps, underneath', slug: '/part-xvi/77-slices-maps/', hours: 3, status: 'written', tag: 'dsa-array', bullets: ['build a dynamic array and see the copy that pays for append;', 'compare a linear scan with a map lookup.'] },
