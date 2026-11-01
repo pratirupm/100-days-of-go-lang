@@ -17,4 +17,4 @@ Everything you've **visited before** still works offline — the lessons, the
 day pages, the progress tracker, and search. Reconnect once and this page
 will be there next time.
 
-[Back to the 60 days](/100-days-of-go-lang/days/)
+[Back to the days](/100-days-of-go-lang/days/)

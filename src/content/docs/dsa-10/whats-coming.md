@@ -8,8 +8,10 @@ sidebar:
 
 Ten days on data structures and algorithms — in Go, and in the book's own
 style: write the test, measure the claim, and keep what the numbers support.
+All ten are written; start at
+[Day 91 — Cost, measured](/100-days-of-go-lang/days/day-91/).
 
-The first sixty days already laid the groundwork: slices and maps (Day 3),
+The first ninety days already laid the groundwork: slices and maps (Day 3),
 generics (Day 7), and benchmarks (Day 14). These ten go underneath them.
 
 ## The working shape
@@ -29,4 +31,6 @@ generics (Day 7), and benchmarks (Day 14). These ten go underneath them.
 - **Practice, the interview-shaped kind** — a set of problems solved and
   tested in Go, not in pseudocode.
 
-This is the working list; it firms up as the days are written.
+The stretch ends with an LRU cache, a comparison of the structures, and a
+review that runs the whole suite. The shapes are in
+[The days](/100-days-of-go-lang/days/).

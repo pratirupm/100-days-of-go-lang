@@ -3,9 +3,9 @@
 **Learn Go Lang by building a real todo app.** A 100-day, beginner-friendly
 course that takes you from an empty folder to a complete application — a CLI,
 a REST API, a server-rendered web UI, and a terminal UI — with tests,
-databases, security, and deployment along the way. The first 60 days are
-written; the next 40, on production ground and data structures, are on the
-way.
+databases, security, and deployment along the way. All 100 days are
+written — the app, the production ground, the review days, and the data
+structures and algorithms stretch.
 
 **Read it at [pratirupm.github.io/100-days-of-go-lang](https://pratirupm.github.io/100-days-of-go-lang/)**
 — free, no sign-up, and installable as an offline app.
@@ -15,9 +15,9 @@ way.
 | Path | What it is |
 | --- | --- |
 | `src/chapters/` | The lesson sources — edit these, then `bun run days` |
-| `src/content/docs/days/` | The 60 written days (generated from the chapter sources) |
+| `src/content/docs/days/` | The written days (generated from the chapter sources) |
 | `src/content/docs/appendices/` | The finished app, file by file; and where to go next |
-| `src/content/docs/next-30/`, `src/content/docs/dsa-10/` | The roadmap for days 61–100 |
+| `src/content/docs/next-30/`, `src/content/docs/dsa-10/` | The production-ground overview and the data-structures stretch |
 | `tools/` | Generators and gates — prose lint, quote and transcript checks, icons, the base-path normalizer |
 | `STYLE.md` | The house style every lesson follows |
 

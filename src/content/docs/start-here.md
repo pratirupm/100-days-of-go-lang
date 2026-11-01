@@ -45,11 +45,9 @@ If a lesson ends with a **Going deeper** box, you can skip it. It's extra
 background, not part of the build.
 
 A word on the shape of the journey: the app becomes complete and working well
-before the last page, and the first sixty days stand on their own. Beyond
-them, the course keeps going: [the next thirty days](/100-days-of-go-lang/next-30/whats-coming/)
-go past the app into production ground, and
-[ten more](/100-days-of-go-lang/dsa-10/whats-coming/) cover data structures and algorithms. Those
-forty are on the way — the sixty are yours now.
+before the last page, and all hundred days are written. The app, the
+containers, the cloud, the database, the services, and the data structures
+are yours to read.
 
 One more thing before you start: **this book was written by an AI**. Every
 command and transcript in it was executed and verified for real, but the

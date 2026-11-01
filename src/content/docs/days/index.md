@@ -1,24 +1,25 @@
 ---
-title: The 60 days
-description: "The 100 Days of Go Lang course plan: 50 build days and 10 review days that take you from an empty folder to a working Go web app — your progress is saved in this browser only."
+title: The days
+description: "The 100 Days of Go Lang course plan: written build days and review days that take you from an empty folder to a working Go app — your progress is saved in this browser only."
 sidebar:
   label: Overview
   order: 0
 ---
 
-This book is a **100-day course**, and the first sixty are written: fifty
-build days — one lesson each — and ten review days, one at the end of every
-part. A build day takes about two and a half to three hours; a review day
-about one and a half. The days don't have to be consecutive: the plan is a
-pace, not a deadline.
+This book is a **100-day course**. 100 days are written —
+84 build days and 16 review days, one review at
+the end of every part. A build day takes about two and a half to three
+hours; a review day about one and a half. The days don't have to be
+consecutive: the plan is a pace, not a deadline.
 
-The next thirty days go past the app into production ground — containers,
-clouds, queues, and the rest — and [ten more](/100-days-of-go-lang/dsa-10/whats-coming/)
-cover data structures and algorithms. Both are on the way;
-[what's coming](/100-days-of-go-lang/next-30/whats-coming/) holds the working list.
+The first sixty days build the whole app and put it on a server. Days 61–90
+take it onto production ground — containers, a cloud, a real database,
+services, and streams — and [ten more](/100-days-of-go-lang/dsa-10/whats-coming/) cover
+data structures and algorithms. [The production ground](/100-days-of-go-lang/next-30/whats-coming/)
+holds the working map.
 
 The app is complete and working by Day 47 (the web interface, tested); the
-last days ship it and tune it, and Day 60 closes the first stretch.
+last days of the first stretch ship it and tune it, and Day 60 closes it.
 
 Your progress is saved **in this browser only** — nothing about it leaves
 your device.
@@ -106,3 +107,55 @@ your device.
 - [Day 58 — Releases](/100-days-of-go-lang/days/day-58/) · about 3 hours
 - [Day 59 — Making it faster](/100-days-of-go-lang/days/day-59/) · about 3 hours
 - [Day 60 — Review: Part X](/100-days-of-go-lang/days/day-60/) · about 1.5 hours
+
+### Part XI — Containers and clusters
+- [Day 61 — The app in a box](/100-days-of-go-lang/days/day-61/) · about 3 hours
+- [Day 62 — Two containers, one command](/100-days-of-go-lang/days/day-62/) · about 3 hours
+- [Day 63 — The first cluster](/100-days-of-go-lang/days/day-63/) · about 3 hours
+- [Day 64 — Config, probes, and limits](/100-days-of-go-lang/days/day-64/) · about 3 hours
+- [Day 65 — Rolling forward](/100-days-of-go-lang/days/day-65/) · about 3 hours
+- [Day 66 — Review: Part XI](/100-days-of-go-lang/days/day-66/) · about 1.5 hours
+
+### Part XII — Cloud and delivery
+- [Day 67 — Onto the cloud](/100-days-of-go-lang/days/day-67/) · about 3 hours
+- [Day 68 — Storage that outlives the machine](/100-days-of-go-lang/days/day-68/) · about 3 hours
+- [Day 69 — Keys and permissions](/100-days-of-go-lang/days/day-69/) · about 3 hours
+- [Day 70 — Checks on every change](/100-days-of-go-lang/days/day-70/) · about 3 hours
+- [Day 71 — Deploy on every change](/100-days-of-go-lang/days/day-71/) · about 3 hours
+- [Day 72 — Review: Part XII](/100-days-of-go-lang/days/day-72/) · about 1.5 hours
+
+### Part XIII — Data at scale
+- [Day 73 — The production database](/100-days-of-go-lang/days/day-73/) · about 3 hours
+- [Day 74 — Queries and indexes](/100-days-of-go-lang/days/day-74/) · about 3 hours
+- [Day 75 — Migrations and transactions](/100-days-of-go-lang/days/day-75/) · about 3 hours
+- [Day 76 — Load testing](/100-days-of-go-lang/days/day-76/) · about 3 hours
+- [Day 77 — Tuning under load](/100-days-of-go-lang/days/day-77/) · about 3 hours
+- [Day 78 — Review: Part XIII](/100-days-of-go-lang/days/day-78/) · about 1.5 hours
+
+### Part XIV — Services and streams
+- [Day 79 — Splitting the app](/100-days-of-go-lang/days/day-79/) · about 3 hours
+- [Day 80 — Typed calls](/100-days-of-go-lang/days/day-80/) · about 3 hours
+- [Day 81 — Events on a log](/100-days-of-go-lang/days/day-81/) · about 3 hours
+- [Day 82 — Consumers and replay](/100-days-of-go-lang/days/day-82/) · about 3 hours
+- [Day 83 — Caching and limits](/100-days-of-go-lang/days/day-83/) · about 3 hours
+- [Day 84 — Live updates](/100-days-of-go-lang/days/day-84/) · about 3 hours
+- [Day 85 — Review: Part XIV](/100-days-of-go-lang/days/day-85/) · about 1.5 hours
+
+### Part XV — Reliability
+- [Day 86 — Retries, idempotency, ordering](/100-days-of-go-lang/days/day-86/) · about 3 hours
+- [Day 87 — Observability at scale](/100-days-of-go-lang/days/day-87/) · about 3 hours
+- [Day 88 — Testing the system](/100-days-of-go-lang/days/day-88/) · about 3 hours
+- [Day 89 — Security at scale](/100-days-of-go-lang/days/day-89/) · about 3 hours
+- [Day 90 — Review: Part XV](/100-days-of-go-lang/days/day-90/) · about 1.5 hours
+
+### Part XVI — Data structures and algorithms
+- [Day 91 — Cost, measured](/100-days-of-go-lang/days/day-91/) · about 3 hours
+- [Day 92 — Slices and maps, underneath](/100-days-of-go-lang/days/day-92/) · about 3 hours
+- [Day 93 — Stacks, queues, and links](/100-days-of-go-lang/days/day-93/) · about 3 hours
+- [Day 94 — Trees](/100-days-of-go-lang/days/day-94/) · about 3 hours
+- [Day 95 — Heaps](/100-days-of-go-lang/days/day-95/) · about 3 hours
+- [Day 96 — Graphs](/100-days-of-go-lang/days/day-96/) · about 3 hours
+- [Day 97 — Sorting and searching](/100-days-of-go-lang/days/day-97/) · about 3 hours
+- [Day 98 — Practice, interview-shaped](/100-days-of-go-lang/days/day-98/) · about 3 hours
+- [Day 99 — Choosing the structure](/100-days-of-go-lang/days/day-99/) · about 3 hours
+- [Day 100 — Review: Part XVI](/100-days-of-go-lang/days/day-100/) · about 1.5 hours

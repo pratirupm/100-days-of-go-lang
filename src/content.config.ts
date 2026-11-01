@@ -12,6 +12,9 @@ export const collections = {
 			// edition's lesson.
 			extend: z.object({
 				chapter: z.number().optional(),
+				// Production-ground lessons may name git and CI vocabulary that
+				// the first sixty days deliberately keep out of the reader path.
+				style: z.enum(['production']).optional(),
 			}),
 		}),
 	}),

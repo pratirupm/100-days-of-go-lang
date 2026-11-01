@@ -1,4 +1,5 @@
 // @ts-check
+import { existsSync, readdirSync } from 'node:fs';
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator';
@@ -18,6 +19,17 @@ const isBuild = process.env.NODE_ENV === 'production';
 const site = 'https://pratirupm.github.io';
 const base = '/100-days-of-go-lang';
 
+// The tracker counts the days that actually exist, so it keeps working as the
+// production-ground chapters land without a second constant to update.
+const dayDir = new URL('./src/content/docs/days/', import.meta.url);
+const dayFiles = existsSync(dayDir) ? readdirSync(dayDir) : [];
+const lastDay = Math.max(
+	60,
+	...dayFiles
+		.map((file) => Number(file.match(/^day-(\d+)\.md$/)?.[1] ?? 0))
+		.filter((n) => Number.isFinite(n)),
+);
+
 export default defineConfig({
 	site,
 	base,
@@ -30,7 +42,7 @@ export default defineConfig({
 		starlight({
 			title: '100 Days of Go Lang',
 			description:
-				'A 100-day Go course: the first 60 days build a real application from an empty folder; the next 40 are on the way.',
+				'A 100-day Go course that builds a real application from an empty folder, then takes it onto production ground.',
 			customCss: ['./src/styles/custom.css'],
 			components: {
 				// Dark is the default theme for a reader with no stored choice.
@@ -57,8 +69,12 @@ export default defineConfig({
 					content:
 						"(() => { try { if (localStorage.getItem('starlight-theme') === null) localStorage.setItem('starlight-theme', 'dark'); } catch {} })();",
 				},
-				// The tracker's scripts build links from this base.
-				{ tag: 'script', content: `document.documentElement.dataset.base = '${base}';` },
+				// The tracker's scripts build links from this base, and count
+				// the days that are written.
+				{
+					tag: 'script',
+					content: `document.documentElement.dataset.base = '${base}'; document.documentElement.dataset.days = '${lastDay}';`,
+				},
 				{ tag: 'script', attrs: { src: `${base}/keys.js`, defer: true } },
 				{ tag: 'script', attrs: { src: `${base}/tracker.js`, defer: true } },
 				// Installable, offline-first: manifest, theme chrome, and the
@@ -91,7 +107,7 @@ export default defineConfig({
 						name: '100 Days of Go Lang',
 						url: `${site}${base}/`,
 						description:
-							'A 100-day Go course: the first 60 days build a real application from an empty folder; the next 40 are on the way.',
+							'A 100-day Go course that builds a real application from an empty folder, then takes it onto production ground.',
 					}),
 				},
 				...(isBuild
@@ -121,12 +137,12 @@ export default defineConfig({
 			sidebar: [
 				{ label: 'Start here', slug: 'start-here' },
 				{
-					label: 'The 60 days',
+					label: 'The days',
 					collapsed: true,
 					items: [{ autogenerate: { directory: 'days' } }],
 				},
 				{
-					label: 'The next 30 days',
+					label: 'Production ground',
 					collapsed: true,
 					items: [{ autogenerate: { directory: 'next-30' } }],
 				},

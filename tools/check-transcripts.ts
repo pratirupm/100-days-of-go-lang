@@ -16,6 +16,7 @@ import { join, relative } from 'node:path';
 const ROOT = new URL('..', import.meta.url).pathname;
 const NEW_DOCS = join(ROOT, 'src/content/docs');
 const OLD_LESSONS = join(ROOT, '..', 'go-todo-course', 'book', 'lessons');
+const CAPTURES = join(ROOT, 'src/transcripts');
 
 const SKIP = new Set(['index.mdx', '404.md', 'start-here.md', 'offline.md', 'credits.md', 'disclaimer.md']);
 // `<!-- transcripts: authored -->` above a fence exempts it: the block was
@@ -32,6 +33,7 @@ async function* walk(dir: string): AsyncGenerator<string> {
 }
 
 const oldFiles = await readdir(OLD_LESSONS);
+const captureFiles = await readdir(CAPTURES).catch(() => []);
 
 function oldSourceFor(rel: string): string | null {
 	const base = rel.split('/').pop() ?? '';
@@ -63,14 +65,28 @@ for await (const file of walk(NEW_DOCS)) {
 		const front = text.match(/^---\n([\s\S]*?)\n---/);
 		const m = front ? front[1]!.match(/^chapter:\s*(\d+)\s*$/m) : null;
 		if (!m) continue;
-		const prefix = String(m[1]).padStart(2, '0') + '-';
-		const hit = oldFiles.find((f) => f.startsWith(prefix));
-		oldPath = hit ? join(OLD_LESSONS, hit) : null;
+		const chapter = Number(m[1]);
+		const prefix = String(chapter).padStart(2, '0') + '-';
+		if (chapter > 50) {
+			// Production-ground chapters have no first edition; their captured
+			// session is the source of truth.
+			const hit = captureFiles.find((f) => f.startsWith(prefix));
+			oldPath = hit ? join(CAPTURES, hit) : null;
+		} else {
+			const hit = oldFiles.find((f) => f.startsWith(prefix));
+			oldPath = hit ? join(OLD_LESSONS, hit) : null;
+		}
 	} else {
 		oldPath = oldSourceFor(rel);
 	}
 	if (!oldPath) {
-		console.log(`${rel}  [fail] no first-edition source found for this chapter`);
+		const front = text.match(/^---\n([\s\S]*?)\n---/);
+		const chapter = front?.[1]!.match(/^chapter:\s*(\d+)\s*$/m)?.[1];
+		console.log(
+			rel.startsWith('days/') && chapter && Number(chapter) > 50
+				? `${rel}  [fail] no transcript capture found in src/transcripts/ for chapter ${chapter}`
+				: `${rel}  [fail] no first-edition source found for this chapter`,
+		);
 		missing++;
 		continue;
 	}

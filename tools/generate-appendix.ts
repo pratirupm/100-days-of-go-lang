@@ -18,6 +18,9 @@ const ROOT = new URL('..', import.meta.url).pathname;
 const APP = join(ROOT, '..', 'go-todo-app');
 const OUT_DIR = join(ROOT, 'src/content/docs/appendices/the-finished-app');
 const INDEX = join(ROOT, 'src/content/docs/appendices/the-finished-app.md');
+// The appendix is the app as the first sixty days leave it. Pin the revision
+// so production-ground work on the app's HEAD cannot silently rewrite it.
+const APP_REF = process.env.APP_REF ?? 'day-60';
 
 // The base path, read from astro.config.mjs (one source of truth); links the
 // generator writes must carry it for the link validator.
@@ -82,9 +85,9 @@ function groupFor(path: string): { slug: string; label: string } {
 	return { slug: dir.replace(/^\./, ''), label: dir };
 }
 
-const INTRO = `> **Spoilers.** The finished application, file by file — the state the course
-> builds toward, and the tree every quote and transcript in this book was
-> captured from. Use it to compare and to unstick; don't copy
+const INTRO = `> **Spoilers.** The finished application, file by file — the state the
+> first sixty days build toward, and the tree every quote and transcript in
+> this book was captured from. Use it to compare and to unstick; don't copy
 > files wholesale. Generated code and artifacts (the \`sqlc\` output, the
 > \`moq\` mocks, the \`templ\` output, the SBOM) are not reproduced here —
 > \`make generate\` and \`make sbom\` produce them — and \`go.sum\` is what
@@ -95,7 +98,9 @@ const INTRO = `> **Spoilers.** The finished application, file by file — the st
 > the project.
 `;
 
-const tracked = execFileSync('git', ['-C', APP, 'ls-files'], { encoding: 'utf8' })
+const tracked = execFileSync('git', ['-C', APP, 'ls-tree', '-r', '--name-only', APP_REF], {
+	encoding: 'utf8',
+})
 	.trim()
 	.split('\n');
 let files = tracked.filter((f) => f && !excluded(f)).sort();
@@ -136,7 +141,10 @@ for (const slug of order) {
 		`Part of [The finished app (spoilers)](${BASE}/appendices/the-finished-app/).\n`,
 	];
 	for (const file of group.files) {
-		const content = (await readFile(join(APP, file), 'utf8')).replace(/\n+$/, '');
+		const content = execFileSync('git', ['-C', APP, 'show', `${APP_REF}:${file}`], {
+			encoding: 'utf8',
+			maxBuffer: 100 * 1024 * 1024,
+		}).replace(/\n+$/, '');
 		parts.push(`\n## \`${file}\`\n\n\`\`\`\`${langFor(file)}\n${content}\n\`\`\`\`\n`);
 	}
 	await writeFile(join(OUT_DIR, `${slug}.md`), parts.join('\n'));

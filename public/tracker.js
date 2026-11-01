@@ -6,7 +6,9 @@
 // progress widget on every page, and day links gain a done mark.
 (() => {
 	const KEY = 'gtb.progress.v1';
-	const DAYS = 60;
+	// How many days exist, set by an inline script in the page head. The
+	// fallback keeps an old cached page usable.
+	const DAYS = Number(document.documentElement.dataset.days) || 60;
 	// The site's base path ('' at the root, '/100-days-of-go-lang' on Pages),
 	// set by an inline script in the page head.
 	const BASE = document.documentElement.dataset.base ?? '';
@@ -64,7 +66,7 @@
 			`<div class="tracker-bar" role="progressbar" aria-valuemin="0" aria-valuemax="${DAYS}" aria-valuenow="${count}"><span style="width:${percent(count)}%"></span></div>` +
 			(next
 				? `<a class="tracker-continue" href="${dayLink(next)}">Continue at Day ${next} →</a>`
-				: '<div class="tracker-finish">All 60 days complete — the next test is yours.</div>') +
+				: `<div class="tracker-finish">All ${DAYS} days complete — the next test is yours.</div>`) +
 			'<div class="tracker-actions">' +
 			(count ? '<button type="button" class="tracker-action tracker-export">Export progress</button>' : '') +
 			'<button type="button" class="tracker-action tracker-import">Import progress</button>' +
@@ -137,7 +139,7 @@
 			`<div class="tracker-bar"><span style="width:${percent(count)}%"></span></div>` +
 			(next
 				? `<a class="tracker-widget-link" href="${dayLink(next)}">${count ? `Continue → Day ${next}` : 'Begin at Day 1 →'}</a>`
-				: '<div class="tracker-widget-link">All 60 days complete ✓</div>');
+				: `<div class="tracker-widget-link">All ${DAYS} days complete ✓</div>`);
 	};
 
 	const refresh = () => {

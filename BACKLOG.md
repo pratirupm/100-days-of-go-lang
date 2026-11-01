@@ -4,13 +4,6 @@ Ideas agreed on but not scheduled. Roughly in order of impact.
 
 ## Content
 
-- **Write days 61–90 (production ground)** — the topics listed in
-  `src/content/docs/next-30/`: Kubernetes, Docker, AWS, CI/CD, microservices,
-  distributed systems, PostgreSQL, Kafka, Redis, gRPC, WebSockets, plus the
-  deepened observability/performance/testing/security days. Pipeline: add a
-  chapter source, extend the plan in `tools/generate-days.ts`, `bun run days`.
-- **Write days 91–100 (data structures and algorithms)** — the shape is in
-  `src/content/docs/dsa-10/`.
 - **A human read-through** — pick three or four days across the book, read
   them as a beginner would, and note anything that reads oddly. The highest
   quality lever left on an AI-written book.
@@ -47,6 +40,8 @@ Ideas agreed on but not scheduled. Roughly in order of impact.
 
 ## Done
 
+- Days 61–90 (production ground) — 30 days, 25 lessons + 5 reviews, with app tags and transcript captures
+- Days 91–100 (data structures and algorithms) — 10 days, 9 lessons + 1 review, with benchmarks and captures
 - Report-a-problem link (footer, prefilled GitHub issue)
 - Progress export/import (JSON, merged on import)
 - GA `day_complete` events

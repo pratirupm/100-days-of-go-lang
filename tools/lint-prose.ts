@@ -17,12 +17,12 @@ const DOCS = join(ROOT, 'src/content/docs');
 // Generated code pages are not prose; the lint does not apply to them.
 const SKIP = new Set(['appendices/the-finished-app.md']);
 
-const FAIL: Array<{ re: RegExp; why: string }> = [
-	{ re: /\bcommits?(ed|ing)?\b/i, why: 'git bookkeeping is out of the reader path' },
+const FAIL: Array<{ re: RegExp; why: string; production?: boolean }> = [
+	{ re: /\bcommits?(ed|ing)?\b/i, why: 'git bookkeeping is out of the reader path', production: true },
 	{ re: /\bcheckpoints?\b/i, why: 'checkpoints are out of the reader path' },
-	{ re: /\bgit\b/i, why: 'the book does not teach git' },
-	{ re: /\bCI\b/, why: 'no CI talk in reader pages' },
-	{ re: /\bworkflows?\b/i, why: 'no CI talk in reader pages' },
+	{ re: /\bgit\b/i, why: 'the book does not teach git', production: true },
+	{ re: /\bCI\b/, why: 'no CI talk in reader pages', production: true },
+	{ re: /\bworkflows?\b/i, why: 'no CI talk in reader pages', production: true },
 	{ re: /\bred\s*(?:→|->|to|[-–—])\s*green\b/i, why: 'use plain words for the test-first loop' },
 	{ re: /\bchapter\s+\d/i, why: 'no chapter-number cross references' },
 	{ re: /\bappendix\s+[abc]\b/i, why: "the first edition's lettered appendices do not exist here" },
@@ -50,7 +50,11 @@ for await (const file of walk(DOCS)) {
 	const rel = relative(DOCS, file);
 	if (SKIP.has(rel)) continue;
 
-	const lines = (await readFile(file, 'utf8')).split('\n');
+	const text = await readFile(file, 'utf8');
+	const lines = text.split('\n');
+	// Production-ground pages opt in to the vocabulary their lessons need;
+	// the first sixty keep the full beginner-safe ban.
+	const production = /^---\n[\s\S]*?^style:\s*production\s*$/m.test(text);
 	let inFence = false;
 	let inFrontmatter = lines[0]?.trim() === '---';
 	let paraStart = 0;
@@ -83,10 +87,12 @@ for await (const file of walk(DOCS)) {
 		// code while its prose says "label". Scrub them before matching.
 		const scrubbed = line.replace(/`[^`]*`/g, '`x`');
 
-		for (const { re, why } of FAIL) {
+		for (const { re, why, production: productionRule } of FAIL) {
 			// The roadmap pages name the production vocabulary (CI/CD,
-			// pipelines) by design; the lessons keep the full ban.
+			// pipelines) by design; the lessons keep the full ban unless
+			// their frontmatter opts in.
 			if (rel.startsWith('next-30/') || rel.startsWith('dsa-10/')) continue;
+			if (production && productionRule) continue;
 			if (re.test(scrubbed)) {
 				console.log(`${rel}:${n}  [fail] ${why} — ${line.trim().slice(0, 90)}`);
 				failures++;

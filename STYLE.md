@@ -51,6 +51,30 @@ Target length: **1,200–4,000 words** per chapter.
   Use "later in the book", "in a moment", "as we just saw".
 - No time estimates and no "you build / answer key" meta blocks.
 
+**Production-ground exception.** Days 61–90 are about the machinery a
+working engineer already uses. Those pages may carry `style: production` in
+their frontmatter, which lifts only the git and CI bans — the lesson needs
+the words a deploy actually uses. Everything else stays: no chapter numbers,
+no checkpoint vocabulary, no invented output.
+
+## Production-ground anatomy
+
+A production lesson still makes a claim and checks it, but the check is often
+a command rather than a Go test:
+
+1. **Opening: 2–4 short paragraphs.** What piece of the system we're giving
+   the app, and why the current shape is not enough.
+2. **The check comes first.** The failing build, probe, query plan, or
+   readiness check — run it, show the real failure, then fix it.
+3. **Sections (`##`).** One idea each: the file, the command, the result.
+   Keep code and terminal blocks small.
+4. **"If something went wrong."** The real error and the fix.
+5. **"Going deeper"** at the end, skippable.
+6. **A one-line closing** pointing at the next piece.
+
+The same honesty rule applies: every command and every output in a terminal
+block is captured from a real run and checked by `bun run transcripts`.
+
 ## Code presentation
 
 - **File quotes carry a title:** ` ```go title="task/task.go" `. The title
