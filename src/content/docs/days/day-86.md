@@ -97,8 +97,8 @@ The activity service's store keys events by id, so a duplicate event is
 dropped. The task store's `Add` generates a fresh id on each call, so `Add`
 itself is not idempotent; the caller must not retry it blindly. A retry of
 `Add` after a timeout can create two tasks. The fix is an idempotency key from
-the client: the API accepts a key, stores it with the task, and a repeated
-request returns the first result.
+the client: the API's write path would accept a key, store it with the task,
+and return the first result for a repeated request.
 
 ## Ordering
 
