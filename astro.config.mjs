@@ -35,10 +35,11 @@ const dayPages = dayFiles
 	})
 	.sort((a, b) => a.n - b.n);
 const lastDay = Math.max(60, ...dayPages.map((page) => page.n));
-const dayGroup = (label, from, to) => {
+const dayGroup = (label, from, to, overview) => {
 	const items = dayPages
 		.filter((page) => page.n >= from && page.n <= to)
 		.map((page) => ({ label: page.title, slug: page.slug }));
+	if (overview) items.unshift(overview);
 	return items.length > 0 ? { label, collapsed: true, items } : null;
 };
 
@@ -154,19 +155,15 @@ export default defineConfig({
 					items: [
 						{ label: 'Overview', slug: 'days' },
 						dayGroup('Days 1–60', 1, 60),
-						dayGroup('Days 61–90', 61, 90),
-						dayGroup('Days 91–100', 91, 100),
+						dayGroup('Days 61–90', 61, 90, {
+							label: 'Production ground overview',
+							slug: 'next-30/whats-coming',
+						}),
+						dayGroup('Days 91–100', 91, 100, {
+							label: 'DSA overview',
+							slug: 'dsa-10/whats-coming',
+						}),
 					].filter((item) => item !== null),
-				},
-				{
-					label: 'Production ground',
-					collapsed: true,
-					items: [{ autogenerate: { directory: 'next-30' } }],
-				},
-				{
-					label: 'The 10 days of DSA',
-					collapsed: true,
-					items: [{ autogenerate: { directory: 'dsa-10' } }],
 				},
 				{
 					label: 'Appendices',
