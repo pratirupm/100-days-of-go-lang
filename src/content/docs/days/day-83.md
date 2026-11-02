@@ -122,14 +122,35 @@ was served from the cached body, not from the in-memory list.
 
 ## Rate limiting
 
-The same Redis connection can count requests. A fixed window is one `INCR`
-plus an `EXPIRE`:
+The same Redis connection can count requests. The service implements a
+fixed window as one `INCR` plus an `EXPIRE`:
 
-```text
-key = "rate:" + client + ":" + minute
-n = INCR key
-if n == 1: EXPIRE key 60
-if n > limit: reject 429
+<!-- verify: internal/activity/ratelimit.go at=redis -->
+```go title="internal/activity/ratelimit.go"
+func Allow(ctx context.Context, rdb *redis.Client, key string, limit int, window time.Duration) (bool, error) {
+	n, err := rdb.Incr(ctx, key).Result()
+	if err != nil {
+		return false, fmt.Errorf("rate limit: %w", err)
+	}
+	if n == 1 {
+		if err := rdb.Expire(ctx, key, window).Err(); err != nil {
+			return false, fmt.Errorf("rate limit: set expiry: %w", err)
+		}
+	}
+	return n <= int64(limit), nil
+}
+```
+
+The first request creates the key and sets the expiry; every request after it
+increments the counter. A value over the limit is refused. The test drives the
+boundary:
+
+```bash
+$ TODO_REDIS_ADDR=127.0.0.1:16379 go test -run TestAllow -v ./internal/activity
+=== RUN   TestAllowFixedWindow
+--- PASS: TestAllowFixedWindow (0.00s)
+PASS
+ok  	todo/internal/activity	0.005s
 ```
 
 `INCR` is atomic, so two instances see one counter. The window is coarse — a

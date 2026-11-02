@@ -22,4 +22,10 @@ $ podman exec todo-redis redis-cli GET activity:latest
 [{"id":"evt-redis-1","task_id":"t-r1","kind":"created","title":"cache the feed","at":"2026-10-31T09:48:10.93603558Z"}]
 $ podman exec todo-redis redis-cli TTL activity:latest
 5
+
+$ TODO_REDIS_ADDR=127.0.0.1:16379 go test -run TestAllow -v ./internal/activity
+=== RUN   TestAllowFixedWindow
+--- PASS: TestAllowFixedWindow (0.00s)
+PASS
+ok  	todo/internal/activity	0.005s
 ```
