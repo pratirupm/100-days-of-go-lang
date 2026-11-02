@@ -208,7 +208,7 @@ export const parts: Part[] = [
 		section: 'Days 61–90 — Production ground',
 		production: true,
 		chapters: [
-			{ n: 61, title: 'The production database', slug: '/part-xiii/61-postgres-store/', hours: 3, status: 'written', tag: 'postgres-store', bullets: ['run the store conformance suite against PostgreSQL;', 'see what a full swap requires once the auth tables move too.'] },
+			{ n: 61, title: 'The production database', slug: '/part-xiii/61-postgres-store/', hours: 3, status: 'written', tag: 'postgres-server', bullets: ['run the store conformance suite against PostgreSQL;', 'start the server on PostgreSQL with one DSN.'] },
 			{ n: 62, title: 'Queries and indexes', slug: '/part-xiii/62-postgres-queries/', hours: 3, status: 'written', tag: 'postgres-queries', bullets: ['read the query plan for the status filter;', 'add the index the plan asks for and keep only what the numbers support.'] },
 			{ n: 63, title: 'Migrations and transactions', slug: '/part-xiii/63-postgres-migrations/', hours: 3, status: 'written', tag: 'postgres-migrations', bullets: ['migrate a live-shaped table in small, reversible steps;', 'choose an isolation level and retry the conflicts it produces.'] },
 			{ n: 64, title: 'Load testing', slug: '/part-xiii/64-load-testing/', hours: 3, status: 'written', tag: 'load-test', bullets: ['drive the list and write paths with a real load tool;', 'record throughput, latency, and the knee where the curve bends.'] },

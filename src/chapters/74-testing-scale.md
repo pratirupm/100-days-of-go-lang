@@ -109,7 +109,7 @@ disappears:
 - Stop Kafka while the consumer is running. Does the service stay up? Does it
   reconnect? Does the feed show a gap?
 - Stop Redis. Does the feed fall back to the store, or return 500?
-- Stop PostgreSQL. Does the store conformance suite fail loudly?
+- Stop PostgreSQL while the server uses the DSN. Does `/ready` fail?
 - Kill the service mid-batch. Does it redeliver, and does the idempotency check
   hold?
 

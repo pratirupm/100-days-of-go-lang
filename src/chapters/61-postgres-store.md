@@ -2,7 +2,7 @@
 title: The production database
 day: 73
 time: "3 hours"
-description: Run the store conformance suite against PostgreSQL and see exactly what a production swap requires.
+description: Run the store conformance suite against PostgreSQL and start the server against it with one DSN.
 sidebar:
   order: 61
 ---
@@ -169,20 +169,56 @@ green on a laptop without a database; the CI job that has PostgreSQL sets
 the variable and runs the suite. A skipped test is not a passed test; the
 environment is the condition.
 
-## What has not changed
+## The switch
 
 The API, the CLI, the web UI, and the TUI all talk to `store.Store`. None of
 them import PostgreSQL. That is the payoff of the interface: the database is
 a package behind the contract, and the rest of the app does not know which
 one is installed.
 
-The server still opens the Turso store in this lesson. That is deliberate:
-the PostgreSQL package is a tested alternative, not the default. The package
-currently covers tasks and users; the session and audit tables would move in
-the same change, because a half-swap would leave tasks in one database and
-sessions in another. This lesson proves the store contract. Wiring the
-constructor is the next change, and it is a deployment decision, not a line in
-a chapter.
+The server chooses the store from configuration. An empty
+`TODO_POSTGRES_DSN` keeps the Turso path; a DSN opens PostgreSQL and the
+PostgreSQL auth dialect:
+
+<!-- verify: cmd/todo-server/main.go at=postgres-server -->
+```go title="cmd/todo-server/main.go"
+	var st appStore
+	dialect := auth.SQLite
+	driver := "turso"
+	if cfg.PostgresDSN != "" {
+		ps, err := postgres.New(ctx, cfg.PostgresDSN)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			return 1
+		}
+		st, dialect, driver = ps, auth.PostgreSQL, "postgres"
+	} else {
+		ts, err := store.NewTursoStore(ctx, cfg.DBPath)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			return 1
+		}
+		st = ts
+	}
+	logger.Info("store ready", "driver", driver)
+```
+
+The auth session and audit tables are part of the PostgreSQL migrations, so
+one database holds tasks, users, sessions, and the trail. The auth package
+rebinds its generated `?` queries to PostgreSQL's `$n` form and uses a plain
+transaction instead of Turso's `BEGIN CONCURRENT`.
+
+Start the server on PostgreSQL:
+
+```bash
+$ TODO_POSTGRES_DSN='postgres://todo:todo@127.0.0.1:15432/todo?sslmode=disable' TODO_ADMIN_EMAIL=admin@example.com TODO_ADMIN_KEY=local-admin-key TODO_LISTEN=127.0.0.1:18096 TODO_LOG=/tmp/todo-pg.log go run ./cmd/todo-server
+...
+{"time":"2026-11-02T10:26:46.874486458+05:30","level":"INFO","msg":"store ready","driver":"postgres"}
+{"time":"2026-11-02T10:26:46.907514941+05:30","level":"INFO","msg":"server listening","addr":"127.0.0.1:18096","version":"dev"}
+```
+
+`/ready` answers 200, and the same auth, task, and session routes run against
+the network database. Turso remains the default when the DSN is empty.
 
 ## If something went wrong
 

@@ -60,7 +60,7 @@ answers:
 ```markdown title="docs/threat-model-production.md"
 | Asset | Boundary | Control | Status |
 |---|---|---|---|
-| Task rows | API → PostgreSQL (reference) | owner-scoped queries, TLS, least-privilege role | gap — the store is tested; the server still uses Turso |
+| Task rows | API → PostgreSQL | owner-scoped queries, TLS, least-privilege role | met when `TODO_POSTGRES_DSN` is set; Turso is the default |
 | Session cookie | edge → API | `__Host-`, Secure, HttpOnly, SameSite | met |
 | Admin key | cloud → task | SSM SecureString, execution role, rotation | met in the local emulator; KMS policy not exercised |
 | Event stream | producer → Kafka | task-id key, at-least-once, idempotent consumer | met; the API task handlers are not wired yet |
