@@ -200,6 +200,71 @@ to its own error. That is the service-to-service equivalent of an HTTP status:
 The generated client already handles the connection, the framing, and the
 codec. The application owns the deadline and the meaning of the error.
 
+## The API as a client
+
+The API uses the same contract. A small adapter turns the generated client
+into the domain events the HTTP layer already understands:
+
+<!-- verify: internal/activity/grpc_client.go at=api-grpc -->
+```go title="internal/activity/grpc_client.go"
+func (c *GRPCClient) ListActivity(ctx context.Context, limit int) ([]Event, error) {
+	if limit < 0 {
+		limit = 0
+	}
+	if limit > 100 {
+		limit = 100
+	}
+	resp, err := c.client.List(ctx, &activitypb.ListRequest{Limit: int32(limit)})
+	if err != nil {
+		return nil, fmt.Errorf("activity list: %w", err)
+	}
+	events := make([]Event, 0, len(resp.GetEvents()))
+	for _, e := range resp.GetEvents() {
+		events = append(events, Event{
+			ID:     e.GetId(),
+			TaskID: e.GetTaskId(),
+			Kind:   e.GetKind(),
+			Title:  e.GetTitle(),
+			At:     time.Unix(e.GetAt(), 0).UTC(),
+		})
+	}
+	return events, nil
+}
+```
+
+The API route is registered only when `TODO_ACTIVITY_GRPC` names the service:
+
+<!-- verify: internal/api/activity.go at=api-grpc -->
+```go title="internal/api/activity.go"
+func (s *server) listActivity(c echo.Context) error {
+	limit := 50
+	if raw := c.QueryParam("limit"); raw != "" {
+		n, err := strconv.Atoi(raw)
+		if err != nil || n < 1 || n > 100 {
+			return badRequest("limit must be between 1 and 100")
+		}
+		limit = n
+	}
+	events, err := s.activity.ListActivity(c.Request().Context(), limit)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadGateway, "activity service unavailable").SetInternal(err)
+	}
+	if events == nil {
+		events = []activity.Event{}
+	}
+	return c.JSON(http.StatusOK, map[string]any{"events": events})
+}
+```
+
+With the service running, `GET /api/v1/activity` returns the feed over gRPC.
+The API keeps its HTTP edge, the service keeps its typed contract, and the
+client never imports the protobuf types.
+
+```bash
+$ curl -sS -b /tmp/grpc-cookies.txt 'http://127.0.0.1:18097/api/v1/activity?limit=1'
+{"events":[{"id":"01a19aa6-00bf-7e43-96fe-effa4cdc08d8","task_id":"01a19aa6-00ba-763b-9428-43dcfb47b56e","kind":"created","title":"api reads grpc","at":"2026-11-02T05:05:32Z"}]}
+```
+
 ## Streaming, when it helps
 
 The contract here is unary: one request, one response. gRPC also supports

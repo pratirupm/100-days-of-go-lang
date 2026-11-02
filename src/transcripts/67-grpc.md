@@ -1,6 +1,8 @@
 # Chapter 67 — typed calls
 
 ```text
+$ curl -sS -b /tmp/grpc-cookies.txt 'http://127.0.0.1:18097/api/v1/activity?limit=1'
+{"events":[{"id":"01a19aa6-00bf-7e43-96fe-effa4cdc08d8","task_id":"01a19aa6-00ba-763b-9428-43dcfb47b56e","kind":"created","title":"api reads grpc","at":"2026-11-02T05:05:32Z"}]}
 $ buf generate
 ...
 $ ls internal/activitypb

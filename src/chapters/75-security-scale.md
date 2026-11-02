@@ -64,6 +64,7 @@ answers:
 | Session cookie | edge → API | `__Host-`, Secure, HttpOnly, SameSite | met |
 | Admin key | cloud → task | SSM SecureString, execution role, rotation | met in the local emulator; KMS policy not exercised |
 | Event stream | API → Kafka | task-id key, at-least-once, idempotent consumer | met when `TODO_KAFKA_BROKERS` is set; the CLI remains a manual publisher |
+| Activity reads | API → activity | gRPC deadline, optional config | met when `TODO_ACTIVITY_GRPC` is set |
 | Feed cache | activity → Redis | TTL, delete-on-write, private network | partial — Redis has no auth in the lab |
 | WebSocket | browser → activity | origin allowlist, session check | gap — the local lesson disables the origin check |
 ```
