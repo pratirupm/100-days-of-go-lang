@@ -617,7 +617,7 @@ The document's own version moves to 3, the shape that carries the task's version
 const exportVersion = 3
 ```
 
-Create `internal/store/importer.go` for the reading side — the import moves out of `export.go` into a file of its own — and a few names there carry the design. `taskStream` is what the store pulls from: a function that returns one task per call and reports `io.EOF` when the document is spent. `bulkInserter` is the store-side half: the single method that takes a stream and writes it as one batch. The factory that builds a stream from the document is `taskStreamFor`, and `importTaskV1` is the older document shape that version-1 files are read into. The finished app's appendix holds `importer.go` in full — read the parts behind the `...` there as you type them.
+Create `internal/store/importer.go` for the reading side. `taskStream` returns one task per call and reports `io.EOF` at the end; `bulkInserter` writes a stream as one batch. The appendix holds the file in full.
 
 <!-- verify: internal/store/importer.go at=transactions -->
 ```go title="internal/store/importer.go"
@@ -629,8 +629,6 @@ type bulkInserter interface {
 }
 ```
 
-The alias is deliberate: a store or a test double can spell the signature out and still satisfy the interface, so the name documents the shape without becoming a second thing to import.
-
 The public door walks the envelope — the version field first, then the tasks array — and before it decodes a single task it asserts that the store can take the batch. A store without the hook is refused by name instead of being quietly served one-at-a-time writes that could leave half a document behind:
 
 <!-- verify: internal/store/importer.go at=transactions -->
@@ -641,8 +639,6 @@ The public door walks the envelope — the version field first, then the tasks a
 		return 0, fmt.Errorf("import tasks: %T does not support atomic import", s)
 	}
 ```
-
-That assertion is the door's first demand: a store that cannot take the batch is refused up front, before the document is read at all.
 
 The store pulls one task at a time while its own write is open:
 
@@ -688,9 +684,9 @@ Older documents are the importer's business, so it reads versions 1 through 3 an
 		return t, nil
 ```
 
-The mapping's smallest half is the v2 rule: a v2 document predates the version column, so every task in it was at version 1 by definition, and the importer writes that value instead of the zero the absent field decodes to. The strictest half is the last check: a v3 task at version 0 is a task no store could have written, because `Add` assigns 1 and every write moves it — so the importer refuses it rather than admitting a row that no version check could ever match.
+The v2 rule normalizes an absent version to 1; the v3 check refuses version 0, which no store could have written.
 
-Five tests written for the old importer now describe behavior that no longer exists, so they change with it. The finished app's appendix holds `export_test.go` in full — read the changed cases there as you type them.
+Five old importer tests now describe behavior that no longer exists.
 
 `TestImportJSON_RejectsUnknownVersion` fed versions 1 and 3, because those were the versions the old importer refused. The importer reads both now, so the refusal case moves to version 0 and the first version past the current one, and the message it checks is the importer's own:
 
@@ -703,8 +699,6 @@ Five tests written for the old importer now describe behavior that no longer exi
 ...
 			assert.Contains(t, err.Error(), fmt.Sprintf("unsupported version %d", version))
 ```
-
-The refusal cases are now the two ends of the range — nothing below the oldest shape and nothing past the current one.
 
 The round-trip test asserted that an import assigns fresh ids; a v3 document carries ids and versions now, so the test asserts they survive the trip instead:
 
@@ -798,7 +792,7 @@ func closeDocument(d *json.Decoder) error {
 
 `io.EOF` is the clean finish; `io.ErrUnexpectedEOF` is "the document ended where the format says it cannot". The check runs from the stream's exhaustion pull, inside the store's write, so a document that does not end cleanly rolls the batch back instead of landing it and then reporting it.
 
-The two stores carry the batch differently, and both are all-or-nothing. The database store streams straight into one concurrent transaction:
+Both stores are all-or-nothing. The database store streams into one concurrent transaction:
 
 <!-- verify: internal/store/turso.go at=transactions -->
 ```go title="internal/store/turso.go"
@@ -947,36 +941,6 @@ Fix: the end-of-document check reports `io.ErrUnexpectedEOF` — "the document e
 <summary>Going deeper: why a version, not a lock</summary>
 
 The other way to stop a lost update is a lock: the first writer holds the task from the moment it reads until the moment it writes, and everyone else waits. That design is **pessimistic concurrency**, and for this app it would hold a database lock while a person decides what to do — minutes of waiting for anyone else who touches that task. The version makes the same guarantee without the waiting: readers run free, and the clash is detected at write time as an ordinary error. The price is that a clash is possible at all; for a todo list, that price is right.
-
-</details>
-
-<details>
-<summary>Going deeper: why even a one-statement write rides a transaction</summary>
-
-The update that completes a task is a single statement, so it could run on its own — every statement is a small transaction by itself. In the new mode, though, a write outside an explicit transaction still takes the engine's exclusive path, and a concurrent transaction cannot finish while an exclusive one is active. A scratch probe measured the difference, in milliseconds, three runs each:
-
-```text
-complete-autocommit  committed=1481–1515  conflict=85–107  elapsed=74–97 ms
-complete-wrapped     committed=1600       conflict=0      elapsed=27–30 ms
-```
-
-So every write in the store rides a concurrent transaction, one statement or ten. The single statement is exactly where the temptation to skip it lives.
-
-</details>
-
-<details>
-<summary>Going deeper: what the new mode is worth</summary>
-
-The mode and the pool of connections are worth measuring together, because either one alone is not the win. A scratch probe ran the store's insert shape — a task plus its labels in one transaction, eight writers × one hundred — under four setups, three runs each:
-
-```text
-pool1-plain          committed=800 conflict=0   44.1 / 52.4 / 46.6
-pool1-concurrent     committed=800 conflict=0   54.7 / 50.8 / 50.5
-pool8-plain          committed=800 conflict=0  109.4 / 109.2 / 75.4
-pool8-concurrent     committed=800 conflict=0   17.6 / 19.6 / 16.7
-```
-
-Every setup landed all 800 writes; the engine's busy wait absorbed the rest. One connection serializes writers (~44–52 ms). Eight connections without the mode are slower than one (~75–109 ms): the writers now contend for the engine's single write lock and spend their time waiting. Only the pool and the mode together overlap: ~17–20 ms. The mode is worth eight connections only because the write path uses them at the same time.
 
 </details>
 

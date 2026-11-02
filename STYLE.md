@@ -38,7 +38,9 @@ person who is seeing this material for the first time.
    only place background theory lives.
 5. **A one-line closing** that points at what's next — never "chapter N".
 
-Target length: **1,200–4,000 words** per chapter.
+Target length: **1,200–4,000 words of prose** per chapter. Code blocks and
+transcripts are not prose; a code-heavy chapter can run longer without
+exceeding the reader-facing target.
 
 ## Hard rules (enforced by `bun run lint`)
 
