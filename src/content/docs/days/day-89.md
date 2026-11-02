@@ -72,7 +72,7 @@ answers:
 | Task rows | API → PostgreSQL | owner-scoped queries, TLS, least-privilege role | met when `TODO_POSTGRES_DSN` is set; Turso is the default |
 | Session cookie | edge → API | `__Host-`, Secure, HttpOnly, SameSite | met |
 | Admin key | cloud → task | SSM SecureString, execution role, rotation | met in the local emulator; KMS policy not exercised |
-| Event stream | producer → Kafka | task-id key, at-least-once, idempotent consumer | met; the API task handlers are not wired yet |
+| Event stream | API → Kafka | task-id key, at-least-once, idempotent consumer | met when `TODO_KAFKA_BROKERS` is set; the CLI remains a manual publisher |
 | Feed cache | activity → Redis | TTL, delete-on-write, private network | partial — Redis has no auth in the lab |
 | WebSocket | browser → activity | origin allowlist, session check | gap — the local lesson disables the origin check |
 ```

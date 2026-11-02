@@ -99,9 +99,16 @@ func (p *Producer) Publish(ctx context.Context, e Event) error {
 ```
 
 The context is the caller's deadline. A publish that cannot reach the broker
-returns an error; the caller decides whether to retry or fail the request. The
-event is not transactional with the task write yet; the next lesson adds the
-consumer, and the one after that makes the pair safe.
+returns an error; the caller decides whether to retry or fail the request.
+
+The same producer is wired into the API behind `TODO_KAFKA_BROKERS`: the task
+handlers publish `created`, `updated`, `completed`, and `deleted` after a
+successful store write. A publish failure is logged, not returned, because the
+task is already committed; the outbox is the next step for making the pair
+atomic. The CLI below stays useful as a manual publisher and a diagnostic.
+
+The event is not transactional with the task write yet; the next lesson adds
+the consumer, and the one after that makes the pair safe.
 
 ## The topic
 
