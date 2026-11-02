@@ -99,6 +99,54 @@ The image line is the change that triggers the rollout:
 would pull from a registry and use an immutable digest instead of a mutable
 name.
 
+## Make the data durable
+
+The first rollout used `emptyDir`; a new pod started with an empty `/data`.
+Before moving the image again, give the data a claim:
+
+<!-- verify: deploy/k8s/pvc.yaml at=k8s-rollout -->
+```yaml title="deploy/k8s/pvc.yaml"
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: todo-data
+  labels:
+    app: todo
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+```
+
+The Deployment mounts the claim instead of the empty directory:
+
+<!-- verify: deploy/k8s/deployment.yaml at=k8s-rollout -->
+```yaml title="deploy/k8s/deployment.yaml"
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: todo-data
+```
+
+Apply the claim first:
+
+```bash
+$ kubectl apply -f deploy/k8s/pvc.yaml
+persistentvolumeclaim/todo-data created
+```
+
+```bash
+$ kubectl get pvc
+NAME        STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+todo-data   Bound    pvc-b3a4a726-d98b-437b-8a85-ad40ef90cdc6   1Gi        RWO            standard       <unset>                 13s
+```
+
+`Bound` means the cluster found a volume. The claim is `ReadWriteOnce`, which
+is enough for the single replica here; a database outside the cluster is the
+stronger answer when the data must survive the cluster itself.
+
 ## Roll it out
 
 Save and load the image, then apply:
@@ -128,9 +176,9 @@ new pod is ready, then receives its stop signal. The app's graceful shutdown
 gives in-flight requests time to finish.
 
 :::caution
-This lab uses `emptyDir`, so the new pod starts with an empty `/data`. The
-rollout moves traffic, not data. A production deployment uses a
-`PersistentVolumeClaim` or a database outside the pod.
+At this point the lab uses `emptyDir`, so a new pod starts with an empty
+`/data`. The rollout moves traffic, not data. The next chapter's rollout gives
+the data a `PersistentVolumeClaim` before changing the image again.
 :::
 
 Check the new pod and its version:

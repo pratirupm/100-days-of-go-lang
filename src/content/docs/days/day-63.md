@@ -110,10 +110,9 @@ The environment and volume are below the part shown here:
 ```
 
 `emptyDir` is a directory that lives as long as the pod. It is enough for this
-lesson because one pod owns the database. A production deployment needs a
-`PersistentVolumeClaim` (or a database outside the cluster) before a pod is
-replaced; this lab keeps the single-pod `emptyDir` so the image and Service
-are the focus.
+lesson because one pod owns the database. The rollout day adds a
+`PersistentVolumeClaim`; this first manifest keeps the single-pod `emptyDir`
+so the image and Service are the focus.
 
 ## The stable name
 

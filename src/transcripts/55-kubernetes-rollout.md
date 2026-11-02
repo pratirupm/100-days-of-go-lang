@@ -1,6 +1,13 @@
 # Chapter 55 — rolling forward
 
 ```text
+$ kubectl apply -f deploy/k8s/pvc.yaml
+persistentvolumeclaim/todo-data created
+
+$ kubectl get pvc
+NAME        STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+todo-data   Bound    pvc-b3a4a726-d98b-437b-8a85-ad40ef90cdc6   1Gi        RWO            standard       <unset>                 13s
+
 $ podman build --build-arg VERSION=v2 -f deploy/Dockerfile.dev -t localhost/todo:v2 .
 ...
 Successfully tagged localhost/todo:v2
